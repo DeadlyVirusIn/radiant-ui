@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Wave 10: viewport-fit=cover lets content extend behind iOS notch/home-indicator;
+         the safe-area-inset-* env() vars (used in body padding below + MobileBottomNav)
+         provide the actual padding so nothing gets clipped. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#7C8AFF" />
+    <meta name="description" content="Track your collection, hunt rare packs, and manage your accounts" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Pack Hunter" />
+    <meta name="application-name" content="Pack Hunter" />
+    <meta name="msapplication-TileColor" content="#7C8AFF" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <title>Pack Hunter</title>
+
+    <!-- iOS status bar style (splash screens intentionally omitted — would require per-device PNG assets) -->
+
+    <style>
+      /* Wave 10: iOS safe-area padding on body. Pages that need to draw
+         BEHIND the safe area (full-bleed images) can override; the default
+         keeps content clear of the notch + home indicator. */
+      body {
+        padding-left: env(safe-area-inset-left, 0);
+        padding-right: env(safe-area-inset-right, 0);
+        /* top/bottom handled by TopBar/MobileBottomNav already */
+      }
+      /* Prevent horizontal overflow at the document level — catches any
+         page that accidentally exceeds viewport width on phones. */
+      html, body { overflow-x: hidden; max-width: 100vw; }
+
+      /* PWA Install Prompt Styling */
+      .pwa-install-prompt {
+        display: none;
+        position: fixed;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #7C8AFF, #A78BFA);
+        color: white;
+        padding: 12px 24px;
+        border-radius: 28px;
+        box-shadow: 0 4px 20px rgba(124, 138, 255, 0.4);
+        z-index: 9999;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        animation: slideUp 0.3s ease-out;
+      }
+      .pwa-install-prompt.show {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      @keyframes slideUp {
+        from { transform: translateX(-50%) translateY(100%); opacity: 0; }
+        to { transform: translateX(-50%) translateY(0); opacity: 1; }
+      }
+      .pwa-install-prompt button {
+        background: white;
+        color: #5C6AC4;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 16px;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .pwa-install-prompt .dismiss {
+        background: transparent;
+        color: rgba(255,255,255,0.8);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Wave 9.1: minimal fallback UI shown if React fails to mount
+         (e.g., iOS PWA with stale SW serving HTML that references purged
+         chunks). React replaces this on successful boot. If scripts 404
+         and React never mounts, the user sees THIS instead of a blank
+         white screen — with a working "Reload fresh" button that clears
+         caches + service worker to break the loop. -->
+    <div id="root">
+      <div id="boot-fallback" style="display:flex;min-height:100vh;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#121212;color:#e0e0e0;padding:24px;box-sizing:border-box;">
+        <div style="max-width:360px;text-align:center;">
+          <div id="boot-spinner" style="width:36px;height:36px;border:3px solid #333;border-top-color:#7C8AFF;border-radius:50%;margin:0 auto 16px;animation:bootspin 0.8s linear infinite;"></div>
+          <div id="boot-msg" style="font-size:14px;line-height:1.5;opacity:0.7;">Loading Pack Hunter…</div>
+          <div id="boot-fallback-actions" style="display:none;margin-top:20px;">
+            <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:#FFA726;">App didn't load</div>
+            <div style="font-size:13px;line-height:1.4;opacity:0.7;margin-bottom:16px;">
+              This can happen after an update. Reloading with a clean cache usually fixes it.
+            </div>
+            <button id="boot-hard-reload" style="background:linear-gradient(135deg,#7C8AFF,#A78BFA);color:#fff;border:0;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Reload fresh</button>
+          </div>
+        </div>
+      </div>
+      <style>
+        @keyframes bootspin { to { transform: rotate(360deg); } }
+      </style>
+    </div>
+    <script>
+      // If React hasn't mounted within 10s, show the "App didn't load" UI.
+      // React replaces #root on successful mount, so #boot-fallback vanishes.
+      (function() {
+        var TIMEOUT_MS = 10000;
+        setTimeout(function() {
+          var fb = document.getElementById('boot-fallback');
+          if (!fb) return; // React mounted — nothing to do
+          var spinner = document.getElementById('boot-spinner');
+          var msg = document.getElementById('boot-msg');
+          var actions = document.getElementById('boot-fallback-actions');
+          if (spinner) spinner.style.display = 'none';
+          if (msg) msg.style.display = 'none';
+          if (actions) actions.style.display = 'block';
+        }, TIMEOUT_MS);
+
+        // "Reload fresh" = unregister SW + drop all caches + reload.
+        // Breaks stale-SW loops where iOS PWA serves old HTML pointing
+        // to purged chunk hashes.
+        document.addEventListener('click', function(e) {
+          if (e.target && e.target.id === 'boot-hard-reload') {
+            e.target.disabled = true;
+            e.target.textContent = 'Clearing…';
+            var done = function() { window.location.reload(); };
+            var p = Promise.resolve();
+            if ('serviceWorker' in navigator) {
+              p = p.then(function() {
+                return navigator.serviceWorker.getRegistrations().then(function(rs) {
+                  return Promise.all(rs.map(function(r) { return r.unregister(); }));
+                });
+              });
+            }
+            if ('caches' in window) {
+              p = p.then(function() {
+                return caches.keys().then(function(keys) {
+                  return Promise.all(keys.map(function(k) { return caches.delete(k); }));
+                });
+              });
+            }
+            p.then(done, done); // reload even on error
+          }
+        });
+      })();
+    </script>
+
+    <!-- PWA Install Prompt (Android / Chrome) -->
+    <div id="pwa-install-prompt" class="pwa-install-prompt">
+      <span>Install Pack Hunter</span>
+      <button id="pwa-install-btn">Install</button>
+      <button class="dismiss" id="pwa-dismiss-btn">Later</button>
+    </div>
+
+    <!-- iOS Install Instructions (manual — Safari doesn't fire beforeinstallprompt) -->
+    <div id="ios-install-prompt" class="pwa-install-prompt" style="max-width:320px;flex-direction:column;gap:6px;padding:14px 20px;text-align:center;">
+      <span style="font-weight:600;">Install Pack Hunter on your iPhone</span>
+      <span style="font-size:12px;opacity:0.9;line-height:1.4;">
+        Tap <strong style="display:inline-block;padding:0 2px;">&#x2B06;</strong> Share in Safari,<br>
+        then choose <strong>Add to Home Screen</strong>
+      </span>
+      <button class="dismiss" id="ios-dismiss-btn" style="margin-top:4px;">Got it</button>
+    </div>
+
+    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            // Add cache-busting version to force SW update
+            const registration = await navigator.serviceWorker.register('/sw.js?v=6', {
+              scope: '/'
+            });
+            console.log('[PWA] Service worker registered:', registration.scope);
+
+            // Check for updates
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              console.log('[PWA] New service worker installing...');
+
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  // New content available
+                  if (window.addNotification) {
+                    window.addNotification('info', 'Update Available', 'Refresh to get the latest version');
+                  }
+                }
+              });
+            });
+          } catch (error) {
+            console.error('[PWA] Service worker registration failed:', error);
+          }
+        });
+      }
+
+      // ── Platform detection ───────────────────────────────────────────
+      const ua = navigator.userAgent || '';
+      const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+      const isAndroid = /Android/.test(ua);
+      const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+        || window.navigator.standalone === true;
+      // In-app browsers (Discord, Instagram, Facebook) cannot install PWAs
+      const isInAppBrowser = /FBAN|FBAV|Instagram|Line|WebView|Discord/.test(ua);
+
+      console.log('[PWA] Platform:', { isIOS, isAndroid, isSafari, isStandalone, isInAppBrowser });
+
+      if (isStandalone) {
+        console.log('[PWA] Already installed — running in standalone mode');
+      }
+
+      // ── Android / Chrome install flow ────────────────────────────────
+      let deferredPrompt;
+      const installPrompt = document.getElementById('pwa-install-prompt');
+      const installBtn = document.getElementById('pwa-install-btn');
+      const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+
+        if (isStandalone) return;
+        const dismissed = localStorage.getItem('pwa-install-dismissed');
+        if (!dismissed) {
+          installPrompt.classList.add('show');
+        }
+      });
+
+      installBtn?.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+
+        installPrompt.classList.remove('show');
+        deferredPrompt.prompt();
+
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[PWA] Install outcome:', outcome);
+        deferredPrompt = null;
+      });
+
+      dismissBtn?.addEventListener('click', () => {
+        installPrompt.classList.remove('show');
+        localStorage.setItem('pwa-install-dismissed', 'true');
+        // Reset after 7 days
+        setTimeout(() => {
+          localStorage.removeItem('pwa-install-dismissed');
+        }, 7 * 24 * 60 * 60 * 1000);
+      });
+
+      // Handle app installed (Android)
+      window.addEventListener('appinstalled', () => {
+        console.log('[PWA] App installed');
+        installPrompt.classList.remove('show');
+        deferredPrompt = null;
+
+        if (window.addNotification) {
+          window.addNotification('success', 'App Installed', 'Pack Hunter is now installed on your device');
+        }
+      });
+
+      // ── iOS Safari fallback ──────────────────────────────────────────
+      // iOS does NOT fire beforeinstallprompt. Show manual instructions.
+      const iosPrompt = document.getElementById('ios-install-prompt');
+      const iosDismissBtn = document.getElementById('ios-dismiss-btn');
+
+      if (isIOS && !isStandalone && !isInAppBrowser) {
+        const iosDismissed = localStorage.getItem('ios-install-dismissed');
+        if (!iosDismissed && isSafari) {
+          // Delay slightly so app loads first
+          setTimeout(() => {
+            iosPrompt?.classList.add('show');
+          }, 3000);
+        }
+      }
+
+      iosDismissBtn?.addEventListener('click', () => {
+        iosPrompt?.classList.remove('show');
+        localStorage.setItem('ios-install-dismissed', 'true');
+        // Reset after 14 days (iOS install is a bigger ask)
+        setTimeout(() => {
+          localStorage.removeItem('ios-install-dismissed');
+        }, 14 * 24 * 60 * 60 * 1000);
+      });
+
+      // Expose install state helper for React components that want to show
+      // their own install CTA in Settings/Profile page
+      window.__PWA__ = {
+        isIOS, isAndroid, isSafari, isStandalone, isInAppBrowser,
+        canPromptInstall: () => !!deferredPrompt,
+        triggerInstall: async () => {
+          if (!deferredPrompt) return { outcome: 'unavailable' };
+          deferredPrompt.prompt();
+          const r = await deferredPrompt.userChoice;
+          deferredPrompt = null;
+          installPrompt?.classList.remove('show');
+          return r;
+        },
+      };
+    </script>
+  </body>
+</html>
