@@ -11,26 +11,36 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as TradesRouteImport } from './routes/trades'
+import { Route as TradeAnalyticsRouteImport } from './routes/trade-analytics'
 import { Route as TrackerRouteImport } from './routes/tracker'
+import { Route as SharingCardsRouteImport } from './routes/sharing-cards'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PresentsRouteImport } from './routes/presents'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as HuntsRouteImport } from './routes/hunts'
+import { Route as HuntRouteImport } from './routes/hunt'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as GoldFlairRouteImport } from './routes/gold-flair'
+import { Route as GodpacksRouteImport } from './routes/godpacks'
 import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as CollectionMissionsRouteImport } from './routes/collection-missions'
 import { Route as CardsRouteImport } from './routes/cards'
 import { Route as CardRequestRouteImport } from './routes/card-request'
+import { Route as BotHubRouteImport } from './routes/bot-hub'
+import { Route as BattlesRouteImport } from './routes/battles'
+import { Route as BattleStatsRouteImport } from './routes/battle-stats'
+import { Route as BattleHistoryRouteImport } from './routes/battle-history'
 import { Route as ApexTerminalRouteImport } from './routes/apex-terminal'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as CollectionGoldFlairTradeRouteImport } from './routes/collection.gold-flair-trade'
 
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
@@ -42,9 +52,19 @@ const TradesRoute = TradesRouteImport.update({
   path: '/trades',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TradeAnalyticsRoute = TradeAnalyticsRouteImport.update({
+  id: '/trade-analytics',
+  path: '/trade-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrackerRoute = TrackerRouteImport.update({
   id: '/tracker',
   path: '/tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SharingCardsRoute = SharingCardsRouteImport.update({
+  id: '/sharing-cards',
+  path: '/sharing-cards',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -62,6 +82,11 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PresentsRoute = PresentsRouteImport.update({
+  id: '/presents',
+  path: '/presents',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -77,6 +102,11 @@ const HuntsRoute = HuntsRouteImport.update({
   path: '/hunts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HuntRoute = HuntRouteImport.update({
+  id: '/hunt',
+  path: '/hunt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -85,6 +115,11 @@ const HelpRoute = HelpRouteImport.update({
 const GoldFlairRoute = GoldFlairRouteImport.update({
   id: '/gold-flair',
   path: '/gold-flair',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GodpacksRoute = GodpacksRouteImport.update({
+  id: '/godpacks',
+  path: '/godpacks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GiftsRoute = GiftsRouteImport.update({
@@ -110,6 +145,26 @@ const CardsRoute = CardsRouteImport.update({
 const CardRequestRoute = CardRequestRouteImport.update({
   id: '/card-request',
   path: '/card-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BotHubRoute = BotHubRouteImport.update({
+  id: '/bot-hub',
+  path: '/bot-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattlesRoute = BattlesRouteImport.update({
+  id: '/battles',
+  path: '/battles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattleStatsRoute = BattleStatsRouteImport.update({
+  id: '/battle-stats',
+  path: '/battle-stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattleHistoryRoute = BattleHistoryRouteImport.update({
+  id: '/battle-history',
+  path: '/battle-history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApexTerminalRoute = ApexTerminalRouteImport.update({
@@ -142,6 +197,12 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const CollectionGoldFlairTradeRoute =
+  CollectionGoldFlairTradeRouteImport.update({
+    id: '/collection/gold-flair-trade',
+    path: '/collection/gold-flair-trade',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -149,22 +210,32 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
   '/card-request': typeof CardRequestRoute
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
   '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
   '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -172,22 +243,32 @@ export interface FileRoutesByTo {
   '/accounts': typeof AccountsRoute
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
   '/card-request': typeof CardRequestRoute
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
   '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
   '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -197,22 +278,32 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
   '/card-request': typeof CardRequestRoute
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
   '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
   '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -223,22 +314,32 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
     | '/card-request'
     | '/cards'
     | '/collection-missions'
     | '/events'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
     | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/presents'
     | '/profile'
     | '/resources'
     | '/settings'
+    | '/sharing-cards'
     | '/tracker'
+    | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/collection/gold-flair-trade'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -246,22 +347,32 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/analytics'
     | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
     | '/card-request'
     | '/cards'
     | '/collection-missions'
     | '/events'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
     | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/presents'
     | '/profile'
     | '/resources'
     | '/settings'
+    | '/sharing-cards'
     | '/tracker'
+    | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/collection/gold-flair-trade'
     | '/admin'
   id:
     | '__root__'
@@ -270,22 +381,32 @@ export interface FileRouteTypes {
     | '/admin'
     | '/analytics'
     | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
     | '/card-request'
     | '/cards'
     | '/collection-missions'
     | '/events'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
     | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/presents'
     | '/profile'
     | '/resources'
     | '/settings'
+    | '/sharing-cards'
     | '/tracker'
+    | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/collection/gold-flair-trade'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -295,22 +416,32 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AnalyticsRoute: typeof AnalyticsRoute
   ApexTerminalRoute: typeof ApexTerminalRoute
+  BattleHistoryRoute: typeof BattleHistoryRoute
+  BattleStatsRoute: typeof BattleStatsRoute
+  BattlesRoute: typeof BattlesRoute
+  BotHubRoute: typeof BotHubRoute
   CardRequestRoute: typeof CardRequestRoute
   CardsRoute: typeof CardsRoute
   CollectionMissionsRoute: typeof CollectionMissionsRoute
   EventsRoute: typeof EventsRoute
   GiftsRoute: typeof GiftsRoute
+  GodpacksRoute: typeof GodpacksRoute
   GoldFlairRoute: typeof GoldFlairRoute
   HelpRoute: typeof HelpRoute
+  HuntRoute: typeof HuntRoute
   HuntsRoute: typeof HuntsRoute
   InventoryRoute: typeof InventoryRoute
   LoginRoute: typeof LoginRoute
+  PresentsRoute: typeof PresentsRoute
   ProfileRoute: typeof ProfileRoute
   ResourcesRoute: typeof ResourcesRoute
   SettingsRoute: typeof SettingsRoute
+  SharingCardsRoute: typeof SharingCardsRoute
   TrackerRoute: typeof TrackerRoute
+  TradeAnalyticsRoute: typeof TradeAnalyticsRoute
   TradesRoute: typeof TradesRoute
   WishlistRoute: typeof WishlistRoute
+  CollectionGoldFlairTradeRoute: typeof CollectionGoldFlairTradeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -329,11 +460,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TradesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trade-analytics': {
+      id: '/trade-analytics'
+      path: '/trade-analytics'
+      fullPath: '/trade-analytics'
+      preLoaderRoute: typeof TradeAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tracker': {
       id: '/tracker'
       path: '/tracker'
       fullPath: '/tracker'
       preLoaderRoute: typeof TrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sharing-cards': {
+      id: '/sharing-cards'
+      path: '/sharing-cards'
+      fullPath: '/sharing-cards'
+      preLoaderRoute: typeof SharingCardsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -357,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/presents': {
+      id: '/presents'
+      path: '/presents'
+      fullPath: '/presents'
+      preLoaderRoute: typeof PresentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -378,6 +530,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HuntsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hunt': {
+      id: '/hunt'
+      path: '/hunt'
+      fullPath: '/hunt'
+      preLoaderRoute: typeof HuntRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help': {
       id: '/help'
       path: '/help'
@@ -390,6 +549,13 @@ declare module '@tanstack/react-router' {
       path: '/gold-flair'
       fullPath: '/gold-flair'
       preLoaderRoute: typeof GoldFlairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/godpacks': {
+      id: '/godpacks'
+      path: '/godpacks'
+      fullPath: '/godpacks'
+      preLoaderRoute: typeof GodpacksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gifts': {
@@ -425,6 +591,34 @@ declare module '@tanstack/react-router' {
       path: '/card-request'
       fullPath: '/card-request'
       preLoaderRoute: typeof CardRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bot-hub': {
+      id: '/bot-hub'
+      path: '/bot-hub'
+      fullPath: '/bot-hub'
+      preLoaderRoute: typeof BotHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battles': {
+      id: '/battles'
+      path: '/battles'
+      fullPath: '/battles'
+      preLoaderRoute: typeof BattlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battle-stats': {
+      id: '/battle-stats'
+      path: '/battle-stats'
+      fullPath: '/battle-stats'
+      preLoaderRoute: typeof BattleStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battle-history': {
+      id: '/battle-history'
+      path: '/battle-history'
+      fullPath: '/battle-history'
+      preLoaderRoute: typeof BattleHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/apex-terminal': {
@@ -469,6 +663,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/collection/gold-flair-trade': {
+      id: '/collection/gold-flair-trade'
+      path: '/collection/gold-flair-trade'
+      fullPath: '/collection/gold-flair-trade'
+      preLoaderRoute: typeof CollectionGoldFlairTradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -488,22 +689,32 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AnalyticsRoute: AnalyticsRoute,
   ApexTerminalRoute: ApexTerminalRoute,
+  BattleHistoryRoute: BattleHistoryRoute,
+  BattleStatsRoute: BattleStatsRoute,
+  BattlesRoute: BattlesRoute,
+  BotHubRoute: BotHubRoute,
   CardRequestRoute: CardRequestRoute,
   CardsRoute: CardsRoute,
   CollectionMissionsRoute: CollectionMissionsRoute,
   EventsRoute: EventsRoute,
   GiftsRoute: GiftsRoute,
+  GodpacksRoute: GodpacksRoute,
   GoldFlairRoute: GoldFlairRoute,
   HelpRoute: HelpRoute,
+  HuntRoute: HuntRoute,
   HuntsRoute: HuntsRoute,
   InventoryRoute: InventoryRoute,
   LoginRoute: LoginRoute,
+  PresentsRoute: PresentsRoute,
   ProfileRoute: ProfileRoute,
   ResourcesRoute: ResourcesRoute,
   SettingsRoute: SettingsRoute,
+  SharingCardsRoute: SharingCardsRoute,
   TrackerRoute: TrackerRoute,
+  TradeAnalyticsRoute: TradeAnalyticsRoute,
   TradesRoute: TradesRoute,
   WishlistRoute: WishlistRoute,
+  CollectionGoldFlairTradeRoute: CollectionGoldFlairTradeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
