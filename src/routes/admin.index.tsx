@@ -5,7 +5,7 @@ import { StatCard } from "@/components/app-shell/StatCard";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Admin — Radiant" }] }),
   component: Admin,
 });
