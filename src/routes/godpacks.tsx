@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/godpacks")({
   head: () => ({ meta: [{ title: "God Packs — Radiant" }] }),
-  component: GodPacks;
+  component: GodPacks,
 });
 
 const gp = Array.from({ length: 12 }).map((_, i) => ({
