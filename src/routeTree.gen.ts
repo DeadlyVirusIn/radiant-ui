@@ -9,8 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TradesRouteImport } from './routes/trades'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as InventoryRouteImport } from './routes/inventory'
+import { Route as HuntsRouteImport } from './routes/hunts'
+import { Route as GoldFlairRouteImport } from './routes/gold-flair'
+import { Route as GiftsRouteImport } from './routes/gifts'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TradesRoute = TradesRouteImport.update({
+  id: '/trades',
+  path: '/trades',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InventoryRoute = InventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HuntsRoute = HuntsRouteImport.update({
+  id: '/hunts',
+  path: '/hunts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoldFlairRoute = GoldFlairRouteImport.update({
+  id: '/gold-flair',
+  path: '/gold-flair',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GiftsRoute = GiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticsRoute = AnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountsRoute = AccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +79,172 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/analytics': typeof AnalyticsRoute
+  '/events': typeof EventsRoute
+  '/gifts': typeof GiftsRoute
+  '/gold-flair': typeof GoldFlairRoute
+  '/hunts': typeof HuntsRoute
+  '/inventory': typeof InventoryRoute
+  '/settings': typeof SettingsRoute
+  '/trades': typeof TradesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/analytics': typeof AnalyticsRoute
+  '/events': typeof EventsRoute
+  '/gifts': typeof GiftsRoute
+  '/gold-flair': typeof GoldFlairRoute
+  '/hunts': typeof HuntsRoute
+  '/inventory': typeof InventoryRoute
+  '/settings': typeof SettingsRoute
+  '/trades': typeof TradesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/accounts': typeof AccountsRoute
+  '/admin': typeof AdminRoute
+  '/analytics': typeof AnalyticsRoute
+  '/events': typeof EventsRoute
+  '/gifts': typeof GiftsRoute
+  '/gold-flair': typeof GoldFlairRoute
+  '/hunts': typeof HuntsRoute
+  '/inventory': typeof InventoryRoute
+  '/settings': typeof SettingsRoute
+  '/trades': typeof TradesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/analytics'
+    | '/events'
+    | '/gifts'
+    | '/gold-flair'
+    | '/hunts'
+    | '/inventory'
+    | '/settings'
+    | '/trades'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/analytics'
+    | '/events'
+    | '/gifts'
+    | '/gold-flair'
+    | '/hunts'
+    | '/inventory'
+    | '/settings'
+    | '/trades'
+  id:
+    | '__root__'
+    | '/'
+    | '/accounts'
+    | '/admin'
+    | '/analytics'
+    | '/events'
+    | '/gifts'
+    | '/gold-flair'
+    | '/hunts'
+    | '/inventory'
+    | '/settings'
+    | '/trades'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountsRoute: typeof AccountsRoute
+  AdminRoute: typeof AdminRoute
+  AnalyticsRoute: typeof AnalyticsRoute
+  EventsRoute: typeof EventsRoute
+  GiftsRoute: typeof GiftsRoute
+  GoldFlairRoute: typeof GoldFlairRoute
+  HuntsRoute: typeof HuntsRoute
+  InventoryRoute: typeof InventoryRoute
+  SettingsRoute: typeof SettingsRoute
+  TradesRoute: typeof TradesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/trades': {
+      id: '/trades'
+      path: '/trades'
+      fullPath: '/trades'
+      preLoaderRoute: typeof TradesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inventory': {
+      id: '/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof InventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hunts': {
+      id: '/hunts'
+      path: '/hunts'
+      fullPath: '/hunts'
+      preLoaderRoute: typeof HuntsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gold-flair': {
+      id: '/gold-flair'
+      path: '/gold-flair'
+      fullPath: '/gold-flair'
+      preLoaderRoute: typeof GoldFlairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gifts': {
+      id: '/gifts'
+      path: '/gifts'
+      fullPath: '/gifts'
+      preLoaderRoute: typeof GiftsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytics': {
+      id: '/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof AnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accounts': {
+      id: '/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof AccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,17 +257,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountsRoute: AccountsRoute,
+  AdminRoute: AdminRoute,
+  AnalyticsRoute: AnalyticsRoute,
+  EventsRoute: EventsRoute,
+  GiftsRoute: GiftsRoute,
+  GoldFlairRoute: GoldFlairRoute,
+  HuntsRoute: HuntsRoute,
+  InventoryRoute: InventoryRoute,
+  SettingsRoute: SettingsRoute,
+  TradesRoute: TradesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
