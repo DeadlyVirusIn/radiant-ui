@@ -9,27 +9,62 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as TradesRouteImport } from './routes/trades'
+import { Route as TrackerRouteImport } from './routes/tracker'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as HuntsRouteImport } from './routes/hunts'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as GoldFlairRouteImport } from './routes/gold-flair'
 import { Route as GiftsRouteImport } from './routes/gifts'
 import { Route as EventsRouteImport } from './routes/events'
+import { Route as CollectionMissionsRouteImport } from './routes/collection-missions'
+import { Route as CardsRouteImport } from './routes/cards'
+import { Route as CardRequestRouteImport } from './routes/card-request'
+import { Route as ApexTerminalRouteImport } from './routes/apex-terminal'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TradesRoute = TradesRouteImport.update({
   id: '/trades',
   path: '/trades',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TrackerRoute = TrackerRouteImport.update({
+  id: '/tracker',
+  path: '/tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InventoryRoute = InventoryRouteImport.update({
@@ -40,6 +75,11 @@ const InventoryRoute = InventoryRouteImport.update({
 const HuntsRoute = HuntsRouteImport.update({
   id: '/hunts',
   path: '/hunts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GoldFlairRoute = GoldFlairRouteImport.update({
@@ -55,6 +95,26 @@ const GiftsRoute = GiftsRouteImport.update({
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
   path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionMissionsRoute = CollectionMissionsRouteImport.update({
+  id: '/collection-missions',
+  path: '/collection-missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardsRoute = CardsRouteImport.update({
+  id: '/cards',
+  path: '/cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardRequestRoute = CardRequestRouteImport.update({
+  id: '/card-request',
+  path: '/card-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApexTerminalRoute = ApexTerminalRouteImport.update({
+  id: '/apex-terminal',
+  path: '/apex-terminal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -88,26 +148,46 @@ export interface FileRoutesByFullPath {
   '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/tracker': typeof TrackerRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/tracker': typeof TrackerRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
@@ -116,13 +196,23 @@ export interface FileRoutesById {
   '/accounts': typeof AccountsRoute
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
   '/gifts': typeof GiftsRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/tracker': typeof TrackerRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -132,26 +222,46 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/admin'
     | '/analytics'
+    | '/apex-terminal'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
     | '/gifts'
     | '/gold-flair'
+    | '/help'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/profile'
+    | '/resources'
     | '/settings'
+    | '/tracker'
     | '/trades'
+    | '/wishlist'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts'
     | '/analytics'
+    | '/apex-terminal'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
     | '/gifts'
     | '/gold-flair'
+    | '/help'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/profile'
+    | '/resources'
     | '/settings'
+    | '/tracker'
     | '/trades'
+    | '/wishlist'
     | '/admin'
   id:
     | '__root__'
@@ -159,13 +269,23 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/admin'
     | '/analytics'
+    | '/apex-terminal'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
     | '/gifts'
     | '/gold-flair'
+    | '/help'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/profile'
+    | '/resources'
     | '/settings'
+    | '/tracker'
     | '/trades'
+    | '/wishlist'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -174,17 +294,34 @@ export interface RootRouteChildren {
   AccountsRoute: typeof AccountsRoute
   AdminRoute: typeof AdminRouteWithChildren
   AnalyticsRoute: typeof AnalyticsRoute
+  ApexTerminalRoute: typeof ApexTerminalRoute
+  CardRequestRoute: typeof CardRequestRoute
+  CardsRoute: typeof CardsRoute
+  CollectionMissionsRoute: typeof CollectionMissionsRoute
   EventsRoute: typeof EventsRoute
   GiftsRoute: typeof GiftsRoute
   GoldFlairRoute: typeof GoldFlairRoute
+  HelpRoute: typeof HelpRoute
   HuntsRoute: typeof HuntsRoute
   InventoryRoute: typeof InventoryRoute
+  LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
+  ResourcesRoute: typeof ResourcesRoute
   SettingsRoute: typeof SettingsRoute
+  TrackerRoute: typeof TrackerRoute
   TradesRoute: typeof TradesRoute
+  WishlistRoute: typeof WishlistRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trades': {
       id: '/trades'
       path: '/trades'
@@ -192,11 +329,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TradesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tracker': {
+      id: '/tracker'
+      path: '/tracker'
+      fullPath: '/tracker'
+      preLoaderRoute: typeof TrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inventory': {
@@ -211,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/hunts'
       fullPath: '/hunts'
       preLoaderRoute: typeof HuntsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gold-flair': {
@@ -232,6 +404,34 @@ declare module '@tanstack/react-router' {
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collection-missions': {
+      id: '/collection-missions'
+      path: '/collection-missions'
+      fullPath: '/collection-missions'
+      preLoaderRoute: typeof CollectionMissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cards': {
+      id: '/cards'
+      path: '/cards'
+      fullPath: '/cards'
+      preLoaderRoute: typeof CardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/card-request': {
+      id: '/card-request'
+      path: '/card-request'
+      fullPath: '/card-request'
+      preLoaderRoute: typeof CardRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apex-terminal': {
+      id: '/apex-terminal'
+      path: '/apex-terminal'
+      fullPath: '/apex-terminal'
+      preLoaderRoute: typeof ApexTerminalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -287,14 +487,34 @@ const rootRouteChildren: RootRouteChildren = {
   AccountsRoute: AccountsRoute,
   AdminRoute: AdminRouteWithChildren,
   AnalyticsRoute: AnalyticsRoute,
+  ApexTerminalRoute: ApexTerminalRoute,
+  CardRequestRoute: CardRequestRoute,
+  CardsRoute: CardsRoute,
+  CollectionMissionsRoute: CollectionMissionsRoute,
   EventsRoute: EventsRoute,
   GiftsRoute: GiftsRoute,
   GoldFlairRoute: GoldFlairRoute,
+  HelpRoute: HelpRoute,
   HuntsRoute: HuntsRoute,
   InventoryRoute: InventoryRoute,
+  LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
+  ResourcesRoute: ResourcesRoute,
   SettingsRoute: SettingsRoute,
+  TrackerRoute: TrackerRoute,
   TradesRoute: TradesRoute,
+  WishlistRoute: WishlistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
