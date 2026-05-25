@@ -1,56 +1,74 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard,
-  Crosshair,
-  Sparkles,
-  Gift,
-  ArrowLeftRight,
-  Boxes,
-  Bot,
-  BarChart3,
-  ScrollText,
-  Settings,
-  ShieldCheck,
-  Search,
-  Command,
+  LayoutDashboard, Crosshair, Sparkles, Gift, ArrowLeftRight, Boxes, Bot,
+  BarChart3, ScrollText, Settings, ShieldCheck, Search, Command,
+  CreditCard, Trophy, Target, Heart, Share2, Package, PackageOpen, Wand2,
+  Users, Swords, History, Coins, Medal, Calendar, Battery, Store, ListChecks,
+  LifeBuoy, User, Sparkle, Gem, BookOpen, Activity, FileSearch, HeartPulse,
+  Cog, GitBranch, Database, FlaskConical,
 } from "lucide-react";
 
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
+  SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
 type NavItem = { title: string; to: string; icon: React.ComponentType<{ className?: string }> };
 
 const overview: NavItem[] = [
-  { title: "Dashboard", to: "/", icon: LayoutDashboard },
-  { title: "Analytics", to: "/analytics", icon: BarChart3 },
+  { title: "Dashboard",     to: "/",          icon: LayoutDashboard },
+  { title: "Resources",     to: "/resources", icon: Coins },
+  { title: "Analytics",     to: "/analytics", icon: BarChart3 },
+  { title: "Profile",       to: "/profile",   icon: User },
+];
+
+const collection: NavItem[] = [
+  { title: "Cards",              to: "/cards",               icon: CreditCard },
+  { title: "Tracker",            to: "/tracker",             icon: Target },
+  { title: "Wishlist",           to: "/wishlist",            icon: Heart },
+  { title: "Collection missions",to: "/collection-missions", icon: ListChecks },
+  { title: "Card request",       to: "/card-request",        icon: BookOpen },
+  { title: "Sharing cards",      to: "/sharing-cards",       icon: Share2 },
+  { title: "Gold Flair trade",   to: "/collection/gold-flair-trade", icon: Gem },
 ];
 
 const operations: NavItem[] = [
-  { title: "Hunts", to: "/hunts", icon: Crosshair },
-  { title: "Gold Flair", to: "/gold-flair", icon: Sparkles },
-  { title: "Gifts", to: "/gifts", icon: Gift },
-  { title: "Trades", to: "/trades", icon: ArrowLeftRight },
+  { title: "Hunts",         to: "/hunts",      icon: Crosshair },
+  { title: "Hunt monitor",  to: "/hunt",       icon: Activity },
+  { title: "God Packs",     to: "/godpacks",   icon: Sparkle },
+  { title: "Gold Flair",    to: "/gold-flair", icon: Sparkles },
+  { title: "Gifts",         to: "/gifts",      icon: Gift },
+  { title: "Presents",      to: "/presents",   icon: Package },
+  { title: "Trades",        to: "/trades",     icon: ArrowLeftRight },
+  { title: "Trade analytics", to: "/trade-analytics", icon: BarChart3 },
+];
+
+const gameplay: NavItem[] = [
+  { title: "Battles",       to: "/battles",        icon: Swords },
+  { title: "Battle history",to: "/battle-history", icon: History },
+  { title: "Battle stats",  to: "/battle-stats",   icon: Trophy },
+  { title: "PvP rankings",  to: "/pvp",            icon: Medal },
+  { title: "Missions",      to: "/missions",       icon: ListChecks },
+  { title: "Achievements",  to: "/achievements",   icon: Trophy },
+  { title: "Events",        to: "/events",         icon: Calendar },
+  { title: "Open pack",     to: "/open-pack",      icon: PackageOpen },
+  { title: "Wonder pick",   to: "/wonder-pick",    icon: Wand2 },
+  { title: "Item shop",     to: "/shop",           icon: Store },
+  { title: "Stamina",       to: "/stamina",        icon: Battery },
+  { title: "Friends",       to: "/friends",        icon: Users },
 ];
 
 const fleet: NavItem[] = [
   { title: "Inventory", to: "/inventory", icon: Boxes },
-  { title: "Accounts", to: "/accounts", icon: Bot },
-  { title: "Events", to: "/events", icon: ScrollText },
+  { title: "Accounts",  to: "/accounts",  icon: Bot },
+  { title: "Bot hub",   to: "/bot-hub",   icon: Bot },
+  { title: "Event log", to: "/events",    icon: ScrollText },
 ];
 
 const system: NavItem[] = [
   { title: "Settings", to: "/settings", icon: Settings },
-  { title: "Admin", to: "/admin", icon: ShieldCheck },
+  { title: "Help",     to: "/help",     icon: LifeBuoy },
+  { title: "Admin",    to: "/admin",    icon: ShieldCheck },
 ];
 
 function NavGroup({ label, items, currentPath }: { label: string; items: NavItem[]; currentPath: string }) {
@@ -62,13 +80,14 @@ function NavGroup({ label, items, currentPath }: { label: string; items: NavItem
       <SidebarGroupContent>
         <SidebarMenu>
           {items.map((item) => {
-            const active = item.to === "/" ? currentPath === "/" : currentPath.startsWith(item.to);
+            const active = item.to === "/" ? currentPath === "/" : currentPath === item.to || currentPath.startsWith(item.to + "/");
             return (
               <SidebarMenuItem key={item.to}>
                 <SidebarMenuButton
                   asChild
                   isActive={active}
-                  className="h-9 rounded-md text-[13px] font-medium data-[active=true]:bg-primary/15 data-[active=true]:text-foreground data-[active=true]:shadow-[inset_2px_0_0_var(--primary)]"
+                  tooltip={item.title}
+                  className="h-8 rounded-md text-[13px] font-medium data-[active=true]:bg-primary/15 data-[active=true]:text-foreground data-[active=true]:shadow-[inset_2px_0_0_var(--primary)]"
                 >
                   <Link to={item.to} className="flex items-center gap-2.5">
                     <item.icon className="h-4 w-4 shrink-0" />
@@ -115,10 +134,12 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="px-1.5">
-        <NavGroup label="Overview" items={overview} currentPath={currentPath} />
+        <NavGroup label="Overview"   items={overview}   currentPath={currentPath} />
+        <NavGroup label="Collection" items={collection} currentPath={currentPath} />
         <NavGroup label="Operations" items={operations} currentPath={currentPath} />
-        <NavGroup label="Fleet" items={fleet} currentPath={currentPath} />
-        <NavGroup label="System" items={system} currentPath={currentPath} />
+        <NavGroup label="Gameplay"   items={gameplay}   currentPath={currentPath} />
+        <NavGroup label="Fleet"      items={fleet}      currentPath={currentPath} />
+        <NavGroup label="System"     items={system}     currentPath={currentPath} />
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
