@@ -76,7 +76,7 @@ function Dashboard() {
           </div>
 
           {/* Pure-CSS sparkline grid */}
-          <div className="mt-5 grid h-44 grid-cols-24 items-end gap-1">
+          <div className="mt-5 grid h-44 items-end gap-1 grid-cols-[repeat(24,minmax(0,1fr))]">
             {Array.from({ length: 24 }).map((_, i) => {
               const a = 20 + Math.round(Math.abs(Math.sin(i * 0.7)) * 70 + (i % 5) * 4);
               const b = 6 + Math.round(Math.abs(Math.cos(i * 0.9)) * 24);
