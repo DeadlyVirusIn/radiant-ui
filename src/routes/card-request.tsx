@@ -419,6 +419,7 @@ function YourRequestsPanel({ requests, onCancel, onAgain }: { requests: UserCard
                   {meta.terminal ? (
                     <button
                       type="button"
+                      onClick={() => onAgain(r.id)}
                       className="inline-flex items-center gap-1 rounded-md border border-border bg-card/40 px-2 py-1 text-[10px] font-semibold text-foreground hover:bg-accent"
                     >
                       <RotateCcw className="h-3 w-3" /> Again
@@ -426,6 +427,7 @@ function YourRequestsPanel({ requests, onCancel, onAgain }: { requests: UserCard
                   ) : (
                     <button
                       type="button"
+                      onClick={() => onCancel(r.id)}
                       className="inline-flex items-center gap-1 rounded-md border border-border bg-card/40 px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     >
                       <X className="h-3 w-3" /> Cancel
