@@ -181,6 +181,33 @@ const friendsActivity = [
   { name:"Ren",    action:"joined Mew ex hunt",         when:"3h"  },
 ];
 
+// Wishlist progress — how close each wishlisted card is to landing
+const wishlist = [
+  { name:"Mew ex",      set:"Triumphant Light",     type:"psychic"   as EnergyType, rarity:"Crown"     as const, route:"hunt",    routeLabel:"Hunt at 12%",          progress:12, sub:"4,200 pulls to expected" },
+  { name:"Blastoise ex",set:"Genetic Apex",         type:"water"     as EnergyType, rarity:"EX"        as const, route:"trade",   routeLabel:"Trade with Mika",      progress:80, sub:"Waiting for your reply" },
+  { name:"Lugia Crown", set:"Space-Time Smackdown", type:"lightning" as EnergyType, rarity:"Crown"     as const, route:"hunt",    routeLabel:"Hunt at 41%",          progress:41, sub:"~2 days to expected" },
+  { name:"Charizard",   set:"Genetic Apex",         type:"fire"      as EnergyType, rarity:"Immersive" as const, route:"flair",   routeLabel:"Mint via Gold Flair",  progress:95, sub:"Ready · 1,284 flair on hand" },
+];
+const wishRoute: Record<string,{cls:string;label:string}> = {
+  hunt:  { cls:"bg-warning/15 text-warning border-warning/30", label:"Hunt" },
+  trade: { cls:"bg-primary/15 text-primary border-primary/30", label:"Trade" },
+  flair: { cls:"bg-warning/15 text-warning border-warning/30", label:"Flair" },
+};
+
+// Community Activity — what the wider PackHunter community is doing right now
+const trending = [
+  { id:"tr1", kind:"hunt",  title:"Mew ex community hunt", sub:"18,900 players · +2.4k joined today", metric:"+24%", to:"/hunts" },
+  { id:"tr2", kind:"set",   title:"Triumphant Light",      sub:"4 new chase cards · 12.4k hunting",   metric:"Hot",  to:"/cards" },
+  { id:"tr3", kind:"trade", title:"Snorlax ↔ Blastoise ex",sub:"Most traded pair this week",          metric:"312",  to:"/trades" },
+  { id:"tr4", kind:"flair", title:"Charizard mints",       sub:"Only 8 left · restock uncertain",     metric:"Low",  to:"/gold-flair" },
+];
+const trendKind: Record<string,{icon:React.ComponentType<{className?:string}>;cls:string}> = {
+  hunt:  { icon: Crosshair, cls:"text-warning bg-warning/10 border-warning/20" },
+  set:   { icon: Sparkles,  cls:"text-primary bg-primary/10 border-primary/20" },
+  trade: { icon: Repeat2,   cls:"text-primary bg-primary/10 border-primary/20" },
+  flair: { icon: Gem,       cls:"text-warning bg-warning/10 border-warning/20" },
+};
+
 // ─────────────────────────────────────────────────────────────
 function Tile({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return <div className={`rounded-2xl border border-border/60 bg-card/40 p-5 backdrop-blur-sm ${className}`}>{children}</div>;
