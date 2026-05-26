@@ -444,6 +444,42 @@ function UserHome() {
         </div>
       </Tile>
 
+      {/* WISHLIST PROGRESS — every wanted card with the fastest path */}
+      <Tile>
+        <TileHeader
+          icon={Heart}
+          title="Wishlist progress"
+          subtitle="The fastest path to every card you want"
+          action={<Link to="/wishlist" className="text-xs font-semibold text-primary hover:underline">Manage wishlist →</Link>}
+        />
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {wishlist.map((w) => {
+            const r = wishRoute[w.route];
+            return (
+              <div key={w.name} className="flex gap-3 rounded-2xl border border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/40">
+                <div className="w-20 shrink-0">
+                  <CardArt name={w.name} set={w.set} type={w.type} rarity={w.rarity} />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate font-display text-sm font-semibold text-foreground">{w.name}</p>
+                    <span className={`inline-flex shrink-0 items-center rounded-md border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${r.cls}`}>{r.label}</span>
+                  </div>
+                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{w.set}</p>
+                  <p className="mt-1.5 truncate text-[11px] font-semibold text-foreground">{w.routeLabel}</p>
+                  <p className="truncate text-[10px] text-muted-foreground">{w.sub}</p>
+                  <div className="mt-auto pt-2">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted/40">
+                      <div className="h-full rounded-full bg-gradient-to-r from-primary to-warning" style={{ width: `${w.progress}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Tile>
+
       {/* 3. TRADE OPPORTUNITIES — dedicated */}
       <Tile>
         <TileHeader icon={Repeat2} title="Trade opportunities" subtitle="Matches with your friends' wishlists right now" action={<Link to="/trades" className="text-xs font-semibold text-primary hover:underline">All trades →</Link>} />
