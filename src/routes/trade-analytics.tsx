@@ -160,13 +160,13 @@ function TradeAnalytics() {
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} interval="preserveStartEnd" />
-                <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} width={28} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
+                <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={28} />
                 <RTooltip content={<ChartTip />} />
-                <Bar dataKey="completed" stackId="a" fill="hsl(var(--success))" radius={[2,2,0,0]} />
-                <Bar dataKey="failed" stackId="a" fill="hsl(var(--destructive))" />
-                <Bar dataKey="cancelled" stackId="a" fill="hsl(var(--muted-foreground))" />
+                <Bar dataKey="completed" stackId="a" fill="var(--success)" radius={[2,2,0,0]} />
+                <Bar dataKey="failed" stackId="a" fill="var(--destructive)" />
+                <Bar dataKey="cancelled" stackId="a" fill="var(--muted-foreground)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -329,15 +329,15 @@ function TradeAnalytics() {
                 <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                   <defs>
                     <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="hsl(var(--warning))" stopOpacity={0.5} />
-                      <stop offset="100%" stopColor="hsl(var(--warning))" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--warning)" stopOpacity={0.5} />
+                      <stop offset="100%" stopColor="var(--warning)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} interval="preserveStartEnd" />
-                  <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} width={40} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
+                  <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={40} />
                   <RTooltip content={<ChartTip />} />
-                  <Area type="monotone" dataKey="net" stroke="hsl(var(--warning))" fill="url(#sandGrad)" strokeWidth={2} />
+                  <Area type="monotone" dataKey="net" stroke="var(--warning)" fill="url(#sandGrad)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
