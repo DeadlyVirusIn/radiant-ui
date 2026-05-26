@@ -364,7 +364,7 @@ export function AppSidebar() {
           <div className="flex min-w-0 flex-col leading-tight group-data-[collapsible=icon]:hidden">
             <span className="font-display text-[15px] font-bold tracking-tight">Radiant</span>
             <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-              Ops Console
+              Collector Hub
             </span>
           </div>
         </Link>
