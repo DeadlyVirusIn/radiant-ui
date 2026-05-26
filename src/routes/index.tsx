@@ -294,7 +294,6 @@ function UserHome() {
                     <p className="truncate text-xs text-foreground"><span className="font-semibold">{f.name}</span> <span className="text-muted-foreground">{f.action}</span></p>
                     <p className="text-[10px] text-muted-foreground">{f.when} ago</p>
                   </div>
-                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
                 </li>
               ))}
             </ul>
