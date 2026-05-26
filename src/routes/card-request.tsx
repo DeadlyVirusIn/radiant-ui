@@ -476,11 +476,12 @@ function HowItWorks() {
 // ── Trade confirmation dialog ───────────────────────────────────────────────
 
 function TradeConfirmDialog({
-  request, onOpenChange, atCap,
+  request, onOpenChange, atCap, onConfirm,
 }: {
   request: CardRequest | null;
   onOpenChange: (open: boolean) => void;
   atCap: boolean;
+  onConfirm: (req: CardRequest) => void;
 }) {
   const open = !!request;
   return (
