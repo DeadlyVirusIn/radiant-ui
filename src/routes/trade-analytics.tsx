@@ -193,11 +193,10 @@ function TradeAnalytics() {
               <div className="bg-destructive" style={{ width: `${(sum.failed / trades) * 100}%` }} />
               <div className="bg-muted-foreground" style={{ width: `${(sum.cancelled / trades) * 100}%` }} />
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mt-4 grid grid-cols-3 gap-3">
               <Readout tone="success" label="Completed" value={sum.completed} pct={Math.round((sum.completed/trades)*100)} />
               <Readout tone="danger" label="Failed" value={sum.failed} pct={Math.round((sum.failed/trades)*100)} />
               <Readout tone="neutral" label="Cancelled" value={sum.cancelled} pct={Math.round((sum.cancelled/trades)*100)} />
-              <Readout tone="warning" label="Stuck > 24h" value={2} pct={Math.round((2/trades)*100)} />
             </div>
           </>
         )}
