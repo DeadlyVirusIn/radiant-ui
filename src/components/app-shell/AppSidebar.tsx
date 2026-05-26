@@ -179,7 +179,7 @@ function LeafRow({ leaf, currentPath, depth }: { leaf: Leaf; currentPath: string
 // Branch renderer (collapsible). Supports one nested branch level (Wallet, Hunts).
 function BranchRow({
   branch, currentPath, depth,
-}: { branch: Branch & { items: (Leaf | Branch & { items: Leaf[] })[] }; currentPath: string; depth: number }) {
+}: { branch: TopBranch; currentPath: string; depth: number }) {
   const branchActive = pathInTree(currentPath, branch.items);
   const [open, setOpen] = useState(branchActive);
   useEffect(() => { if (branchActive) setOpen(true); }, [branchActive]);
@@ -202,11 +202,11 @@ function BranchRow({
       </CollapsibleTrigger>
       <CollapsibleContent>
         <SidebarMenuSub className="mr-0 pr-0">
-          {branch.items.map((child) => (
+          {branch.items.map((child: Leaf | SubBranch) => (
             <SidebarMenuSubItem key={"to" in child ? child.to : child.title}>
               {"to" in child
                 ? <LeafRow leaf={child} currentPath={currentPath} depth={depth + 1} />
-                : <BranchRow branch={child as any} currentPath={currentPath} depth={depth + 1} />}
+                : <BranchRow branch={child} currentPath={currentPath} depth={depth + 1} />}
             </SidebarMenuSubItem>
           ))}
         </SidebarMenuSub>
