@@ -12,6 +12,7 @@ const labels: Record<string, string> = {
   "gold-flair": "Gold Flair",
   gifts: "Gifts",
   trades: "Trades",
+  wishlist: "Wishlist",
   inventory: "Inventory",
   accounts: "Accounts",
   analytics: "Analytics",
