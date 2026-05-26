@@ -22,7 +22,7 @@ export function MarketplacePreview({ requests }: { requests: CardRequest[] }) {
             <p className="text-xs text-muted-foreground">Cards from the request marketplace that match your wishlist</p>
           </div>
         </div>
-        <Link to="/card-request" className="text-xs font-semibold text-primary hover:underline">
+        <Link to="/card-request" search={{ card: undefined }} className="text-xs font-semibold text-primary hover:underline">
           Browse marketplace →
         </Link>
       </div>
