@@ -162,13 +162,14 @@ function GoalCard({ g, compact = false }: { g: Goal; compact?: boolean }) {
 
   return (
     <div className={cn(
-      "rounded-xl border bg-card/40 p-4 transition-colors",
+      "rounded-xl border bg-card/40 p-3 transition-colors",
       status === "completed" ? "border-success/20" :
       status === "almost"    ? "border-amber-400/30 bg-amber-400/[0.03]" :
                                "border-border hover:border-border/80",
-      compact && "p-3",
+      compact && "p-2.5",
     )}>
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2.5">
+
         <div className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border",
           CATS[g.category].tint,
