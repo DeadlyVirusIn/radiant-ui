@@ -31,78 +31,132 @@ type Entry =
 type Group = { id: string; label: string; entries: Entry[] };
 
 // ─────────────────────────────────────────────────────────────────────────
-// USER FLOW  (mirrors reference/packhunter-current App.jsx allNavGroups)
+// USER FLOW
+//
+// Every entry below maps to a real route file in src/routes/ AND has a
+// counterpart page in reference/packhunter-current/src/pages/. Labels are
+// taken from the reference component so the sidebar reflects what the page
+// actually does instead of inventing product surface.
+//
+//  label              | route                          | reference page
+//  -------------------|--------------------------------|------------------------
+//  Home               | /                              | Dashboard.jsx
+//  Missions           | /missions                      | Missions.jsx
+//  Open Pack          | /open-pack                     | OpenPack.jsx
+//  Wonder Pick        | /wonder-pick                   | WonderPick.jsx
+//  Cards              | /cards                         | Cards.jsx
+//  Tracker            | /tracker                       | Tracker.jsx
+//  Wishlist           | /wishlist                      | Wishlist.jsx
+//  God Pack Gallery   | /godpacks                      | GodPackGallery.jsx
+//  Collection Goals   | /collection-missions           | CollectionMissions.jsx
+//  Hunt Monitor       | /hunt                          | HuntMonitor.jsx
+//  Bot Hub            | /bot-hub                       | BotHub.jsx
+//  Trades             | /trades                        | (custom route, real file)
+//  Trade Analytics    | /trade-analytics               | TradeAnalytics.jsx
+//  Card Requests      | /card-request                  | CardRequest.jsx
+//  Sharing Cards      | /sharing-cards                 | SharingCards.jsx
+//  Present Box        | /presents                      | PresentBox.jsx
+//  Gold Flair         | /gold-flair                    | (custom route, real file)
+//  Gold Flair Trade   | /collection/gold-flair-trade   | (custom route, real file)
+//  Friends            | /friends                       | Friends.jsx
+//  Battles            | /battles                       | Battles.jsx
+//  PvP Rankings       | /pvp                           | PvpRankings.jsx
+//  Battle History     | /battle-history                | BattleHistory.jsx
+//  Battle Stats       | /battle-stats                  | BattleStats.jsx
+//  Events             | /events                        | Events.jsx
+//  Achievements       | /achievements                  | Achievements.jsx
+//  Item Shop          | /shop                          | ItemShop.jsx
+//  Stamina            | /stamina                       | StaminaDashboard.jsx
+//  Resources          | /resources                     | ResourceDashboard.jsx
+//
+// ─────────────────────────────────────────────────────────────────────────
+// FUTURE IDEAS — NOT IN NAVIGATION
+// The following concepts came up during design but have no backing route or
+// reference component. Do not add to the sidebar until a real page exists:
+//   - "Latest Pulls" landing (distinct from God Pack Gallery)
+//   - "Community Hunts" hub (distinct from Bot Hub)
+//   - "Trade Matches" matchmaker (distinct from Trades list)
+//   - "Send a Card" quick action (covered by Card Requests today)
+//   - "Inbox" unified notifications (Present Box only covers gifts)
+//   - "Trending" / "Discover" feed
+//   - "My Hunts" personal hunts view (only /hunts exists as a generic file)
+// ─────────────────────────────────────────────────────────────────────────
+
 const USER_GROUPS: Group[] = [
   {
     id: "play",
     label: "Play",
     entries: [
-      { kind: "link", title: "Home",          to: "/",            icon: Home },
-      { kind: "link", title: "Daily Missions",to: "/missions",    icon: ListChecks },
-      { kind: "link", title: "Open Pack",     to: "/open-pack",   icon: PackageOpen },
-      { kind: "link", title: "Wonder Pick",   to: "/wonder-pick", icon: Wand2 },
+      { kind: "link", title: "Home",         to: "/",            icon: Home },
+      { kind: "link", title: "Missions",     to: "/missions",    icon: ListChecks },
+      { kind: "link", title: "Open Pack",    to: "/open-pack",   icon: PackageOpen },
+      { kind: "link", title: "Wonder Pick",  to: "/wonder-pick", icon: Wand2 },
     ],
   },
   {
     id: "collect",
     label: "Collection",
     entries: [
-      { kind: "link", title: "My Cards",          to: "/cards",    icon: CreditCard },
-      { kind: "link", title: "Set Progress",      to: "/tracker",  icon: Target },
-      { kind: "link", title: "Wishlist",          to: "/wishlist", icon: Heart },
-      { kind: "link", title: "Latest Pulls",      to: "/godpacks", icon: Sparkle },
+      { kind: "link", title: "Cards",            to: "/cards",                icon: CreditCard },
+      { kind: "link", title: "Tracker",          to: "/tracker",              icon: Target },
+      { kind: "link", title: "Wishlist",         to: "/wishlist",             icon: Heart },
+      { kind: "link", title: "Collection Goals", to: "/collection-missions",  icon: Trophy },
+      { kind: "link", title: "God Pack Gallery", to: "/godpacks",             icon: Sparkle },
     ],
   },
   {
     id: "hunts",
     label: "Hunts",
     entries: [
-      { kind: "link", title: "My Hunts",       to: "/hunts",    icon: Crosshair },
-      { kind: "link", title: "Live Monitor",   to: "/hunt",     icon: Activity },
-      { kind: "link", title: "Community Hunts",to: "/bot-hub",  icon: Flame },
+      { kind: "link", title: "Hunt Monitor", to: "/hunt",    icon: Activity },
+      { kind: "link", title: "Bot Hub",      to: "/bot-hub", icon: Bot },
     ],
   },
   {
     id: "trade",
     label: "Trades",
     entries: [
-      { kind: "link", title: "Trade Matches",  to: "/trades",       icon: Repeat2 },
-      { kind: "link", title: "Send a Card",    to: "/card-request", icon: ArrowLeftRight },
+      { kind: "link", title: "Trades",          to: "/trades",          icon: Repeat2 },
+      { kind: "link", title: "Trade Analytics", to: "/trade-analytics", icon: BarChart3 },
+      { kind: "link", title: "Card Requests",   to: "/card-request",    icon: ArrowLeftRight },
     ],
   },
   {
     id: "gift",
     label: "Gifts",
     entries: [
-      { kind: "link", title: "Send Gifts",     to: "/sharing-cards", icon: Gift },
-      { kind: "link", title: "Inbox",          to: "/presents",      icon: PackageOpen },
+      { kind: "link", title: "Sharing Cards", to: "/sharing-cards", icon: Gift },
+      { kind: "link", title: "Present Box",   to: "/presents",      icon: PackageOpen },
     ],
   },
   {
     id: "flair",
     label: "Gold Flair",
     entries: [
-      { kind: "link", title: "Flair Center",   to: "/gold-flair",                  icon: Gem },
-      { kind: "link", title: "Flair Trade",    to: "/collection/gold-flair-trade", icon: ArrowLeftRight },
+      { kind: "link", title: "Gold Flair",       to: "/gold-flair",                  icon: Gem },
+      { kind: "link", title: "Gold Flair Trade", to: "/collection/gold-flair-trade", icon: ArrowLeftRight },
     ],
   },
   {
     id: "social",
-    label: "Friends",
+    label: "Social",
     entries: [
-      { kind: "link", title: "Friends",        to: "/friends",      icon: Users },
-      { kind: "link", title: "Battles",        to: "/battles",      icon: Swords },
+      { kind: "link", title: "Friends",        to: "/friends",        icon: Users },
+      { kind: "link", title: "Battles",        to: "/battles",        icon: Swords },
+      { kind: "link", title: "PvP Rankings",   to: "/pvp",            icon: Trophy },
+      { kind: "link", title: "Battle History", to: "/battle-history", icon: ScrollText },
+      { kind: "link", title: "Battle Stats",   to: "/battle-stats",   icon: BarChart3 },
     ],
   },
   {
-    id: "discover",
-    label: "Discover",
+    id: "more",
+    label: "More",
     entries: [
-      { kind: "link", title: "Trending",       to: "/events",       icon: Compass },
-      { kind: "link", title: "Achievements",   to: "/achievements", icon: Trophy },
-      { kind: "link", title: "Item Shop",      to: "/shop",         icon: Store },
-      { kind: "link", title: "Stamina",        to: "/stamina",      icon: Battery },
-      { kind: "link", title: "Resources",      to: "/resources",    icon: Coins },
+      { kind: "link", title: "Events",       to: "/events",       icon: Calendar },
+      { kind: "link", title: "Achievements", to: "/achievements", icon: Trophy },
+      { kind: "link", title: "Item Shop",    to: "/shop",         icon: Store },
+      { kind: "link", title: "Stamina",      to: "/stamina",      icon: Battery },
+      { kind: "link", title: "Resources",    to: "/resources",    icon: Coins },
     ],
   },
 ];
