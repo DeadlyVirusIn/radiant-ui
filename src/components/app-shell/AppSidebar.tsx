@@ -6,7 +6,7 @@ import {
   Swords, ListChecks, PackageOpen, Wallet, Battery, Store, Trophy, Coins,
   HeartPulse, ShieldCheck, BarChart3, Database, Activity, ScrollText, FileSearch,
   Settings as SettingsIcon, Calendar, RotateCcw, GitBranch, FlaskConical, LayoutDashboard,
-  Search, Command, ChevronDown, UserCog, Shield,
+  Search, Command, ChevronDown, ChevronRight, UserCog, Shield,
 } from "lucide-react";
 
 import {
