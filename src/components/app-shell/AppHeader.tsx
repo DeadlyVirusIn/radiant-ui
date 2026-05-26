@@ -2,6 +2,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { Bell, ChevronRight } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/app-shell/ThemeToggle";
 
 const labels: Record<string, string> = {
   "": "Dashboard",
