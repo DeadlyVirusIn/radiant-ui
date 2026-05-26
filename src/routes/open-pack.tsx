@@ -14,6 +14,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
 import { CardArt } from "@/components/home/CardArt";
+import { CrossLink } from "@/components/app-shell/CrossLink";
 import { cn } from "@/lib/utils";
 import { SETS } from "@/lib/mock-cards";
 import {
@@ -249,25 +250,6 @@ function Stat({ label, value, tone }: { label: string; value: number | string; t
   );
 }
 
-function CrossLink({
-  to, icon: Icon, title, hint,
-}: { to: string; icon: typeof Heart; title: string; hint: string }) {
-  return (
-    <Link
-      to={to}
-      className="flex items-center gap-3 rounded-xl border border-border bg-card/60 p-4 transition-colors hover:border-primary/50 hover:bg-card"
-    >
-      <div className="grid h-9 w-9 place-items-center rounded-md bg-primary/10 text-primary">
-        <Icon className="h-4 w-4" />
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold">{title}</div>
-        <div className="truncate text-[11px] text-muted-foreground">{hint}</div>
-      </div>
-      <ArrowRight className="h-4 w-4 text-muted-foreground" />
-    </Link>
-  );
-}
 
 function PullRevealDialog({ pack, onClose }: { pack: Pack | null; onClose: () => void }) {
   const [revealed, setRevealed] = useState<Set<number>>(new Set());
