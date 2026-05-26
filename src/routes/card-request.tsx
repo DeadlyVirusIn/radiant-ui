@@ -521,7 +521,7 @@ function TradeConfirmDialog({
             )}
             <DialogFooter>
               <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button disabled={atCap} onClick={() => onOpenChange(false)}>
+              <Button disabled={atCap} onClick={() => onConfirm(request)}>
                 <Repeat2 className="mr-1.5 h-3.5 w-3.5" /> Confirm request
               </Button>
             </DialogFooter>
