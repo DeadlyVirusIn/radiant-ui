@@ -326,7 +326,7 @@ function CollectionGoals() {
 
       {/* Next Best Goal */}
       {nextBest && (
-        <Section title="Next Best Goal" className="mt-6">
+        <Section title="Next Best Goal" className="mt-5">
           <NextBestCard g={nextBest} />
         </Section>
       )}
@@ -336,7 +336,7 @@ function CollectionGoals() {
         <Section
           title="Almost Done"
           description="Goals within reach — finish these first."
-          className="mt-6"
+          className="mt-5"
         >
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {almostDone.map((g) => <GoalCard key={g.id} g={g} compact />)}
@@ -387,7 +387,7 @@ function CollectionGoals() {
       </div>
 
       {/* All goals grouped */}
-      <div className="mt-6 space-y-8">
+      <div className="mt-5 space-y-6">
         {visibleGroups.map((group) => {
           const c = CATS[group.id];
           const Icon = c.icon;
@@ -418,7 +418,7 @@ function CollectionGoals() {
 
       {/* Other Goals (collapsed) */}
       {otherGoals.length > 0 && (
-        <section className="mt-8 rounded-xl border border-border bg-card/30">
+        <section className="mt-6 rounded-xl border border-border bg-card/30">
           <button
             onClick={() => setOtherOpen((v) => !v)}
             className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm"
