@@ -345,7 +345,7 @@ function CollectionGoals() {
       )}
 
       {/* Sticky filter row */}
-      <div className="sticky top-14 z-20 -mx-3 mt-8 border-y border-border/60 bg-background/85 px-3 py-3 backdrop-blur md:-mx-6 md:px-6">
+      <div className="sticky top-14 z-20 -mx-3 mt-6 border-y border-border/60 bg-background/85 px-3 py-3 backdrop-blur md:-mx-6 md:px-6">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
             {CATEGORY_FILTERS.map((f) => (
@@ -438,7 +438,7 @@ function CollectionGoals() {
 
       {/* Recently completed — compact strip */}
       {RECENTLY_COMPLETED.length > 0 && (
-        <section className="mt-8">
+        <section className="mt-6">
           <header className="mb-2 flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-success" />
             <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Recently Completed</h3>
