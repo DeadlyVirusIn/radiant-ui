@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowRight, CheckCircle2, Coins, Filter, HelpCircle, Info, Loader2,
   Plus, Repeat2, RotateCcw, Search, Sparkles, X, XCircle,
@@ -10,6 +11,7 @@ import { Section } from "@/components/app-shell/Section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CardArt } from "@/components/home/CardArt";
 import {
   MOCK_CARD_REQUESTS, MOCK_USER_REQUESTS, MARKETPLACE_PACKS, MARKETPLACE_RARITIES,
