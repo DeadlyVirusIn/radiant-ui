@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/tracker")({
   head: () => ({ meta: [{ title: "Set Progress — Radiant" }] }),
-  component: SetProgress;
+  component: SetProgress,
 });
 
 // ─────────────────────────────────────────────────────────────────────────
