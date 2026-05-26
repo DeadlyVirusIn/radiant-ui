@@ -278,8 +278,10 @@ function PullRevealDialog({ pack, onClose }: { pack: Pack | null; onClose: () =>
 
   if (!pack) return null;
   const cards = pack.pullResultIds.map(getCardById).filter(Boolean);
-  const impact = pullImpact(pack.pullResultIds);
+  const revealedIds = pack.pullResultIds.filter((_, i) => revealed.has(i));
+  const impact = pullImpact(revealedIds);
   const allRevealed = revealed.size === cards.length;
+  const hasRevealed = revealed.size > 0;
 
   return (
     <Dialog open onOpenChange={(o) => { if (!o) onClose(); }}>
@@ -328,14 +330,27 @@ function PullRevealDialog({ pack, onClose }: { pack: Pack | null; onClose: () =>
         </div>
 
         <div className="mt-4 rounded-lg border border-border bg-card/60 p-3">
-          <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Collection impact
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Collection impact
+            </div>
+            {hasRevealed && (
+              <div className="text-[10px] text-muted-foreground">
+                {revealed.size} of {cards.length} revealed
+              </div>
+            )}
           </div>
-          <div className="mt-2 grid grid-cols-3 gap-2 text-center text-sm">
-            <ImpactStat label="New" value={impact.newToCollection} tone="good" />
-            <ImpactStat label="Duplicates" value={impact.duplicates} tone="muted" />
-            <ImpactStat label="Wishlist" value={impact.wishlistHits} tone="warn" />
-          </div>
+          {hasRevealed ? (
+            <div className="mt-2 grid grid-cols-3 gap-2 text-center text-sm">
+              <ImpactStat label="New" value={impact.newToCollection} tone="good" />
+              <ImpactStat label="Duplicates" value={impact.duplicates} tone="muted" />
+              <ImpactStat label="Wishlist" value={impact.wishlistHits} tone="warn" />
+            </div>
+          ) : (
+            <div className="mt-2 rounded-md border border-dashed border-border/70 px-3 py-4 text-center text-xs text-muted-foreground">
+              Reveal cards to see collection impact
+            </div>
+          )}
           {!allRevealed && (
             <div className="mt-3 text-center">
               <Button size="sm" variant="outline" onClick={() => setRevealed(new Set(cards.map((_, i) => i)))}>
