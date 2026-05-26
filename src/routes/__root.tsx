@@ -90,10 +90,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+const themeInitScript = `(() => { try {
+  var s = localStorage.getItem('radiant.theme');
+  var t = s === 'light' || s === 'dark' ? s
+    : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.classList.add(t);
+} catch (e) { document.documentElement.classList.add('dark'); } })();`;
+
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <head><HeadContent /></head>
+    <html lang="en">
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <HeadContent />
+      </head>
       <body>
         {children}
         <Scripts />
