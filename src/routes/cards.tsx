@@ -1,222 +1,247 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
 import {
-  Search, Heart, Lock, Sparkles, Crosshair, Repeat2, Plus, Minus,
-  SlidersHorizontal, LayoutGrid, Rows3, Star, Check, X, ArrowRight,
+  Search, Heart, Lock, Sparkles, Crosshair, Repeat2,
+  SlidersHorizontal, LayoutGrid, Rows3, X, ArrowRight,
+  Download, Wand2, PackageOpen,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { CardArt, type EnergyType } from "@/components/home/CardArt";
+import {
+  SETS, CARDS, RARITIES, TYPES,
+  getSet, getCardByName, getCollectionSummary,
+  type Card, type Rarity,
+} from "@/lib/mock-cards";
+
+type OwnFilter = "all" | "owned" | "missing" | "duplicates" | "wishlist" | "recent";
+type SortKey = "name" | "set" | "rarity" | "dupes" | "recent";
+type ViewMode = "grid" | "list";
+
+const OWN_VALUES: OwnFilter[] = ["all","owned","missing","duplicates","wishlist","recent"];
+
+type Search = {
+  card?: string;
+  set?: string;
+  own?: OwnFilter;
+};
 
 export const Route = createFileRoute("/cards")({
-  head: () => ({ meta: [{ title: "My Collection — Radiant" }] }),
-  component: MyCollection,
+  head: () => ({ meta: [{ title: "My Cards — Radiant" }] }),
+  validateSearch: (s: Record<string, unknown>): Search => ({
+    card: typeof s.card === "string" ? s.card : undefined,
+    set: typeof s.set === "string" && SETS.some((x) => x.id === s.set) ? s.set : undefined,
+    own: typeof s.own === "string" && (OWN_VALUES as string[]).includes(s.own)
+      ? (s.own as OwnFilter) : undefined,
+  }),
+  component: MyCards,
 });
 
-// ─────────────────────────────────────────────────────────────────────────
-// Card-art primitive (mirrors the one on Home; duplicated here so the
-// Cards route stays self-contained for the page-by-page redesign pass)
-type EnergyType =
-  | "fire" | "water" | "grass" | "lightning" | "psychic"
-  | "fighting" | "dark" | "metal" | "dragon" | "fairy" | "colorless";
-
-const energy: Record<EnergyType, { from: string; via: string; to: string; glow: string }> = {
-  fire:      { from: "from-orange-500/70", via: "via-red-600/40",    to: "to-amber-900/60",   glow: "shadow-[0_8px_40px_-12px_rgba(249,115,22,0.5)]" },
-  water:     { from: "from-sky-400/70",    via: "via-blue-600/40",   to: "to-indigo-900/60",  glow: "shadow-[0_8px_40px_-12px_rgba(56,189,248,0.5)]" },
-  grass:     { from: "from-emerald-400/70",via: "via-green-600/40",  to: "to-teal-900/60",    glow: "shadow-[0_8px_40px_-12px_rgba(52,211,153,0.5)]" },
-  lightning: { from: "from-yellow-300/80", via: "via-amber-500/40",  to: "to-yellow-900/60",  glow: "shadow-[0_8px_40px_-12px_rgba(250,204,21,0.55)]" },
-  psychic:   { from: "from-fuchsia-400/70",via: "via-purple-600/40", to: "to-indigo-900/60",  glow: "shadow-[0_8px_40px_-12px_rgba(217,70,239,0.5)]" },
-  fighting:  { from: "from-orange-700/70", via: "via-amber-800/40",  to: "to-stone-900/60",   glow: "shadow-[0_8px_40px_-12px_rgba(180,83,9,0.5)]" },
-  dark:      { from: "from-slate-600/70",  via: "via-zinc-800/40",   to: "to-black/70",       glow: "shadow-[0_8px_40px_-12px_rgba(15,23,42,0.7)]" },
-  metal:     { from: "from-slate-300/70",  via: "via-zinc-500/40",   to: "to-slate-800/60",   glow: "shadow-[0_8px_40px_-12px_rgba(148,163,184,0.5)]" },
-  dragon:    { from: "from-amber-400/70",  via: "via-indigo-600/40", to: "to-violet-900/60",  glow: "shadow-[0_8px_40px_-12px_rgba(251,191,36,0.45)]" },
-  fairy:     { from: "from-pink-300/70",   via: "via-rose-500/40",   to: "to-fuchsia-900/60", glow: "shadow-[0_8px_40px_-12px_rgba(244,114,182,0.5)]" },
-  colorless: { from: "from-slate-200/60",  via: "via-slate-400/30",  to: "to-slate-700/60",   glow: "shadow-[0_8px_40px_-12px_rgba(203,213,225,0.4)]" },
-};
-
-type Rarity = "Common" | "Uncommon" | "Rare" | "EX" | "Full Art" | "Star" | "Immersive" | "Crown";
-const rarityRing: Record<Rarity, string> = {
-  Common:    "ring-1 ring-white/10",
-  Uncommon:  "ring-1 ring-white/20",
-  Rare:      "ring-1 ring-sky-300/50",
-  EX:        "ring-1 ring-orange-400/70",
-  "Full Art":"ring-1 ring-sky-300/70",
-  Star:      "ring-2 ring-amber-300/70",
-  Immersive: "ring-2 ring-fuchsia-400/70",
-  Crown:     "ring-2 ring-yellow-400/80",
+const RARITY_ORDER: Record<Rarity, number> = {
+  Common: 0, Uncommon: 1, Rare: 2, EX: 3, "Full Art": 4, Star: 5, Immersive: 6, Crown: 7,
 };
 const rarityChip: Record<Rarity, string> = {
-  Common:    "bg-muted text-muted-foreground",
-  Uncommon:  "bg-muted text-muted-foreground",
-  Rare:      "bg-sky-500/15 text-sky-300",
-  EX:        "bg-orange-500/15 text-orange-300",
-  "Full Art":"bg-sky-500/15 text-sky-300",
-  Star:      "bg-amber-400/15 text-amber-300",
+  Common: "bg-muted text-muted-foreground",
+  Uncommon: "bg-muted text-muted-foreground",
+  Rare: "bg-sky-500/15 text-sky-300",
+  EX: "bg-orange-500/15 text-orange-300",
+  "Full Art": "bg-sky-500/15 text-sky-300",
+  Star: "bg-amber-400/15 text-amber-300",
   Immersive: "bg-fuchsia-500/15 text-fuchsia-300",
-  Crown:     "bg-yellow-400/15 text-yellow-300",
+  Crown: "bg-yellow-400/15 text-yellow-300",
 };
 
-function CardArt({
-  name, type, rarity, number, owned, missing, size = "md",
-}: {
-  name: string; type: EnergyType; rarity: Rarity; number?: string;
-  owned?: number; missing?: boolean; size?: "sm" | "md" | "lg";
-}) {
-  const e = energy[type];
-  return (
-    <div
-      className={cn(
-        "relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-white/10",
-        rarityRing[rarity], e.glow,
-        missing && "saturate-[.4] opacity-80",
-      )}
-    >
-      <div className={cn("absolute inset-0 bg-gradient-to-br", e.from, e.via, e.to)} />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.32),transparent_45%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_30%,rgba(255,255,255,0.16)_50%,transparent_70%)]" />
-      <div className="absolute inset-0 opacity-25 mix-blend-overlay [background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.12)_0_1px,transparent_1px_4px)]" />
-      {/* Reserved art area — swap silhouette for <img src={card.imageUrl}> when API wires up */}
-      <div className="absolute inset-x-0 top-1/2 mx-auto h-2/3 w-2/3 -translate-y-1/2 rounded-full border border-white/10 bg-white/5" />
-      <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/30 bg-background/40" />
+function MyCards() {
+  const { card: deepCard, set: deepSet, own: deepOwn } = Route.useSearch();
+  const navigate = useNavigate({ from: "/cards" });
 
-      {/* top chips */}
-      <div className="absolute inset-x-2 top-2 flex items-start justify-between">
-        <span className="inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur">
-          <Star className="h-2.5 w-2.5" /> {rarity}
-        </span>
-        {!missing && typeof owned === "number" && owned > 0 && (
-          <span className="inline-flex items-center gap-0.5 rounded-md bg-success px-1.5 py-0.5 text-[11px] font-extrabold leading-none text-success-foreground shadow-md ring-1 ring-success-foreground/20 backdrop-blur">
-            ×{owned}
-          </span>
-        )}
-        {missing && (
-          <span className="inline-flex items-center gap-0.5 rounded-md bg-warning/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-warning-foreground shadow-md backdrop-blur">
-            <Lock className="h-2.5 w-2.5" /> Missing
-          </span>
-        )}
-      </div>
-
-      {/* bottom name plate */}
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-2 pt-6">
-        <p className={cn(
-          "truncate font-display font-bold leading-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]",
-          size === "lg" ? "text-base" : "text-[13px]",
-        )}>{name}</p>
-        {number && (
-          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-white/85">{number}</p>
-        )}
-      </div>
-    </div>
+  // Local state — wishlist is mock; toggling shows toast & updates in-memory.
+  const [wishlist, setWishlist] = useState<Set<string>>(
+    () => new Set(CARDS.filter((c) => c.wishlist).map((c) => c.id)),
   );
-}
+  const [owned, setOwned] = useState<Record<string, number>>(
+    () => Object.fromEntries(CARDS.map((c) => [c.id, c.owned])),
+  );
 
-// ─────────────────────────────────────────────────────────────────────────
-// Mock data — sets, rarities, cards
-const SETS = [
-  { id: "TL",  name: "Triumphant Light",     short: "TL",  owned: 118, total: 120 },
-  { id: "MI",  name: "Mythical Island",      short: "MI",  owned: 84,  total: 86 },
-  { id: "STS", name: "Space-Time Smackdown", short: "STS", owned: 92,  total: 108 },
-  { id: "GA",  name: "Genetic Apex",         short: "GA",  owned: 226, total: 286 },
-] as const;
-type SetId = (typeof SETS)[number]["id"];
-
-const TYPES: EnergyType[] = ["fire", "water", "grass", "lightning", "psychic", "fighting", "dark", "metal", "dragon", "fairy", "colorless"];
-const RARITIES: Rarity[] = ["Common", "Uncommon", "Rare", "EX", "Full Art", "Star", "Immersive", "Crown"];
-
-type Card = {
-  id: string; name: string; set: SetId; number: string;
-  type: EnergyType; rarity: Rarity; owned: number; wishlist?: boolean;
-  pullOdds?: string; tradeOffers?: number; activeHunts?: number;
-};
-
-const CARDS: Card[] = [
-  { id: "c01", name: "Mew ex",          set: "TL",  number: "TL 086/120", type: "psychic",   rarity: "Crown",     owned: 0, wishlist: true,  pullOdds: "0.05%", tradeOffers: 8, activeHunts: 18900 },
-  { id: "c02", name: "Rayquaza Crown",  set: "TL",  number: "TL 119/120", type: "dragon",    rarity: "Crown",     owned: 0, wishlist: true,  pullOdds: "0.05%", tradeOffers: 2, activeHunts: 11400 },
-  { id: "c03", name: "Gengar ex",       set: "TL",  number: "TL 067/120", type: "psychic",   rarity: "Immersive", owned: 1,                  pullOdds: "0.15%", tradeOffers: 14 },
-  { id: "c04", name: "Solar Crown",     set: "TL",  number: "TL 118/120", type: "fire",      rarity: "Crown",     owned: 1,                  pullOdds: "0.05%" },
-  { id: "c05", name: "Charizard ex",    set: "GA",  number: "GA 184/286", type: "fire",      rarity: "EX",        owned: 3,                  pullOdds: "1.2%" },
-  { id: "c06", name: "Blastoise ex",    set: "GA",  number: "GA 200/286", type: "water",     rarity: "EX",        owned: 0, wishlist: true,  pullOdds: "1.2%", tradeOffers: 4 },
-  { id: "c07", name: "Venusaur ex",     set: "GA",  number: "GA 211/286", type: "grass",     rarity: "EX",        owned: 2,                  pullOdds: "1.2%" },
-  { id: "c08", name: "Pikachu ex",      set: "GA",  number: "GA 096/286", type: "lightning", rarity: "EX",        owned: 4,                  pullOdds: "1.2%" },
-  { id: "c09", name: "Mewtwo ex",       set: "GA",  number: "GA 286/286", type: "psychic",   rarity: "Immersive", owned: 1,                  pullOdds: "0.15%" },
-  { id: "c10", name: "Articuno ex",     set: "MI",  number: "MI 084/086", type: "water",     rarity: "EX",        owned: 0,                  pullOdds: "1.2%", tradeOffers: 6, activeHunts: 2100 },
-  { id: "c11", name: "Mew",             set: "MI",  number: "MI 085/086", type: "psychic",   rarity: "Star",      owned: 0, wishlist: true,  pullOdds: "0.5%", tradeOffers: 3 },
-  { id: "c12", name: "Lugia Crown",     set: "STS", number: "STS 108/108",type: "lightning", rarity: "Crown",     owned: 0,                  pullOdds: "0.05%", tradeOffers: 1, activeHunts: 12400 },
-  { id: "c13", name: "Snorlax",         set: "GA",  number: "GA 145/286", type: "colorless", rarity: "Star",      owned: 2 },
-  { id: "c14", name: "Eevee",           set: "GA",  number: "GA 089/286", type: "colorless", rarity: "Rare",      owned: 5 },
-  { id: "c15", name: "Greninja ex",     set: "GA",  number: "GA 210/286", type: "water",     rarity: "EX",        owned: 1 },
-  { id: "c16", name: "Lucario",         set: "STS", number: "STS 071/108",type: "fighting",  rarity: "Full Art",  owned: 1 },
-  { id: "c17", name: "Dialga ex",       set: "STS", number: "STS 098/108",type: "metal",     rarity: "EX",        owned: 0,                  pullOdds: "1.2%", tradeOffers: 5 },
-  { id: "c18", name: "Palkia ex",       set: "STS", number: "STS 099/108",type: "water",     rarity: "EX",        owned: 0,                  pullOdds: "1.2%" },
-  { id: "c19", name: "Gardevoir",       set: "TL",  number: "TL 053/120", type: "fairy",     rarity: "Full Art",  owned: 1 },
-  { id: "c20", name: "Sylveon",         set: "TL",  number: "TL 054/120", type: "fairy",     rarity: "Star",      owned: 0,                  pullOdds: "0.5%", tradeOffers: 2 },
-  { id: "c21", name: "Umbreon",         set: "TL",  number: "TL 088/120", type: "dark",      rarity: "Star",      owned: 1 },
-  { id: "c22", name: "Magnezone",       set: "STS", number: "STS 047/108",type: "metal",     rarity: "Rare",      owned: 3 },
-  { id: "c23", name: "Garchomp ex",     set: "STS", number: "STS 100/108",type: "dragon",    rarity: "EX",        owned: 0,                  pullOdds: "1.2%" },
-  { id: "c24", name: "Wigglytuff",      set: "GA",  number: "GA 052/286", type: "fairy",     rarity: "Uncommon",  owned: 4 },
-];
-
-const TOTAL_OWNED = CARDS.reduce((acc, c) => acc + (c.owned > 0 ? 1 : 0), 0);
-const TOTAL_MISSING = CARDS.length - TOTAL_OWNED;
-const TOTAL_WISHLIST = CARDS.filter((c) => c.wishlist).length;
-
-// ─────────────────────────────────────────────────────────────────────────
-type OwnFilter = "all" | "owned" | "missing" | "wishlist";
-
-function MyCollection() {
-  const [activeSet, setActiveSet] = useState<SetId | "ALL">("ALL");
   const [search, setSearch] = useState("");
-  const [own, setOwn] = useState<OwnFilter>("all");
+  const [activeSet, setActiveSet] = useState<string | "ALL">(deepSet ?? "ALL");
+  const [own, setOwn] = useState<OwnFilter>(deepOwn ?? "all");
   const [rarity, setRarity] = useState<Rarity | "ALL">("ALL");
   const [type, setType] = useState<EnergyType | "ALL">("ALL");
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [sort, setSort] = useState<SortKey>("set");
+  const [view, setView] = useState<ViewMode>("grid");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [picked, setPicked] = useState<Card | null>(null);
 
+  // Deep-link: open drawer for ?card=
+  useEffect(() => {
+    if (deepCard) {
+      const found = getCardByName(deepCard);
+      if (found) setPicked(found);
+    }
+  }, [deepCard]);
+
+  const summary = useMemo(() => {
+    const ownedCount = Object.values(owned).filter((n) => n > 0).length;
+    const missing = CARDS.length - ownedCount;
+    const duplicates = Object.values(owned).reduce((a, n) => a + Math.max(0, n - 1), 0);
+    const completion = Math.round((ownedCount / CARDS.length) * 100);
+    return { owned: ownedCount, missing, duplicates, completion, total: CARDS.length };
+  }, [owned]);
+
   const filtered = useMemo(() => {
-    return CARDS.filter((c) => {
+    const list = CARDS.filter((c) => {
+      const n = owned[c.id] ?? 0;
       if (activeSet !== "ALL" && c.set !== activeSet) return false;
       if (rarity !== "ALL" && c.rarity !== rarity) return false;
       if (type !== "ALL" && c.type !== type) return false;
-      if (own === "owned"   && c.owned <= 0) return false;
-      if (own === "missing" && c.owned > 0)  return false;
-      if (own === "wishlist" && !c.wishlist) return false;
+      if (own === "owned" && n <= 0) return false;
+      if (own === "missing" && n > 0) return false;
+      if (own === "duplicates" && n < 2) return false;
+      if (own === "wishlist" && !wishlist.has(c.id)) return false;
+      if (own === "recent" && !c.acquiredAt) return false;
       if (search) {
         const q = search.toLowerCase();
         if (!c.name.toLowerCase().includes(q) && !c.number.toLowerCase().includes(q)) return false;
       }
       return true;
     });
-  }, [activeSet, rarity, type, own, search]);
+    list.sort((a, b) => {
+      switch (sort) {
+        case "name": return a.name.localeCompare(b.name);
+        case "rarity": return RARITY_ORDER[b.rarity] - RARITY_ORDER[a.rarity];
+        case "dupes": return (owned[b.id] ?? 0) - (owned[a.id] ?? 0);
+        case "recent": {
+          const da = a.acquiredAt ?? "";
+          const db = b.acquiredAt ?? "";
+          return db.localeCompare(da);
+        }
+        case "set":
+        default:
+          return a.set === b.set ? a.numberIndex - b.numberIndex : a.set.localeCompare(b.set);
+      }
+    });
+    return list;
+  }, [activeSet, rarity, type, own, search, sort, owned, wishlist]);
 
-  const setMeta = activeSet === "ALL"
-    ? { name: "All sets", owned: SETS.reduce((a, s) => a + s.owned, 0), total: SETS.reduce((a, s) => a + s.total, 0) }
-    : SETS.find((s) => s.id === activeSet)!;
-  const setPct = Math.round((setMeta.owned / setMeta.total) * 100);
-  const setMissing = setMeta.total - setMeta.owned;
+  // Sync own filter into URL (preserve other params)
+  useEffect(() => {
+    navigate({
+      search: (prev: Search) => ({
+        ...prev,
+        own: own === "all" ? undefined : own,
+        set: activeSet === "ALL" ? undefined : activeSet,
+      }),
+      replace: true,
+    });
+  }, [own, activeSet, navigate]);
+
+  const toggleWishlist = (c: Card) => {
+    setWishlist((prev) => {
+      const next = new Set(prev);
+      if (next.has(c.id)) { next.delete(c.id); toast(`${c.name} removed from wishlist`); }
+      else                { next.add(c.id);    toast(`${c.name} added to wishlist`); }
+      return next;
+    });
+  };
+  const adjust = (c: Card, delta: number) => {
+    setOwned((prev) => ({ ...prev, [c.id]: Math.max(0, (prev[c.id] ?? 0) + delta) }));
+  };
+
+  const handleExport = () => {
+    const rows = [
+      ["id","name","set","number","rarity","type","owned","wishlist"],
+      ...CARDS.map((c) => [
+        c.id, c.name, c.set, c.number, c.rarity, c.type,
+        String(owned[c.id] ?? 0),
+        wishlist.has(c.id) ? "yes" : "no",
+      ]),
+    ];
+    const csv = rows.map((r) =>
+      r.map((v) => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v).join(",")
+    ).join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "my-cards.csv"; document.body.appendChild(a);
+    a.click(); a.remove(); URL.revokeObjectURL(url);
+    toast("Exported my-cards.csv");
+  };
 
   return (
     <div className="relative">
       <PageHeader
-        title="My Collection"
-        description="Your card binder — owned, missing, wishlisted, and where to find them."
+        title="My Cards"
+        description="Your complete binder and collection."
+        actions={
+          <>
+            <div className="hidden rounded-md border border-border bg-card/40 p-0.5 md:flex">
+              <Button variant={view === "grid" ? "secondary" : "ghost"} size="sm"
+                className="h-7 px-2" onClick={() => setView("grid")}
+                aria-label="Grid view">
+                <LayoutGrid className="h-3.5 w-3.5" />
+              </Button>
+              <Button variant={view === "list" ? "secondary" : "ghost"} size="sm"
+                className="h-7 px-2" onClick={() => setView("list")}
+                aria-label="List view">
+                <Rows3 className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+            <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={handleExport}>
+              <Download className="h-3.5 w-3.5" /> Export
+            </Button>
+          </>
+        }
       />
 
-      {/* ── Sticky binder header ──────────────────────────────────────── */}
-      <div className="sticky top-12 z-20 -mx-4 mb-4 border-y border-border bg-background/85 px-4 backdrop-blur md:-mx-6 md:px-6">
+      {/* ── Summary strip ─────────────────────────────────────────────── */}
+      <section className="mt-1 rounded-xl border border-border bg-card/60 p-3 md:p-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <SummaryStat label="Complete" value={`${summary.completion}%`} tone="primary" />
+          <SummaryStat label="Owned" value={summary.owned} tone="success" />
+          <SummaryStat label="Missing" value={summary.missing} tone="warning" />
+          <SummaryStat label="Duplicates" value={summary.duplicates} tone="muted" />
+        </div>
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-primary via-primary/80 to-primary/60"
+              style={{ width: `${summary.completion}%` }}
+            />
+          </div>
+          <Link
+            to="/tracker"
+            className="inline-flex shrink-0 items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+          >
+            View Progress <ArrowRight className="h-3 w-3" />
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Sticky binder controls ───────────────────────────────────── */}
+      <div className="sticky top-12 z-20 -mx-4 mt-4 border-y border-border bg-background/85 px-4 backdrop-blur md:-mx-6 md:px-6">
         {/* set chips */}
         <div className="-mx-1 flex gap-1.5 overflow-x-auto pt-3 pb-2">
           {(["ALL", ...SETS.map((s) => s.id)] as const).map((id) => {
-            const s = id === "ALL" ? null : SETS.find((x) => x.id === id)!;
+            const s = id === "ALL" ? null : getSet(id)!;
             const active = activeSet === id;
+            const setOwned = s
+              ? CARDS.filter((c) => c.set === s.id && (owned[c.id] ?? 0) > 0).length
+              : summary.owned;
+            const setTotal = s ? CARDS.filter((c) => c.set === s.id).length : CARDS.length;
             return (
               <button
                 key={id}
-                onClick={() => setActiveSet(id as SetId | "ALL")}
+                onClick={() => setActiveSet(id as string)}
                 className={cn(
                   "shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
                   active
@@ -225,42 +250,34 @@ function MyCollection() {
                 )}
               >
                 {s ? s.short : "All"}
-                <span className="ml-1.5 text-[10px] opacity-70">
-                  {s ? `${Math.round((s.owned / s.total) * 100)}%` : `${TOTAL_OWNED}/${CARDS.length}`}
-                </span>
+                <span className="ml-1.5 text-[10px] opacity-70">{setOwned}/{setTotal}</span>
               </button>
             );
           })}
         </div>
 
-        {/* completion bar + counters */}
-        <div className="grid grid-cols-1 gap-3 pb-3 md:grid-cols-[1fr_auto] md:items-center">
-          <div>
-            <div className="flex items-baseline justify-between">
-              <div className="flex items-baseline gap-2">
-                <span className="font-display text-base font-bold leading-none">{setMeta.name}</span>
-                <span className="text-mono text-xs text-muted-foreground">
-                  {setMeta.owned}/{setMeta.total}
-                </span>
-              </div>
-              <span className="text-mono text-sm font-bold text-primary">{setPct}%</span>
-            </div>
-            <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-all"
-                style={{ width: `${setPct}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5">
-            <CountChip label="Owned"    value={own === "all" ? TOTAL_OWNED   : filtered.filter((c) => c.owned > 0).length} tone="success" active={own === "owned"}    onClick={() => setOwn(own === "owned"    ? "all" : "owned")} icon={<Check className="h-3 w-3" />} />
-            <CountChip label="Missing"  value={own === "all" ? TOTAL_MISSING : filtered.filter((c) => c.owned <= 0).length} tone="warning" active={own === "missing"}  onClick={() => setOwn(own === "missing"  ? "all" : "missing")} icon={<Lock className="h-3 w-3" />} />
-            <CountChip label="Wishlist" value={TOTAL_WISHLIST} tone="primary" active={own === "wishlist"} onClick={() => setOwn(own === "wishlist" ? "all" : "wishlist")} icon={<Heart className="h-3 w-3" />} />
-          </div>
+        {/* ownership chips */}
+        <div className="flex flex-wrap gap-1.5 pb-2">
+          {([
+            ["all","All"], ["owned","Owned"], ["missing","Missing"],
+            ["duplicates","Duplicates"], ["wishlist","Wishlist"], ["recent","Recent"],
+          ] as Array<[OwnFilter, string]>).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setOwn(key)}
+              className={cn(
+                "rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors",
+                own === key
+                  ? "border-primary/60 bg-primary/15 text-foreground"
+                  : "border-border bg-card/40 text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        {/* search + view + filters */}
+        {/* search + sort + filters + view */}
         <div className="flex items-center gap-2 pb-3">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -271,6 +288,18 @@ function MyCollection() {
               className="h-9 bg-background/40 pl-8"
             />
           </div>
+          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+            <SelectTrigger className="hidden h-9 w-[160px] bg-background/40 sm:flex">
+              <SelectValue placeholder="Sort" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="set">Set order</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="rarity">Rarity</SelectItem>
+              <SelectItem value="dupes">Duplicates ↓</SelectItem>
+              <SelectItem value="recent">Recently acquired</SelectItem>
+            </SelectContent>
+          </Select>
           <Button variant="outline" size="sm" className="h-9 gap-1.5" onClick={() => setFiltersOpen(true)}>
             <SlidersHorizontal className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Filters</span>
@@ -280,45 +309,65 @@ function MyCollection() {
               </span>
             )}
           </Button>
-          <div className="hidden rounded-md border border-border bg-card/40 p-0.5 md:flex">
-            <Button variant={view === "grid" ? "secondary" : "ghost"} size="sm" className="h-7 px-2" onClick={() => setView("grid")}><LayoutGrid className="h-3.5 w-3.5" /></Button>
-            <Button variant={view === "list" ? "secondary" : "ghost"} size="sm" className="h-7 px-2" onClick={() => setView("list")}><Rows3 className="h-3.5 w-3.5" /></Button>
+          <div className="flex rounded-md border border-border bg-card/40 p-0.5 md:hidden">
+            <Button variant={view === "grid" ? "secondary" : "ghost"} size="sm"
+              className="h-7 px-2" onClick={() => setView("grid")}>
+              <LayoutGrid className="h-3.5 w-3.5" />
+            </Button>
+            <Button variant={view === "list" ? "secondary" : "ghost"} size="sm"
+              className="h-7 px-2" onClick={() => setView("list")}>
+              <Rows3 className="h-3.5 w-3.5" />
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* helper tip */}
-      <p className="mb-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-        <Sparkles className="h-3 w-3 text-primary/70" />
-        Tip: click any card to see how to get it.
-      </p>
-
-      {/* ── Binder grid / list ───────────────────────────────────────── */}
+      {/* ── Grid / List ──────────────────────────────────────────────── */}
       {filtered.length === 0 ? (
         <EmptyBinder onClear={() => { setSearch(""); setOwn("all"); setRarity("ALL"); setType("ALL"); }} />
       ) : view === "grid" ? (
         <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
-          {filtered.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setPicked(c)}
-              className="group relative text-left transition-all hover:-translate-y-1"
-            >
-              <CardArt
-                name={c.name}
-                type={c.type}
-                rarity={c.rarity}
-                number={c.number}
-                owned={c.owned}
-                missing={c.owned <= 0}
-              />
-              {c.wishlist && (
-                <span className="absolute -right-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-rose-500/90 text-white shadow-lg ring-2 ring-background">
-                  <Heart className="h-3 w-3 fill-current" />
-                </span>
-              )}
-            </button>
-          ))}
+          {filtered.map((c) => {
+            const n = owned[c.id] ?? 0;
+            const wl = wishlist.has(c.id);
+            return (
+              <button
+                key={c.id}
+                onClick={() => setPicked(c)}
+                className={cn(
+                  "group relative text-left transition-all hover:-translate-y-1",
+                  n <= 0 && "opacity-80",
+                )}
+              >
+                <CardArt name={c.name} type={c.type} rarity={c.rarity} set={getSet(c.set)?.short} />
+
+                {/* Owned badge */}
+                {n > 0 && (
+                  <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-0.5 rounded-md bg-success px-1.5 py-0.5 text-[11px] font-extrabold leading-none text-success-foreground shadow-md ring-1 ring-success-foreground/20">
+                    ×{n}
+                  </span>
+                )}
+                {/* Missing overlay tag */}
+                {n <= 0 && (
+                  <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-md bg-warning/95 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-warning-foreground shadow-md">
+                    <Lock className="h-2.5 w-2.5" /> Missing
+                  </span>
+                )}
+                {/* Duplicates ribbon */}
+                {n >= 2 && (
+                  <span className="absolute bottom-12 left-1.5 rounded-md bg-primary/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow">
+                    +{n - 1} spare
+                  </span>
+                )}
+                {/* Wishlist heart */}
+                {wl && (
+                  <span className="absolute -left-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-rose-500/95 text-white shadow-lg ring-2 ring-background">
+                    <Heart className="h-3 w-3 fill-current" />
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </section>
       ) : (
         <section className="overflow-hidden rounded-xl border border-border bg-card/60">
@@ -326,51 +375,57 @@ function MyCollection() {
             <thead>
               <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
                 <th className="px-4 py-2.5">Card</th>
-                <th className="px-4 py-2.5">Set</th>
-                <th className="px-4 py-2.5">Rarity</th>
+                <th className="px-4 py-2.5 hidden sm:table-cell">Set</th>
+                <th className="px-4 py-2.5 hidden md:table-cell">Rarity</th>
                 <th className="px-4 py-2.5 text-right">Owned</th>
-                <th className="px-4 py-2.5 text-right">Get it</th>
+                <th className="px-4 py-2.5 text-right hidden md:table-cell">Acquired</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {filtered.map((c) => (
-                <tr key={c.id} onClick={() => setPicked(c)} className="cursor-pointer hover:bg-accent/40">
-                  <td className="px-4 py-2.5">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-8 shrink-0">
-                        <CardArt name={c.name} type={c.type} rarity={c.rarity} owned={c.owned} missing={c.owned <= 0} size="sm" />
+              {filtered.map((c) => {
+                const n = owned[c.id] ?? 0;
+                return (
+                  <tr key={c.id} onClick={() => setPicked(c)} className="cursor-pointer hover:bg-accent/40">
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-8 shrink-0">
+                          <CardArt name={c.name} type={c.type} rarity={c.rarity} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="truncate font-semibold flex items-center gap-1.5">
+                            {c.name}
+                            {wishlist.has(c.id) && <Heart className="h-3 w-3 fill-rose-400 text-rose-400" />}
+                          </div>
+                          <div className="text-mono text-[11px] text-muted-foreground">{c.number}</div>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <div className="truncate font-semibold">{c.name}</div>
-                        <div className="text-mono text-[11px] text-muted-foreground">{c.number}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-2.5 text-xs text-muted-foreground">{SETS.find((s) => s.id === c.set)!.name}</td>
-                  <td className="px-4 py-2.5">
-                    <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase tracking-wider", rarityChip[c.rarity])}>
-                      {c.rarity}
-                    </Badge>
-                  </td>
-                  <td className="px-4 py-2.5 text-right">
-                    {c.owned > 0
-                      ? <span className="text-mono text-success">×{c.owned}</span>
-                      : <span className="text-mono text-warning">missing</span>}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-[11px] text-muted-foreground">
-                    {c.tradeOffers ? `${c.tradeOffers} trades` : c.activeHunts ? `${(c.activeHunts/1000).toFixed(1)}k hunting` : c.pullOdds ?? "—"}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-4 py-2.5 text-xs text-muted-foreground hidden sm:table-cell">
+                      {getSet(c.set)?.name}
+                    </td>
+                    <td className="px-4 py-2.5 hidden md:table-cell">
+                      <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase tracking-wider", rarityChip[c.rarity])}>
+                        {c.rarity}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-2.5 text-right">
+                      {n > 0
+                        ? <span className="text-mono text-success">×{n}</span>
+                        : <span className="text-mono text-warning">missing</span>}
+                    </td>
+                    <td className="px-4 py-2.5 text-right text-[11px] text-muted-foreground hidden md:table-cell">
+                      {c.acquiredAt ?? "—"}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </section>
       )}
 
-      {/* counter under the grid */}
       <p className="mt-4 text-center text-xs text-muted-foreground">
         Showing <span className="text-mono text-foreground">{filtered.length}</span> of {CARDS.length} cards
-        {setMissing > 0 && <> · <span className="text-warning">{setMissing} missing in {setMeta.name}</span></>}
       </p>
 
       {/* ── Filter sheet ─────────────────────────────────────────────── */}
@@ -378,11 +433,11 @@ function MyCollection() {
         <SheetContent side="left" className="w-[300px] bg-background p-0 sm:w-[340px]">
           <div className="flex items-center justify-between border-b border-border p-4">
             <h3 className="font-display text-base font-bold">Filter binder</h3>
-            <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs" onClick={() => { setRarity("ALL"); setType("ALL"); }}>
+            <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs"
+              onClick={() => { setRarity("ALL"); setType("ALL"); }}>
               Reset
             </Button>
           </div>
-
           <div className="space-y-5 p-4">
             <FilterGroup label="Rarity">
               <div className="flex flex-wrap gap-1.5">
@@ -394,7 +449,6 @@ function MyCollection() {
                 ))}
               </div>
             </FilterGroup>
-
             <FilterGroup label="Energy">
               <div className="flex flex-wrap gap-1.5">
                 <FilterChip active={type === "ALL"} onClick={() => setType("ALL")}>All</FilterChip>
@@ -405,25 +459,24 @@ function MyCollection() {
                 ))}
               </div>
             </FilterGroup>
-
-            <FilterGroup label="View">
-              <div className="flex gap-1.5">
-                <FilterChip active={view === "grid"} onClick={() => setView("grid")}>
-                  <LayoutGrid className="mr-1 h-3 w-3 inline" /> Grid
-                </FilterChip>
-                <FilterChip active={view === "list"} onClick={() => setView("list")}>
-                  <Rows3 className="mr-1 h-3 w-3 inline" /> List
-                </FilterChip>
-              </div>
-            </FilterGroup>
           </div>
         </SheetContent>
       </Sheet>
 
-      {/* ── Card detail drawer ──────────────────────────────────────── */}
+      {/* ── Detail drawer ────────────────────────────────────────────── */}
       <Sheet open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
         <SheetContent side="right" className="w-full overflow-y-auto bg-background p-0 sm:max-w-[440px]">
-          {picked && <CardDetail card={picked} onClose={() => setPicked(null)} />}
+          {picked && (
+            <CardDetail
+              card={picked}
+              ownedCount={owned[picked.id] ?? 0}
+              wishlisted={wishlist.has(picked.id)}
+              onClose={() => setPicked(null)}
+              onToggleWishlist={() => toggleWishlist(picked)}
+              onInc={() => adjust(picked, 1)}
+              onDec={() => adjust(picked, -1)}
+            />
+          )}
         </SheetContent>
       </Sheet>
     </div>
@@ -431,29 +484,19 @@ function MyCollection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-function CountChip({
-  label, value, tone, active, onClick, icon,
-}: {
-  label: string; value: number;
-  tone: "success" | "warning" | "primary";
-  active: boolean; onClick: () => void; icon: React.ReactNode;
-}) {
+function SummaryStat({
+  label, value, tone,
+}: { label: string; value: string | number; tone: "primary" | "success" | "warning" | "muted" }) {
   const toneCls =
-    tone === "success" ? "border-success/30 text-success bg-success/10"
-    : tone === "warning" ? "border-warning/30 text-warning bg-warning/10"
-    : "border-primary/30 text-primary bg-primary/10";
+    tone === "success" ? "text-success"
+    : tone === "warning" ? "text-warning"
+    : tone === "primary" ? "text-primary"
+    : "text-foreground";
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-all",
-        active ? toneCls + " shadow-[inset_0_0_0_1px_currentColor]" : "border-border bg-card/40 text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {icon}
-      <span>{label}</span>
-      <span className="text-mono">{value}</span>
-    </button>
+    <div>
+      <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{label}</div>
+      <div className={cn("mt-0.5 font-display text-2xl font-bold tabular-nums", toneCls)}>{value}</div>
+    </div>
   );
 }
 
@@ -498,9 +541,17 @@ function EmptyBinder({ onClear }: { onClear: () => void }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-function CardDetail({ card, onClose }: { card: Card; onClose: () => void }) {
-  const set = SETS.find((s) => s.id === card.set)!;
-  const isOwned = card.owned > 0;
+function CardDetail({
+  card, ownedCount, wishlisted, onClose, onToggleWishlist, onInc, onDec,
+}: {
+  card: Card; ownedCount: number; wishlisted: boolean;
+  onClose: () => void; onToggleWishlist: () => void;
+  onInc: () => void; onDec: () => void;
+}) {
+  const set = getSet(card.set)!;
+  const isOwned = ownedCount > 0;
+  const spares = Math.max(0, ownedCount - 1);
+  const cardParam = encodeURIComponent(card.name);
 
   return (
     <div>
@@ -516,134 +567,138 @@ function CardDetail({ card, onClose }: { card: Card; onClose: () => void }) {
         </Button>
       </div>
 
-      {/* Hero art */}
       <div className="px-6 pt-5">
         <div className="mx-auto w-[220px]">
-          <CardArt
-            name={card.name}
-            type={card.type}
-            rarity={card.rarity}
-            number={card.number}
-            owned={card.owned}
-            missing={!isOwned}
-            size="lg"
-          />
+          <CardArt name={card.name} type={card.type} rarity={card.rarity} set={set.short} />
         </div>
       </div>
 
-      {/* Headline + ownership answer */}
       <div className="px-5 pt-4">
         <h2 className="font-display text-xl font-bold tracking-tight">{card.name}</h2>
-        <p className="mt-0.5 text-xs text-muted-foreground">{set.name} · <span className="capitalize">{card.type}</span></p>
+        <p className="mt-0.5 text-xs text-muted-foreground">
+          {set.name} · <span className="capitalize">{card.type}</span>
+        </p>
 
-        <div
-          className={cn(
-            "mt-4 rounded-lg border p-3",
-            isOwned
-              ? "border-success/30 bg-success/10"
-              : "border-warning/30 bg-warning/10",
-          )}
-        >
-          <div className="flex items-center justify-between">
+        <div className={cn(
+          "mt-4 rounded-lg border p-3",
+          isOwned ? "border-success/30 bg-success/10" : "border-warning/30 bg-warning/10",
+        )}>
+          <div className="flex items-center justify-between gap-3">
             <div>
-              <div className={cn("text-[10px] font-semibold uppercase tracking-[0.16em]", isOwned ? "text-success" : "text-warning")}>
+              <div className={cn(
+                "text-[10px] font-semibold uppercase tracking-[0.16em]",
+                isOwned ? "text-success" : "text-warning",
+              )}>
                 {isOwned ? "Owned" : "Missing"}
               </div>
               <div className="mt-0.5 font-display text-base font-bold">
-                {isOwned ? `${card.owned} ${card.owned === 1 ? "copy" : "copies"} in your binder` : "Not in your binder yet"}
+                {isOwned ? `Owned ×${ownedCount}` : "Not in your binder yet"}
               </div>
+              {isOwned && (
+                <div className="mt-0.5 text-[11px] text-muted-foreground">
+                  Spare copies: <span className="text-mono">{spares}</span>
+                </div>
+              )}
             </div>
-            {isOwned ? (
-              <div className="flex items-center gap-1">
-                <Button variant="outline" size="icon" className="h-7 w-7"><Minus className="h-3 w-3" /></Button>
-                <span className="w-6 text-center text-mono text-sm font-bold">{card.owned}</span>
-                <Button variant="outline" size="icon" className="h-7 w-7"><Plus className="h-3 w-3" /></Button>
-              </div>
-            ) : (
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-warning/20">
-                <Lock className="h-4 w-4 text-warning" />
-              </span>
-            )}
+            <div className="flex items-center gap-1">
+              <Button variant="outline" size="icon" className="h-7 w-7" onClick={onDec} aria-label="Decrease">−</Button>
+              <span className="w-6 text-center text-mono text-sm font-bold">{ownedCount}</span>
+              <Button variant="outline" size="icon" className="h-7 w-7" onClick={onInc} aria-label="Increase">+</Button>
+            </div>
           </div>
         </div>
+
+        {spares >= 1 && (
+          <div className="mt-3 rounded-lg border border-primary/30 bg-primary/10 p-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">Duplicate leverage</div>
+            <p className="mt-0.5 text-sm">You have <span className="text-mono font-bold">{spares}</span> spare {spares === 1 ? "copy" : "copies"}.</p>
+            <Link
+              to="/card-request" search={{ card: card.name }}
+              className="mt-2 inline-flex items-center gap-1 text-[12px] font-semibold text-primary hover:underline"
+            >
+              Request trades <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        )}
       </div>
 
-      {/* Meta facts */}
-      <div className="mt-4 grid grid-cols-3 gap-2 px-5">
-        <FactCell label="Set"    value={set.short} />
-        <FactCell label="Number" value={card.number.split(" ")[1]} />
-        <FactCell label="Rarity" value={card.rarity} />
-      </div>
-
-      {/* How can I get it */}
+      {/* Acquisition paths */}
       <div className="mt-5 px-5">
         <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
           How can I get it
         </div>
         <div className="space-y-1.5">
-          <SourceRow
-            icon={<Sparkles className="h-3.5 w-3.5" />}
-            label={`Pull from ${set.name}`}
-            value={card.pullOdds ? `${card.pullOdds} per pack` : "Not currently in pool"}
+          <AcquireLink
+            href={`/open-pack?set=${set.id}`}
+            icon={<PackageOpen className="h-3.5 w-3.5" />}
+            label={`Open ${set.name}`}
+            value={card.pullOdds ? `${card.pullOdds} per pack` : "Pull source"}
             tone="primary"
           />
-          <SourceRow
+          <AcquireLink
+            href={`/card-request?card=${cardParam}`}
             icon={<Repeat2 className="h-3.5 w-3.5" />}
-            label="Trade with a friend"
-            value={card.tradeOffers ? `${card.tradeOffers} open offers` : "No offers yet"}
-            tone={card.tradeOffers ? "success" : "muted"}
+            label="Request a trade"
+            value="Browse partners"
+            tone="success"
           />
-          <SourceRow
+          <AcquireLink
+            href={`/hunt?card=${cardParam}`}
             icon={<Crosshair className="h-3.5 w-3.5" />}
-            label="Community hunt"
-            value={card.activeHunts ? `${card.activeHunts.toLocaleString()} hunting now` : "No active hunt"}
-            tone={card.activeHunts ? "warning" : "muted"}
+            label="Join a hunt"
+            value="Community sessions"
+            tone="warning"
+          />
+          <AcquireLink
+            href={`/wonder-pick?card=${cardParam}`}
+            icon={<Wand2 className="h-3.5 w-3.5" />}
+            label="Wonder Pick"
+            value="Pick from recent pulls"
+            tone="muted"
           />
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="sticky bottom-0 mt-5 grid grid-cols-1 gap-2 border-t border-border bg-background/95 p-4 backdrop-blur sm:grid-cols-3">
-        <Button variant={card.wishlist ? "secondary" : "outline"} size="sm" className="h-9 gap-1.5">
-          <Heart className={cn("h-3.5 w-3.5", card.wishlist && "fill-current text-rose-400")} />
-          {card.wishlist ? "Wishlisted" : "Wishlist"}
+      {/* Sticky actions: wishlist toggle + manage in wishlist link */}
+      <div className="sticky bottom-0 mt-5 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-4 backdrop-blur">
+        <Button
+          variant={wishlisted ? "secondary" : "outline"}
+          size="sm" className="h-9 gap-1.5"
+          onClick={onToggleWishlist}
+        >
+          <Heart className={cn("h-3.5 w-3.5", wishlisted && "fill-rose-400 text-rose-400")} />
+          {wishlisted ? "Wishlisted" : "Add to wishlist"}
         </Button>
-        <Button variant="outline" size="sm" className="h-9 gap-1.5" disabled={!card.tradeOffers}>
-          <Repeat2 className="h-3.5 w-3.5" /> Find Trade
-        </Button>
-        <Button size="sm" className="h-9 gap-1.5">
-          <Crosshair className="h-3.5 w-3.5" /> Hunt This Card
-          <ArrowRight className="ml-auto h-3 w-3" />
+        <Button asChild size="sm" variant="outline" className="h-9 gap-1.5">
+          <Link to="/wishlist">
+            Manage in Wishlist <ArrowRight className="h-3 w-3" />
+          </Link>
         </Button>
       </div>
     </div>
   );
 }
 
-function FactCell({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border border-border bg-card/60 p-2.5">
-      <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{label}</div>
-      <div className="mt-0.5 truncate text-sm font-bold">{value}</div>
-    </div>
-  );
-}
-
-function SourceRow({
-  icon, label, value, tone,
-}: { icon: React.ReactNode; label: string; value: string; tone: "primary" | "success" | "warning" | "muted" }) {
+function AcquireLink({
+  href, icon, label, value, tone,
+}: { href: string; icon: React.ReactNode; label: string; value: string; tone: "primary" | "success" | "warning" | "muted" }) {
   const toneCls =
     tone === "success" ? "text-success bg-success/10 border-success/20"
     : tone === "warning" ? "text-warning bg-warning/10 border-warning/20"
     : tone === "primary" ? "text-primary bg-primary/10 border-primary/20"
     : "text-muted-foreground bg-muted/40 border-border";
   return (
-    <div className="flex items-center justify-between rounded-md border border-border bg-card/40 px-3 py-2">
+    <a
+      href={href}
+      className="flex items-center justify-between rounded-md border border-border bg-card/40 px-3 py-2 transition-colors hover:bg-accent/40"
+    >
       <div className="flex items-center gap-2">
         <span className={cn("grid h-6 w-6 place-items-center rounded-md border", toneCls)}>{icon}</span>
         <span className="text-xs font-medium">{label}</span>
       </div>
-      <span className="text-mono text-[11px] text-muted-foreground">{value}</span>
-    </div>
+      <span className="inline-flex items-center gap-1 text-mono text-[11px] text-muted-foreground">
+        {value} <ArrowRight className="h-3 w-3" />
+      </span>
+    </a>
   );
 }
