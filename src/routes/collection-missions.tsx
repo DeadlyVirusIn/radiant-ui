@@ -162,13 +162,14 @@ function GoalCard({ g, compact = false }: { g: Goal; compact?: boolean }) {
 
   return (
     <div className={cn(
-      "rounded-xl border bg-card/40 p-4 transition-colors",
+      "rounded-xl border bg-card/40 p-3 transition-colors",
       status === "completed" ? "border-success/20" :
       status === "almost"    ? "border-amber-400/30 bg-amber-400/[0.03]" :
                                "border-border hover:border-border/80",
-      compact && "p-3",
+      compact && "p-2.5",
     )}>
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-2.5">
+
         <div className={cn(
           "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border",
           CATS[g.category].tint,
@@ -186,14 +187,15 @@ function GoalCard({ g, compact = false }: { g: Goal; compact?: boolean }) {
             <StatusChip status={status} />
           </div>
 
-          <div className="mt-3 flex items-center gap-3">
+          <div className="mt-2 flex items-center gap-3">
             <ProgressBar value={pct(g)} tone={tone} />
             <span className="w-20 shrink-0 text-right font-mono text-xs text-muted-foreground">
               {g.progress}/{g.total} · {pct(g)}%
             </span>
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+
             <div className="flex flex-wrap items-center gap-1.5">
               <CategoryChip category={g.category} />
               <Badge variant="outline" className="border-transparent bg-muted/60 text-[10px] font-normal text-muted-foreground">
@@ -324,7 +326,7 @@ function CollectionGoals() {
 
       {/* Next Best Goal */}
       {nextBest && (
-        <Section title="Next Best Goal" className="mt-6">
+        <Section title="Next Best Goal" className="mt-5">
           <NextBestCard g={nextBest} />
         </Section>
       )}
@@ -334,7 +336,7 @@ function CollectionGoals() {
         <Section
           title="Almost Done"
           description="Goals within reach — finish these first."
-          className="mt-6"
+          className="mt-5"
         >
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {almostDone.map((g) => <GoalCard key={g.id} g={g} compact />)}
@@ -343,7 +345,7 @@ function CollectionGoals() {
       )}
 
       {/* Sticky filter row */}
-      <div className="sticky top-14 z-20 -mx-3 mt-8 border-y border-border/60 bg-background/85 px-3 py-3 backdrop-blur md:-mx-6 md:px-6">
+      <div className="sticky top-14 z-20 -mx-3 mt-6 border-y border-border/60 bg-background/85 px-3 py-3 backdrop-blur md:-mx-6 md:px-6">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
             {CATEGORY_FILTERS.map((f) => (
@@ -385,7 +387,7 @@ function CollectionGoals() {
       </div>
 
       {/* All goals grouped */}
-      <div className="mt-6 space-y-8">
+      <div className="mt-5 space-y-6">
         {visibleGroups.map((group) => {
           const c = CATS[group.id];
           const Icon = c.icon;
@@ -416,7 +418,7 @@ function CollectionGoals() {
 
       {/* Other Goals (collapsed) */}
       {otherGoals.length > 0 && (
-        <section className="mt-8 rounded-xl border border-border bg-card/30">
+        <section className="mt-6 rounded-xl border border-border bg-card/30">
           <button
             onClick={() => setOtherOpen((v) => !v)}
             className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm"
@@ -436,7 +438,7 @@ function CollectionGoals() {
 
       {/* Recently completed — compact strip */}
       {RECENTLY_COMPLETED.length > 0 && (
-        <section className="mt-8">
+        <section className="mt-6">
           <header className="mb-2 flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-success" />
             <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Recently Completed</h3>
