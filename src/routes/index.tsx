@@ -24,6 +24,8 @@ import {
   Trophy,
   Users,
   Zap,
+  Compass,
+  TrendingUp,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -178,6 +180,33 @@ const friendsActivity = [
   { name:"Yui",    action:"completed Triumphant Light", when:"2h"  },
   { name:"Ren",    action:"joined Mew ex hunt",         when:"3h"  },
 ];
+
+// Wishlist progress — how close each wishlisted card is to landing
+const wishlist = [
+  { name:"Mew ex",      set:"Triumphant Light",     type:"psychic"   as EnergyType, rarity:"Crown"     as const, route:"hunt",    routeLabel:"Hunt at 12%",          progress:12, sub:"4,200 pulls to expected" },
+  { name:"Blastoise ex",set:"Genetic Apex",         type:"water"     as EnergyType, rarity:"EX"        as const, route:"trade",   routeLabel:"Trade with Mika",      progress:80, sub:"Waiting for your reply" },
+  { name:"Lugia Crown", set:"Space-Time Smackdown", type:"lightning" as EnergyType, rarity:"Crown"     as const, route:"hunt",    routeLabel:"Hunt at 41%",          progress:41, sub:"~2 days to expected" },
+  { name:"Charizard",   set:"Genetic Apex",         type:"fire"      as EnergyType, rarity:"Immersive" as const, route:"flair",   routeLabel:"Mint via Gold Flair",  progress:95, sub:"Ready · 1,284 flair on hand" },
+];
+const wishRoute: Record<string,{cls:string;label:string}> = {
+  hunt:  { cls:"bg-warning/15 text-warning border-warning/30", label:"Hunt" },
+  trade: { cls:"bg-primary/15 text-primary border-primary/30", label:"Trade" },
+  flair: { cls:"bg-warning/15 text-warning border-warning/30", label:"Flair" },
+};
+
+// Community Activity — what the wider PackHunter community is doing right now
+const trending = [
+  { id:"tr1", kind:"hunt",  title:"Mew ex community hunt", sub:"18,900 players · +2.4k joined today", metric:"+24%", to:"/hunts" },
+  { id:"tr2", kind:"set",   title:"Triumphant Light",      sub:"4 new chase cards · 12.4k hunting",   metric:"Hot",  to:"/cards" },
+  { id:"tr3", kind:"trade", title:"Snorlax ↔ Blastoise ex",sub:"Most traded pair this week",          metric:"312",  to:"/trades" },
+  { id:"tr4", kind:"flair", title:"Charizard mints",       sub:"Only 8 left · restock uncertain",     metric:"Low",  to:"/gold-flair" },
+];
+const trendKind: Record<string,{icon:React.ComponentType<{className?:string}>;cls:string}> = {
+  hunt:  { icon: Crosshair, cls:"text-warning bg-warning/10 border-warning/20" },
+  set:   { icon: Sparkles,  cls:"text-primary bg-primary/10 border-primary/20" },
+  trade: { icon: Repeat2,   cls:"text-primary bg-primary/10 border-primary/20" },
+  flair: { icon: Gem,       cls:"text-warning bg-warning/10 border-warning/20" },
+};
 
 // ─────────────────────────────────────────────────────────────
 function Tile({ children, className = "" }: { children: React.ReactNode; className?: string }) {
@@ -415,6 +444,42 @@ function UserHome() {
         </div>
       </Tile>
 
+      {/* WISHLIST PROGRESS — every wanted card with the fastest path */}
+      <Tile>
+        <TileHeader
+          icon={Heart}
+          title="Wishlist progress"
+          subtitle="The fastest path to every card you want"
+          action={<Link to="/wishlist" className="text-xs font-semibold text-primary hover:underline">Manage wishlist →</Link>}
+        />
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {wishlist.map((w) => {
+            const r = wishRoute[w.route];
+            return (
+              <div key={w.name} className="flex gap-3 rounded-2xl border border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/40">
+                <div className="w-20 shrink-0">
+                  <CardArt name={w.name} set={w.set} type={w.type} rarity={w.rarity} />
+                </div>
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate font-display text-sm font-semibold text-foreground">{w.name}</p>
+                    <span className={`inline-flex shrink-0 items-center rounded-md border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${r.cls}`}>{r.label}</span>
+                  </div>
+                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{w.set}</p>
+                  <p className="mt-1.5 truncate text-[11px] font-semibold text-foreground">{w.routeLabel}</p>
+                  <p className="truncate text-[10px] text-muted-foreground">{w.sub}</p>
+                  <div className="mt-auto pt-2">
+                    <div className="h-1.5 overflow-hidden rounded-full bg-muted/40">
+                      <div className="h-full rounded-full bg-gradient-to-r from-primary to-warning" style={{ width: `${w.progress}%` }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </Tile>
+
       {/* 3. TRADE OPPORTUNITIES — dedicated */}
       <Tile>
         <TileHeader icon={Repeat2} title="Trade opportunities" subtitle="Matches with your friends' wishlists right now" action={<Link to="/trades" className="text-xs font-semibold text-primary hover:underline">All trades →</Link>} />
@@ -457,6 +522,37 @@ function UserHome() {
               </div>
             </div>
           ))}
+        </div>
+      </Tile>
+
+      {/* COMMUNITY ACTIVITY / TRENDING */}
+      <Tile className="bg-gradient-to-br from-card/40 via-card/30 to-primary/5">
+        <TileHeader
+          icon={TrendingUp}
+          title="Trending in the community"
+          subtitle="What other players are hunting, trading, and minting right now"
+          action={<Link to="/events" className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"><Compass className="h-3.5 w-3.5" /> Explore</Link>}
+        />
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {trending.map((t) => {
+            const meta = trendKind[t.kind];
+            const Icon = meta.icon;
+            return (
+              <Link key={t.id} to={t.to} className="group flex items-start gap-3 rounded-xl border border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/40 hover:bg-card/60">
+                <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg border ${meta.cls}`}><Icon className="h-4 w-4" /></div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-sm font-semibold text-foreground">{t.title}</p>
+                    <span className="shrink-0 rounded-md bg-foreground/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground">{t.metric}</span>
+                  </div>
+                  <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{t.sub}</p>
+                  <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    Jump in <ArrowUpRight className="h-3 w-3" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </Tile>
 
