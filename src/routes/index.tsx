@@ -24,6 +24,8 @@ import {
   Trophy,
   Users,
   Zap,
+  Compass,
+  TrendingUp,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
