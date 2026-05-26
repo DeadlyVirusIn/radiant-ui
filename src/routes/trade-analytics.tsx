@@ -153,7 +153,7 @@ function TradeAnalytics() {
       </div>
 
       {/* ── Volume trend ───────────────────────────────────────────── */}
-      <Section title="Trade volume over time" description={`Daily breakdown · ${TF_LABEL[tf]}`} className="mt-4">
+      <Section title="Trade volume over time" description={`Daily breakdown · ${TF_LABEL[tf as AnalyticsTimeframe]}`} className="mt-4">
         {chartData.length === 0 ? (
           <Empty msg="Nothing to plot for this window." />
         ) : (
