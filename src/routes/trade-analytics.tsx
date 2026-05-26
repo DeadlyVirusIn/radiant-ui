@@ -163,18 +163,18 @@ function TradeAnalytics() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
                 <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={28} />
-                <RTooltip content={<ChartTip />} />
-                <Bar dataKey="completed" stackId="a" fill="var(--success)" radius={[2,2,0,0]} />
-                <Bar dataKey="failed" stackId="a" fill="var(--destructive)" />
-                <Bar dataKey="cancelled" stackId="a" fill="var(--muted-foreground)" />
+                <RTooltip content={<ChartTip />} cursor={{ fill: "var(--accent)", opacity: 0.25 }} />
+                <Bar dataKey="completed" name="Completed" stackId="a" fill="var(--chart-2)" radius={[2,2,0,0]} />
+                <Bar dataKey="failed" name="Failed" stackId="a" fill="var(--chart-4)" />
+                <Bar dataKey="cancelled" name="Cancelled" stackId="a" fill="var(--chart-5)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
         <div className="mt-3 flex flex-wrap gap-3 text-[11px]">
-          <Legend swatch="bg-success" label="Completed" value={sum.completed} />
-          <Legend swatch="bg-destructive" label="Failed" value={sum.failed} />
-          <Legend swatch="bg-muted-foreground" label="Cancelled" value={sum.cancelled} />
+          <Legend swatch="var(--chart-2)" label="Completed" value={sum.completed} />
+          <Legend swatch="var(--chart-4)" label="Failed" value={sum.failed} />
+          <Legend swatch="var(--chart-5)" label="Cancelled" value={sum.cancelled} />
         </div>
       </Section>
 
