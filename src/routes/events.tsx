@@ -187,5 +187,3 @@ function EventCard({ event }: { event: LiveEvent }) {
   );
 }
 
-// satisfy unused import in some configurations
-void Calendar;
