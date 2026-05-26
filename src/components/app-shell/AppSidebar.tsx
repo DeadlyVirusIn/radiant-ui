@@ -21,10 +21,14 @@ import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types
-type Leaf = { title: string; to: string; icon: React.ComponentType<{ className?: string }> };
-type Branch = { title: string; icon: React.ComponentType<{ className?: string }>; items: Leaf[] };
-type Node = Leaf | (Branch & { items: (Leaf | Branch)[] });
-type Group = { id: string; label: string; entries: ({ kind: "link" } & Leaf | { kind: "tree" } & Branch & { items: (Leaf | (Branch & { items: Leaf[] }))[] })[] };
+type IconC = React.ComponentType<{ className?: string }>;
+type Leaf = { title: string; to: string; icon: IconC };
+type SubBranch = { title: string; icon: IconC; items: Leaf[] };
+type TopBranch = { title: string; icon: IconC; items: (Leaf | SubBranch)[] };
+type Entry =
+  | ({ kind: "link" } & Leaf)
+  | ({ kind: "tree" } & TopBranch);
+type Group = { id: string; label: string; entries: Entry[] };
 
 // ─────────────────────────────────────────────────────────────────────────
 // USER FLOW  (mirrors reference/packhunter-current App.jsx allNavGroups)
