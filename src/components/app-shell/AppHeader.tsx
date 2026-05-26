@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/components/app-shell/ThemeToggle";
 
 const labels: Record<string, string> = {
   "": "Dashboard",
-  cards: "My Collection",
+  cards: "My Cards",
   hunts: "Hunts",
   tracker: "Set Progress",
   "gold-flair": "Gold Flair",
