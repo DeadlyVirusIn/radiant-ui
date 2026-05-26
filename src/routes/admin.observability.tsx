@@ -18,7 +18,6 @@ function Observability() {
         <StatCard label="Req/s"      value="2,840" icon={Activity} tone="primary" />
         <StatCard label="P95"        value="184 ms" />
         <StatCard label="Error rate" value="0.18%" tone="success" />
-        <startCard label="" />
         <StatCard label="Saturation" value="42%" tone="warning" />
       </div>
 
