@@ -270,7 +270,8 @@ function Wishlist() {
       </section>
 
       {/* ── Filters bar ───────────────────────────────────────────── */}
-      <div className="sticky top-12 z-20 -mx-4 mb-4 border-y border-border bg-background/85 px-4 py-3 backdrop-blur md:-mx-6 md:px-6">
+      <div className="sticky top-12 z-20 -mx-4 mb-6 mt-2 border-y border-border bg-background/85 px-4 py-4 backdrop-blur md:-mx-6 md:px-6">
+
         <div className="flex flex-wrap items-center gap-2">
           {/* Set chips */}
           <div className="flex gap-1.5 overflow-x-auto">
