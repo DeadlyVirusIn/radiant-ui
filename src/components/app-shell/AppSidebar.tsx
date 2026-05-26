@@ -34,56 +34,75 @@ type Group = { id: string; label: string; entries: Entry[] };
 // USER FLOW  (mirrors reference/packhunter-current App.jsx allNavGroups)
 const USER_GROUPS: Group[] = [
   {
-    id: "main",
-    label: "Workspace",
+    id: "play",
+    label: "Play",
     entries: [
-      { kind: "link", title: "Home", to: "/", icon: Home },
-      {
-        kind: "tree",
-        title: "Hunt",
-        icon: Gauge,
-        items: [
-          { title: "Hunt Monitor", to: "/hunt",        icon: Activity },
-          { title: "God Packs",    to: "/godpacks",    icon: Sparkle },
-          { title: "Bot Hub",      to: "/bot-hub",     icon: Bot },
-          { title: "Friends",      to: "/friends",     icon: Users },
-          { title: "Wonder Pick",  to: "/wonder-pick", icon: Wand2 },
-        ],
-      },
-      {
-        kind: "tree",
-        title: "Collection",
-        icon: CreditCard,
-        items: [
-          { title: "My Cards",         to: "/cards",                       icon: CreditCard },
-          { title: "Tracker",          to: "/tracker",                     icon: Target },
-          { title: "Wishlist",         to: "/wishlist",                    icon: Heart },
-          { title: "Trade",            to: "/card-request",                icon: ArrowLeftRight },
-          { title: "Gift",             to: "/sharing-cards",               icon: Gift },
-          { title: "Gold Flair Trade", to: "/collection/gold-flair-trade", icon: Gem },
-        ],
-      },
-      { kind: "link", title: "Battle", to: "/battles", icon: Swords },
-      {
-        kind: "tree",
-        title: "Play",
-        icon: ListChecks,
-        items: [
-          { title: "Daily Missions", to: "/missions",  icon: ListChecks },
-          { title: "Presents",       to: "/presents",  icon: Gift },
-          { title: "Open Pack",      to: "/open-pack", icon: PackageOpen },
-          {
-            title: "Wallet",
-            icon: Wallet,
-            items: [
-              { title: "Stamina",      to: "/stamina",      icon: Battery },
-              { title: "Item Shop",    to: "/shop",         icon: Store },
-              { title: "Achievements", to: "/achievements", icon: Trophy },
-              { title: "Resources",    to: "/resources",    icon: Coins },
-            ],
-          },
-        ],
-      },
+      { kind: "link", title: "Home",          to: "/",            icon: Home },
+      { kind: "link", title: "Daily Missions",to: "/missions",    icon: ListChecks },
+      { kind: "link", title: "Open Pack",     to: "/open-pack",   icon: PackageOpen },
+      { kind: "link", title: "Wonder Pick",   to: "/wonder-pick", icon: Wand2 },
+    ],
+  },
+  {
+    id: "collect",
+    label: "Collection",
+    entries: [
+      { kind: "link", title: "My Cards",          to: "/cards",    icon: CreditCard },
+      { kind: "link", title: "Set Progress",      to: "/tracker",  icon: Target },
+      { kind: "link", title: "Wishlist",          to: "/wishlist", icon: Heart },
+      { kind: "link", title: "Latest Pulls",      to: "/godpacks", icon: Sparkle },
+    ],
+  },
+  {
+    id: "hunts",
+    label: "Hunts",
+    entries: [
+      { kind: "link", title: "My Hunts",       to: "/hunts",    icon: Crosshair },
+      { kind: "link", title: "Live Monitor",   to: "/hunt",     icon: Activity },
+      { kind: "link", title: "Community Hunts",to: "/bot-hub",  icon: Flame },
+    ],
+  },
+  {
+    id: "trade",
+    label: "Trades",
+    entries: [
+      { kind: "link", title: "Trade Matches",  to: "/trades",       icon: Repeat2 },
+      { kind: "link", title: "Send a Card",    to: "/card-request", icon: ArrowLeftRight },
+    ],
+  },
+  {
+    id: "gift",
+    label: "Gifts",
+    entries: [
+      { kind: "link", title: "Send Gifts",     to: "/sharing-cards", icon: Gift },
+      { kind: "link", title: "Inbox",          to: "/presents",      icon: PackageOpen },
+    ],
+  },
+  {
+    id: "flair",
+    label: "Gold Flair",
+    entries: [
+      { kind: "link", title: "Flair Center",   to: "/gold-flair",                  icon: Gem },
+      { kind: "link", title: "Flair Trade",    to: "/collection/gold-flair-trade", icon: ArrowLeftRight },
+    ],
+  },
+  {
+    id: "social",
+    label: "Friends",
+    entries: [
+      { kind: "link", title: "Friends",        to: "/friends",      icon: Users },
+      { kind: "link", title: "Battles",        to: "/battles",      icon: Swords },
+    ],
+  },
+  {
+    id: "discover",
+    label: "Discover",
+    entries: [
+      { kind: "link", title: "Trending",       to: "/events",       icon: Compass },
+      { kind: "link", title: "Achievements",   to: "/achievements", icon: Trophy },
+      { kind: "link", title: "Item Shop",      to: "/shop",         icon: Store },
+      { kind: "link", title: "Stamina",        to: "/stamina",      icon: Battery },
+      { kind: "link", title: "Resources",      to: "/resources",    icon: Coins },
     ],
   },
 ];
