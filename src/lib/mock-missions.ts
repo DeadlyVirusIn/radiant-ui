@@ -25,21 +25,11 @@ export type Mission = {
   title: string;
   hint?: string;
   progress: { done: number; total: number };
-  reward: { kind: RewardKind; amount: number; label: string };
+  reward: Reward;
   state: MissionState;
   actionTo: MissionActionTo;
   /** Hours until this mission resets / expires. */
   resetInHours: number;
-};
-
-// Reward "value" used purely to break ties when ranking the recommended next mission.
-// Higher = better. NOT a real economy calculation.
-const REWARD_WEIGHT: Record<RewardKind, number> = {
-  card: 100,
-  pack: 80,
-  ticket: 60,
-  hourglass: 30,
-  dust: 10,
 };
 
 export const MISSIONS: Mission[] = [
