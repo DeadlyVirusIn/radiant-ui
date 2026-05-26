@@ -368,31 +368,51 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="px-1.5">
-        {groups.map((group, idx) => (
-          <SidebarGroup key={group.id}>
-            <SidebarGroupLabel
-              className={cn(
-                "text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70",
-                idx > 0 && "mt-1 border-t border-sidebar-border/60 pt-3",
-              )}
-            >
-              {group.label}
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {group.entries.map((entry, i) => (
-                  <SidebarMenuItem key={i}>
-                    {entry.kind === "link"
-                      ? <LeafRow leaf={entry} currentPath={currentPath} depth={0} />
-                      : <BranchRow branch={entry as any} currentPath={currentPath} depth={0} />}
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ))}
+      <SidebarContent className="overflow-y-auto px-1.5">
+        {groups.map((group, idx) => {
+          const groupActive = group.entries.some((e) =>
+            e.kind === "link"
+              ? isActivePath(currentPath, e.to)
+              : pathInTree(currentPath, e.items),
+          );
+          const open = groupActive || !collapsedGroups[group.id];
+          return (
+            <SidebarGroup key={group.id} className={cn(idx > 0 && "mt-1 border-t border-sidebar-border/60 pt-2")}>
+              <Collapsible
+                open={open}
+                onOpenChange={(next) => toggleGroup(group.id, next, groupActive)}
+                className="group/group"
+              >
+                <CollapsibleTrigger asChild>
+                  <SidebarGroupLabel
+                    asChild
+                    className="group/label flex h-7 w-full cursor-pointer items-center justify-between gap-1 rounded px-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground/70 transition-colors hover:bg-accent/40 hover:text-foreground group-data-[collapsible=icon]:hidden"
+                  >
+                    <button type="button" aria-expanded={open}>
+                      <span className="truncate">{group.label}</span>
+                      <ChevronRight className="h-3 w-3 shrink-0 transition-transform group-data-[state=open]/group:rotate-90" />
+                    </button>
+                  </SidebarGroupLabel>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {group.entries.map((entry, i) => (
+                        <SidebarMenuItem key={i}>
+                          {entry.kind === "link"
+                            ? <LeafRow leaf={entry} currentPath={currentPath} depth={0} />
+                            : <BranchRow branch={entry as any} currentPath={currentPath} depth={0} />}
+                        </SidebarMenuItem>
+                      ))}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </CollapsibleContent>
+              </Collapsible>
+            </SidebarGroup>
+          );
+        })}
       </SidebarContent>
+
 
       <SidebarFooter className="border-t border-sidebar-border p-3">
         <div className="flex items-center gap-2.5">
