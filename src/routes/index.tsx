@@ -1,481 +1,393 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
-  Boxes,
-  Brain,
-  CheckCircle2,
+  ArrowUpRight,
+  Calendar,
   Crosshair,
+  Flame,
   Gem,
   Gift,
-  Loader2,
-  Pause,
-  Play,
-  Plus,
+  Heart,
+  Package,
   Repeat2,
-  RotateCcw,
-  Send,
-  ShieldAlert,
+  Search,
   Sparkles,
-  UserCheck,
-  XCircle,
-  Zap,
+  Star,
+  Target,
+  Trophy,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  head: () => ({ meta: [{ title: "Mission Control — Radiant" }] }),
-  component: Dashboard,
+  head: () => ({ meta: [{ title: "Home — Radiant" }] }),
+  component: UserHome,
 });
 
 // ─────────────────────────────────────────────────────────────
-// PackHunter-specific status vocabulary
-type Status =
-  | "ready-to-send"
-  | "needs-mint"
-  | "low-stock"
-  | "out-of-stock"
-  | "waiting-for-user"
-  | "in-progress"
-  | "completed"
-  | "failed";
-
-const STATUS_META: Record<Status, { label: string; tone: "success" | "warning" | "danger" | "primary" | "muted"; icon: React.ComponentType<{ className?: string }> }> = {
-  "ready-to-send":     { label: "Ready to Send",     tone: "success",  icon: Send },
-  "needs-mint":        { label: "Needs Mint",        tone: "warning",  icon: Sparkles },
-  "low-stock":         { label: "Low Stock",         tone: "warning",  icon: Boxes },
-  "out-of-stock":      { label: "Out of Stock",      tone: "danger",   icon: XCircle },
-  "waiting-for-user":  { label: "Waiting for User",  tone: "muted",    icon: UserCheck },
-  "in-progress":       { label: "In Progress",       tone: "primary",  icon: Loader2 },
-  "completed":         { label: "Completed",         tone: "success",  icon: CheckCircle2 },
-  "failed":            { label: "Failed",            tone: "danger",   icon: XCircle },
+// User-facing data: collector, not operator
+const player = {
+  name: "Riko",
+  level: 27,
+  xpInLevel: 1820,
+  xpToNext: 2400,
+  streakDays: 12,
+  goldFlair: 1284,
+  staminaNow: 38,
+  staminaMax: 50,
+  collectionPct: 67,
+  ownedCards: 1241,
+  totalCards: 1840,
 };
 
-const toneChip: Record<string, string> = {
-  success: "bg-success/10 text-success border-success/20",
-  warning: "bg-warning/10 text-warning border-warning/20",
-  danger:  "bg-destructive/10 text-destructive border-destructive/20",
-  primary: "bg-primary/10 text-primary border-primary/20",
-  muted:   "bg-muted/40 text-muted-foreground border-border",
-};
-const toneDot: Record<string, string> = {
-  success: "bg-success",
-  warning: "bg-warning",
-  danger:  "bg-destructive",
-  primary: "bg-primary",
-  muted:   "bg-muted-foreground/60",
-};
-const toneBorder: Record<string, string> = {
-  success: "border-l-success",
-  warning: "border-l-warning",
-  danger:  "border-l-destructive",
-  primary: "border-l-primary",
-  muted:   "border-l-border",
-};
+const dailyTasks = [
+  { id: 1, label: "Open 2 packs",            done: 2, total: 2 },
+  { id: 2, label: "Win a Wonder Pick",        done: 1, total: 1 },
+  { id: 3, label: "Send a gift to a friend",  done: 0, total: 1 },
+  { id: 4, label: "Complete 1 trade",         done: 0, total: 2 },
+];
 
-function StatusPill({ status }: { status: Status }) {
-  const m = STATUS_META[status];
+const recentPulls = [
+  { id: "p1", name: "Mewtwo ex",       set: "Genetic Apex",  rarity: "Crown",     pulled: "2h ago", accent: "from-yellow-500/40 to-amber-700/20" },
+  { id: "p2", name: "Charizard",        set: "Genetic Apex",  rarity: "Immersive", pulled: "5h ago", accent: "from-orange-500/40 to-red-700/20" },
+  { id: "p3", name: "Pikachu",          set: "Promo-A",       rarity: "Full Art",  pulled: "Yesterday", accent: "from-yellow-300/40 to-yellow-600/10" },
+  { id: "p4", name: "Articuno ex",      set: "Mythical Island", rarity: "Star",    pulled: "Yesterday", accent: "from-sky-400/40 to-indigo-700/20" },
+];
+
+const activeHunts = [
+  { id: "h1", target: "Gengar ex",        set: "Triumphant Light",  progress: 72, eta: "ready soon" },
+  { id: "h2", target: "Lugia Crown",      set: "Space-Time Smackdown", progress: 41, eta: "~2 days" },
+];
+
+const recommended = [
+  { id: "r1", kind: "trade",  title: "Trade your Snorlax for Blastoise ex", with: "Mika", value: "+58 collection value" },
+  { id: "r2", kind: "gift",   title: "Send a daily gift to Hana",            with: "10-day mutual streak", value: "Earn 25 Gold Flair" },
+  { id: "r3", kind: "hunt",   title: "Hunt Mew ex — only 2 missing in set",  with: "Triumphant Light",  value: "Completes 3 collections" },
+];
+
+const missingHighlights = [
+  { name: "Mew ex",         set: "Triumphant Light",     odds: "1 / 480", tag: "Crown" },
+  { name: "Rayquaza",       set: "Space-Time Smackdown", odds: "1 / 120", tag: "Immersive" },
+  { name: "Greninja ex",    set: "Genetic Apex",         odds: "1 / 90",  tag: "Star" },
+];
+
+const friendsActivity = [
+  { name: "Mika",   action: "pulled Charizard ex",   when: "3m" },
+  { name: "Hana",   action: "sent you a gift",       when: "18m" },
+  { name: "Daichi", action: "wants to trade Snorlax",when: "1h" },
+];
+
+// ─────────────────────────────────────────────────────────────
+// Small primitives — softer, card-game flavored (distinct from admin grid)
+function Tile({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${toneChip[m.tone]}`}>
-      <span className={`h-1.5 w-1.5 rounded-full ${toneDot[m.tone]}`} />
-      {m.label}
-    </span>
+    <div className={`rounded-2xl border border-border/60 bg-card/40 p-5 backdrop-blur-sm ${className}`}>
+      {children}
+    </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// Mock PackHunter data
-const aiSummary = {
-  posture: "Stable with two pressure points",
-  highlights: [
-    "Hunt throughput up 8% vs 24h baseline — EU-W queue absorbing surge.",
-    "Gold Flair mint backlog (14 pending) is the current rate-limiting step for trade settlement.",
-    "Sneakerhead-7 inventory is two pulls away from Out of Stock; recommend rotating SKU SH-204 into hunt-12.",
-  ],
-  next: "Mint 14 Gold Flair · then release hunts 12, 14, 17",
-};
-
-const needsAttention: Array<{
-  id: string;
-  entity: "Hunt" | "Gold Flair" | "Gift" | "Trade" | "Inventory";
+function TileHeader({ icon: Icon, title, subtitle, action }: {
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
-  status: Status;
-  detail: string;
-  age: string;
-  cta: string;
-}> = [
-  { id: "h-12",  entity: "Hunt",       title: "Hunt slot B stalled past ETA",          status: "in-progress",      detail: "HUNT-12 · EU-W · waiting on bot-07",     age: "8m",  cta: "Reassign" },
-  { id: "gf-q", entity: "Gold Flair", title: "14 Gold Flair awaiting mint",            status: "needs-mint",       detail: "Queue depth +6 in last hour",            age: "14m", cta: "Mint batch" },
-  { id: "gi-19",entity: "Gift",       title: "Gift batch B-19 partial delivery",       status: "waiting-for-user", detail: "2 of 24 recipients un-claimed",          age: "33m", cta: "Notify" },
-  { id: "inv-7",entity: "Inventory",  title: "Sneakerhead-7 stock dropping",           status: "low-stock",        detail: "3 units left · SKU SH-204",              age: "1h",  cta: "Restock" },
-  { id: "t-9f", entity: "Trade",      title: "Trade #A9F2 awaiting counterparty",      status: "waiting-for-user", detail: "fleet-3 · sent 9m ago",                  age: "9m",  cta: "Ping" },
-  { id: "h-09", entity: "Hunt",       title: "Hunt-09 settle handshake failed",        status: "failed",           detail: "Retry budget exhausted · bot-02",        age: "22m", cta: "Resolve" },
-];
-
-// First-class entity rails
-const hunts = [
-  { id: "HUNT-12", status: "in-progress" as Status,    target: "Sneakerhead-7", region: "EU-W", eta: "+28m" },
-  { id: "HUNT-14", status: "ready-to-send" as Status,  target: "Streetcap",      region: "NA-E", eta: "queued" },
-  { id: "HUNT-17", status: "ready-to-send" as Status,  target: "Heatlist",       region: "JP",   eta: "queued" },
-  { id: "HUNT-09", status: "failed" as Status,         target: "Sneakerhead-3",  region: "EU-W", eta: "—" },
-  { id: "HUNT-08", status: "completed" as Status,      target: "Drop-tracker",   region: "OCE",  eta: "settled" },
-];
-
-const goldFlair = { needsMint: 14, readyToSend: 6, inProgress: 3, completed24h: 184, failed24h: 1 };
-const gifts =     { readyToSend: 18, waitingForUser: 4, completed24h: 22, failed24h: 0 };
-const trades =    { inProgress: 7, waitingForUser: 5, completed24h: 2418, failed24h: 4 };
-
-const inventory = [
-  { name: "Sneakerhead-7", sku: "SH-204", status: "low-stock"    as Status, qty:  3, of: 50 },
-  { name: "Streetcap",     sku: "SC-118", status: "ready-to-send" as Status, qty: 42, of: 50 },
-  { name: "Heatlist Pro",  sku: "HL-077", status: "needs-mint"   as Status, qty: 12, of: 50 },
-  { name: "Drop-tracker",  sku: "DT-301", status: "out-of-stock" as Status, qty:  0, of: 25 },
-];
-
-const fleet = { healthy: 40, total: 42, regions: [
-  { id: "NA-E", state: "ok",   bots: 12 },
-  { id: "EU-W", state: "warn", bots: 10 },
-  { id: "JP",   state: "ok",   bots:  8 },
-  { id: "OCE",  state: "ok",   bots: 12 },
-]};
-
-// ─────────────────────────────────────────────────────────────
-function SectionLabel({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
+  subtitle?: string;
+  action?: React.ReactNode;
+}) {
   return (
-    <div className="mb-3 flex items-center justify-between">
-      <h3 className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">{children}</h3>
+    <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="flex items-center gap-3">
+        <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-primary">
+          <Icon className="h-4 w-4" />
+        </div>
+        <div>
+          <h3 className="font-display text-base font-semibold text-foreground">{title}</h3>
+          {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+        </div>
+      </div>
       {action}
     </div>
   );
 }
 
-function EntityCard({
-  title, to, icon: Icon, accent, stats, footer,
-}: {
-  title: string;
-  to: string;
-  icon: React.ComponentType<{ className?: string }>;
-  accent: string; // tone key
-  stats: Array<{ label: string; value: string | number; status?: Status }>;
-  footer?: React.ReactNode;
-}) {
+function UserHome() {
+  const xpPct = Math.round((player.xpInLevel / player.xpToNext) * 100);
+  const staminaPct = Math.round((player.staminaNow / player.staminaMax) * 100);
+
   return (
-    <Link
-      to={to}
-      className="group relative overflow-hidden rounded-xl border border-border bg-card/40 p-4 transition-all hover:border-primary/40 hover:bg-card"
-    >
-      <div className={`absolute left-0 top-0 h-full w-0.5 ${toneDot[accent]}`} />
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className={`grid h-7 w-7 place-items-center rounded-md border ${toneChip[accent]}`}>
-            <Icon className="h-3.5 w-3.5" />
-          </div>
-          <h4 className="font-display text-sm font-semibold text-foreground">{title}</h4>
-        </div>
-        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
-      </div>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        {stats.map((s) => (
-          <div key={s.label} className="rounded-md border border-border/50 bg-background/40 p-2">
-            <p className="text-mono text-base font-bold leading-tight text-foreground">{s.value}</p>
-            <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{s.label}</p>
-            {s.status && <div className="mt-1.5"><StatusPill status={s.status} /></div>}
-          </div>
-        ))}
-      </div>
-      {footer && <div className="mt-3 border-t border-border/60 pt-3">{footer}</div>}
-    </Link>
-  );
-}
+    <div className="space-y-6 pb-12">
+      {/* ─────────────────── HERO — Welcome back ─────────────────── */}
+      <section className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/15 via-card/40 to-background p-6 md:p-8">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-warning/20 blur-3xl" />
 
-function Dashboard() {
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <header className="flex items-start justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2 font-display text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
-            </span>
-            PackHunter Operational · {fleet.healthy}/{fleet.total} bots
-          </div>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-foreground md:text-3xl">
-            Mission Control
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Hunts, Gold Flair, Gifts, Trades and Inventory — operations-first.
-          </p>
-        </div>
-        <div className="hidden items-center gap-2 md:flex">
-          <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
-            <Pause className="h-3.5 w-3.5" /> Pause fleet
-          </button>
-          <button className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-[0_0_24px_-6px_var(--primary)] transition-colors hover:bg-primary/90">
-            <Plus className="h-3.5 w-3.5" /> New hunt
-          </button>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]">
-        {/* PRIMARY COLUMN */}
-        <div className="space-y-4">
-
-          {/* 1. AI OPERATIONS SUMMARY (hero) */}
-          <section className="relative overflow-hidden rounded-xl border border-primary/30 bg-gradient-to-br from-primary/[0.06] via-card/60 to-card/40 p-5">
-            <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-primary to-primary/30" />
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-center gap-2.5">
-                <div className="grid h-8 w-8 place-items-center rounded-md border border-primary/30 bg-primary/10 text-primary">
-                  <Brain className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">AI Operations Summary</p>
-                  <p className="font-display text-base font-semibold text-foreground">{aiSummary.posture}</p>
-                </div>
-              </div>
-              <span className="text-mono shrink-0 text-[10px] uppercase tracking-wider text-muted-foreground">updated 12s ago</span>
+        <div className="relative grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          <div>
+            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+              <Flame className="h-3.5 w-3.5" />
+              {player.streakDays}-day streak · keep it alive
             </div>
-            <ul className="mt-4 space-y-2">
-              {aiSummary.highlights.map((h, i) => (
-                <li key={i} className="flex gap-2.5 text-sm leading-relaxed text-foreground/90">
-                  <span className="text-mono mt-1 shrink-0 text-[10px] text-primary">0{i + 1}</span>
-                  <span>{h}</span>
-                </li>
+            <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+              Welcome back, {player.name}.
+            </h1>
+            <p className="mt-1.5 max-w-lg text-sm text-muted-foreground md:text-base">
+              You're <span className="font-semibold text-foreground">2 cards away</span> from completing
+              Triumphant Light. Want to keep hunting?
+            </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <Link to="/open-pack" className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_var(--primary)] transition-transform hover:-translate-y-0.5">
+                <Sparkles className="h-4 w-4" /> Open today's pack
+              </Link>
+              <Link to="/hunts" className="inline-flex items-center gap-2 rounded-xl border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-card">
+                <Crosshair className="h-4 w-4" /> Resume hunts
+              </Link>
+              <Link to="/wishlist" className="inline-flex items-center gap-2 rounded-xl border border-border/60 bg-transparent px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground">
+                <Heart className="h-4 w-4" /> Wishlist
+              </Link>
+            </div>
+          </div>
+
+          {/* Player stat ring */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Level</p>
+              <p className="mt-1 font-display text-3xl font-bold text-foreground">{player.level}</p>
+              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted/40">
+                <div className="h-full rounded-full bg-gradient-to-r from-primary to-primary/60" style={{ width: `${xpPct}%` }} />
+              </div>
+              <p className="mt-1.5 text-[10px] text-muted-foreground">{player.xpInLevel}/{player.xpToNext} XP</p>
+            </div>
+            <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Collection</p>
+              <p className="mt-1 font-display text-3xl font-bold text-foreground">{player.collectionPct}%</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">{player.ownedCards.toLocaleString()} / {player.totalCards.toLocaleString()} cards</p>
+            </div>
+            <div className="rounded-2xl border border-border/60 bg-background/40 p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Stamina</p>
+                <Target className="h-3.5 w-3.5 text-muted-foreground" />
+              </div>
+              <p className="mt-1 font-display text-2xl font-bold text-foreground">{player.staminaNow}<span className="text-base text-muted-foreground">/{player.staminaMax}</span></p>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted/40">
+                <div className="h-full rounded-full bg-success" style={{ width: `${staminaPct}%` }} />
+              </div>
+            </div>
+            <div className="rounded-2xl border border-warning/30 bg-gradient-to-br from-warning/15 to-transparent p-4">
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-warning">Gold Flair</p>
+                <Gem className="h-3.5 w-3.5 text-warning" />
+              </div>
+              <p className="mt-1 font-display text-2xl font-bold text-foreground">{player.goldFlair.toLocaleString()}</p>
+              <Link to="/gold-flair" className="mt-1 inline-flex items-center gap-1 text-[11px] font-semibold text-warning hover:underline">
+                Spend now <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────── Body grid ─────────────────── */}
+      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+        {/* LEFT — discovery */}
+        <div className="space-y-6">
+          {/* Latest pulls */}
+          <Tile>
+            <TileHeader
+              icon={Package}
+              title="Latest pulls"
+              subtitle="Your most recent cards"
+              action={<Link to="/cards" className="text-xs font-semibold text-primary hover:underline">View all →</Link>}
+            />
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              {recentPulls.map((c) => (
+                <Link
+                  key={c.id}
+                  to="/cards"
+                  className="group relative aspect-[3/4] overflow-hidden rounded-xl border border-border/60 bg-gradient-to-br p-3 transition-transform hover:-translate-y-1 hover:border-primary/40"
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${c.accent} opacity-80`} />
+                  <div className="relative flex h-full flex-col justify-between">
+                    <span className="inline-flex w-fit items-center gap-1 rounded-md bg-background/60 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-foreground backdrop-blur">
+                      <Star className="h-2.5 w-2.5" /> {c.rarity}
+                    </span>
+                    <div>
+                      <p className="font-display text-sm font-bold text-foreground drop-shadow">{c.name}</p>
+                      <p className="text-[10px] text-foreground/70">{c.set}</p>
+                      <p className="mt-0.5 text-[10px] text-foreground/60">{c.pulled}</p>
+                    </div>
+                  </div>
+                </Link>
               ))}
-            </ul>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
-              <div className="flex items-center gap-2 text-xs">
-                <Zap className="h-3.5 w-3.5 text-primary" />
-                <span className="text-muted-foreground">Recommended next:</span>
-                <span className="font-semibold text-foreground">{aiSummary.next}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button className="rounded-md border border-border bg-card/60 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground hover:text-foreground">
-                  Dismiss
-                </button>
-                <button className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-primary-foreground hover:bg-primary/90">
-                  <Play className="h-3 w-3" /> Run plan
-                </button>
-              </div>
             </div>
-          </section>
+          </Tile>
 
-          {/* 2. NEEDS ATTENTION QUEUE */}
-          <section>
-            <SectionLabel
-              action={<Link to="/events" className="text-[11px] font-semibold text-primary hover:underline">Open queue →</Link>}
-            >
-              Needs Attention · {needsAttention.length}
-            </SectionLabel>
-            <div className="overflow-hidden rounded-xl border border-border bg-card/30">
-              <ul className="divide-y divide-border">
-                {needsAttention.map((item) => {
-                  const tone = STATUS_META[item.status].tone;
-                  return (
-                    <li key={item.id} className={`flex items-center justify-between gap-3 border-l-2 p-3 transition-colors hover:bg-card/60 ${toneBorder[tone]}`}>
-                      <div className="flex min-w-0 items-center gap-3">
-                        <span className="text-mono w-20 shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                          {item.entity}
-                        </span>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
-                          <p className="text-mono mt-0.5 truncate text-[10px] uppercase tracking-wider text-muted-foreground">{item.detail}</p>
-                        </div>
-                      </div>
-                      <div className="flex shrink-0 items-center gap-2">
-                        <StatusPill status={item.status} />
-                        <span className="text-mono hidden w-10 text-right text-[10px] text-muted-foreground sm:inline">{item.age}</span>
-                        <button className={`rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
-                          tone === "danger"
-                            ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                            : "border border-border bg-background/60 text-foreground hover:bg-card"
-                        }`}>
-                          {item.cta}
-                        </button>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </section>
-
-          {/* 3. FIRST-CLASS ENTITY RAILS */}
-          <section>
-            <SectionLabel>Operational Entities</SectionLabel>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <EntityCard
-                title="Hunts" to="/hunts" icon={Crosshair} accent="primary"
-                stats={[
-                  { label: "In Progress",   value: hunts.filter(h => h.status === "in-progress").length,   status: "in-progress" },
-                  { label: "Ready to Send", value: hunts.filter(h => h.status === "ready-to-send").length, status: "ready-to-send" },
-                  { label: "Failed",        value: hunts.filter(h => h.status === "failed").length,        status: "failed" },
-                  { label: "Completed 24h", value: 47 },
-                ]}
-                footer={
-                  <ul className="space-y-1.5 text-[11px]">
-                    {hunts.slice(0, 3).map((h) => (
-                      <li key={h.id} className="flex items-center justify-between gap-2">
-                        <span className="text-mono text-muted-foreground">{h.id}</span>
-                        <span className="truncate text-foreground/80">{h.target}</span>
-                        <StatusPill status={h.status} />
-                      </li>
-                    ))}
-                  </ul>
-                }
-              />
-              <EntityCard
-                title="Gold Flair" to="/gold-flair" icon={Gem} accent="warning"
-                stats={[
-                  { label: "Needs Mint",    value: goldFlair.needsMint,    status: "needs-mint" },
-                  { label: "Ready to Send", value: goldFlair.readyToSend,  status: "ready-to-send" },
-                  { label: "In Progress",   value: goldFlair.inProgress,   status: "in-progress" },
-                  { label: "Completed 24h", value: goldFlair.completed24h },
-                ]}
-              />
-              <EntityCard
-                title="Gifts" to="/gifts" icon={Gift} accent="success"
-                stats={[
-                  { label: "Ready to Send",    value: gifts.readyToSend,    status: "ready-to-send" },
-                  { label: "Waiting for User", value: gifts.waitingForUser, status: "waiting-for-user" },
-                  { label: "Completed 24h",    value: gifts.completed24h },
-                  { label: "Failed 24h",       value: gifts.failed24h },
-                ]}
-              />
-              <EntityCard
-                title="Trades" to="/trades" icon={Repeat2} accent="primary"
-                stats={[
-                  { label: "In Progress",      value: trades.inProgress,      status: "in-progress" },
-                  { label: "Waiting for User", value: trades.waitingForUser,  status: "waiting-for-user" },
-                  { label: "Completed 24h",    value: trades.completed24h.toLocaleString() },
-                  { label: "Failed 24h",       value: trades.failed24h,       status: "failed" },
-                ]}
-              />
-            </div>
-          </section>
-
-          {/* 4. INVENTORY (first-class) */}
-          <section className="rounded-xl border border-border bg-card/40">
-            <div className="flex items-center justify-between border-b border-border px-5 py-3">
-              <div className="flex items-center gap-2">
-                <Boxes className="h-4 w-4 text-muted-foreground" />
-                <h3 className="font-display text-sm font-semibold text-foreground">Inventory</h3>
-              </div>
-              <Link to="/inventory" className="text-[11px] font-semibold text-primary hover:underline">Manage stock →</Link>
-            </div>
-            <ul className="divide-y divide-border">
-              {inventory.map((row) => {
-                const pct = Math.round((row.qty / row.of) * 100);
-                const tone = STATUS_META[row.status].tone;
+          {/* Recommended for you */}
+          <Tile>
+            <TileHeader
+              icon={Sparkles}
+              title="Recommended for you"
+              subtitle="Smart actions tailored to your collection"
+            />
+            <ul className="space-y-2">
+              {recommended.map((r) => {
+                const map = {
+                  trade: { icon: Repeat2,    chip: "Trade", color: "text-primary bg-primary/10 border-primary/20" },
+                  gift:  { icon: Gift,       chip: "Gift",  color: "text-success bg-success/10 border-success/20" },
+                  hunt:  { icon: Crosshair,  chip: "Hunt",  color: "text-warning bg-warning/10 border-warning/20" },
+                }[r.kind as "trade" | "gift" | "hunt"];
+                const Icon = map.icon;
                 return (
-                  <li key={row.sku} className="grid grid-cols-[1fr_auto] items-center gap-4 px-5 py-3 sm:grid-cols-[1fr_120px_180px_auto]">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-foreground">{row.name}</p>
-                      <p className="text-mono mt-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">{row.sku}</p>
+                  <li key={r.id} className="group flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/30 hover:bg-card/60">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg border ${map.color}`}>
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-foreground">{r.title}</p>
+                        <p className="truncate text-[11px] text-muted-foreground">{r.with} · <span className="text-foreground/80">{r.value}</span></p>
+                      </div>
                     </div>
-                    <p className="text-mono hidden text-sm font-bold text-foreground sm:block">
-                      {row.qty}<span className="text-muted-foreground"> / {row.of}</span>
-                    </p>
-                    <div className="hidden h-1.5 overflow-hidden rounded-full bg-muted/40 sm:block">
-                      <div className={`h-full ${toneDot[tone]}`} style={{ width: `${Math.max(pct, 2)}%` }} />
-                    </div>
-                    <StatusPill status={row.status} />
+                    <button className="shrink-0 rounded-lg border border-border bg-card/60 px-3 py-1.5 text-xs font-semibold text-foreground opacity-80 transition-opacity hover:opacity-100">
+                      Do it
+                    </button>
                   </li>
                 );
               })}
             </ul>
-          </section>
-        </div>
+          </Tile>
 
-        {/* RIGHT RAIL */}
-        <aside className="space-y-4 xl:sticky xl:top-16 xl:h-fit">
-          {/* Fleet snapshot */}
-          <section className="rounded-xl border border-border bg-card/40 p-5">
-            <SectionLabel
-              action={<Link to="/accounts" className="text-[11px] font-semibold text-primary hover:underline">Fleet →</Link>}
-            >
-              Fleet · {fleet.healthy}/{fleet.total}
-            </SectionLabel>
-            <div className="mb-3 flex items-baseline gap-2">
-              <span className="text-mono text-3xl font-bold tracking-tight text-foreground">95.2%</span>
-              <span className="text-[11px] uppercase tracking-wider text-muted-foreground">healthy</span>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              {fleet.regions.map((r) => (
-                <div key={r.id} className="space-y-1.5">
-                  <div className={`h-1.5 rounded-full ${r.state === "warn" ? "bg-warning" : "bg-success"}`} />
-                  <div className="text-center">
-                    <p className="text-mono text-[10px] font-bold text-foreground">{r.id}</p>
-                    <p className="text-mono text-[10px] text-muted-foreground">{r.bots}</p>
+          {/* Active hunts (player perspective, friendly) */}
+          <Tile>
+            <TileHeader
+              icon={Crosshair}
+              title="Your hunts"
+              subtitle="Cards being chased for you"
+              action={<Link to="/hunts" className="text-xs font-semibold text-primary hover:underline">Manage →</Link>}
+            />
+            <div className="grid gap-3 md:grid-cols-2">
+              {activeHunts.map((h) => (
+                <div key={h.id} className="rounded-xl border border-border/60 bg-background/40 p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="font-display text-sm font-semibold text-foreground">{h.target}</p>
+                      <p className="text-[11px] text-muted-foreground">{h.set}</p>
+                    </div>
+                    <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary">{h.eta}</span>
                   </div>
+                  <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-muted/40">
+                    <div className="h-full rounded-full bg-gradient-to-r from-primary to-primary/50" style={{ width: `${h.progress}%` }} />
+                  </div>
+                  <p className="mt-1.5 text-[10px] text-muted-foreground">{h.progress}% · hunt in progress</p>
                 </div>
               ))}
             </div>
-          </section>
+          </Tile>
 
-          {/* Quick ops */}
-          <section className="rounded-xl border border-border bg-card/40 p-5">
-            <SectionLabel>Quick Operations</SectionLabel>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { to: "/hunts",      title: "New Hunt",   icon: Plus,       tone: "primary" },
-                { to: "/gold-flair", title: "Mint Batch", icon: Sparkles,   tone: "warning" },
-                { to: "/gifts",      title: "Send Gifts", icon: Send,       tone: "success" },
-                { to: "/admin/fleet",title: "Rotate Bot", icon: RotateCcw,  tone: "muted"   },
-              ].map((a) => (
-                <Link key={a.to} to={a.to} className="group rounded-lg border border-border bg-background/40 p-3 transition-all hover:border-primary/40">
-                  <div className={`mb-2 grid h-7 w-7 place-items-center rounded-md border ${toneChip[a.tone]}`}>
-                    <a.icon className="h-3.5 w-3.5" />
-                  </div>
-                  <p className="text-xs font-semibold text-foreground">{a.title}</p>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          {/* Live activity (compact) */}
-          <section className="rounded-xl border border-border bg-card/40 p-5">
-            <SectionLabel
-              action={<Link to="/events" className="text-[11px] font-semibold text-primary hover:underline">All →</Link>}
-            >
-              Live Activity
-            </SectionLabel>
-            <ul className="space-y-2.5 text-[11px]">
-              {[
-                { t: "14:32", title: "Trade #A9F2 settled",       tag: "Trade · Completed",     tone: "success" },
-                { t: "14:31", title: "HUNT-12 opened",            tag: "Hunt · In Progress",    tone: "primary" },
-                { t: "14:30", title: "bot-07 rate limited",       tag: "Fleet · Failed",        tone: "danger"  },
-                { t: "14:28", title: "Gift batch B-18 delivered", tag: "Gift · Completed",      tone: "success" },
-                { t: "14:25", title: "SH-204 low stock alert",    tag: "Inventory · Low Stock", tone: "warning" },
-                { t: "14:21", title: "bot-02 token rotated",      tag: "Fleet · Completed",     tone: "muted"   },
-              ].map((e, i) => (
-                <li key={i} className="flex items-start gap-2.5">
-                  <span className={`mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full ${toneDot[e.tone]}`} />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="truncate text-foreground">{e.title}</p>
-                      <span className="text-mono shrink-0 text-[10px] text-muted-foreground">{e.t}</span>
+          {/* Missing cards — discovery */}
+          <Tile>
+            <TileHeader
+              icon={Search}
+              title="Still missing"
+              subtitle="Closest to completing a set"
+              action={<Link to="/wishlist" className="text-xs font-semibold text-primary hover:underline">See all gaps →</Link>}
+            />
+            <ul className="divide-y divide-border/60">
+              {missingHighlights.map((m) => (
+                <li key={m.name} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-10 w-7 place-items-center rounded-md border border-dashed border-border bg-background/40 text-muted-foreground">
+                      <Star className="h-3 w-3" />
                     </div>
-                    <p className="text-mono mt-0.5 truncate text-[10px] uppercase tracking-wider text-muted-foreground">{e.tag}</p>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{m.name}</p>
+                      <p className="text-[11px] text-muted-foreground">{m.set}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-mono text-[11px] text-muted-foreground">{m.odds}</span>
+                    <Link to="/hunts" className="rounded-md border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20">
+                      Hunt
+                    </Link>
                   </div>
                 </li>
               ))}
             </ul>
-          </section>
+          </Tile>
+        </div>
 
-          {/* Watchlist */}
-          <section className="rounded-xl border border-destructive/30 bg-destructive/5 p-5">
-            <SectionLabel
-              action={<ShieldAlert className="h-3.5 w-3.5 text-destructive" />}
-            >
-              Watchlist
-            </SectionLabel>
-            <ul className="space-y-2 text-xs">
-              <li className="flex items-center justify-between"><span className="text-foreground">bot-07 EU-W</span><StatusPill status="failed" /></li>
-              <li className="flex items-center justify-between"><span className="text-foreground">SH-204 stock</span><StatusPill status="low-stock" /></li>
-              <li className="flex items-center justify-between"><span className="text-foreground">DT-301 stock</span><StatusPill status="out-of-stock" /></li>
+        {/* RIGHT — daily engagement rail */}
+        <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
+          {/* Daily tasks */}
+          <Tile>
+            <TileHeader icon={Calendar} title="Today" subtitle="Resets in 7h 24m" />
+            <ul className="space-y-2.5">
+              {dailyTasks.map((t) => {
+                const done = t.done >= t.total;
+                return (
+                  <li key={t.id} className="flex items-center gap-3">
+                    <div className={`grid h-5 w-5 shrink-0 place-items-center rounded-md border ${done ? "border-success bg-success/20 text-success" : "border-border bg-background/60 text-muted-foreground"}`}>
+                      {done ? "✓" : ""}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className={`truncate text-xs font-medium ${done ? "text-muted-foreground line-through" : "text-foreground"}`}>{t.label}</p>
+                      <div className="mt-1 h-1 overflow-hidden rounded-full bg-muted/40">
+                        <div className={`h-full ${done ? "bg-success" : "bg-primary"}`} style={{ width: `${(t.done / t.total) * 100}%` }} />
+                      </div>
+                    </div>
+                    <span className="text-mono text-[10px] text-muted-foreground">{t.done}/{t.total}</span>
+                  </li>
+                );
+              })}
             </ul>
-          </section>
+            <button className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-card/60 px-3 py-2 text-xs font-semibold text-foreground hover:bg-card">
+              <Trophy className="h-3.5 w-3.5 text-warning" /> Claim 75 XP
+            </button>
+          </Tile>
+
+          {/* Friends activity */}
+          <Tile>
+            <TileHeader
+              icon={Heart}
+              title="From your friends"
+              action={<Link to="/friends" className="text-xs font-semibold text-primary hover:underline">All →</Link>}
+            />
+            <ul className="space-y-3">
+              {friendsActivity.map((f, i) => (
+                <li key={i} className="flex items-center gap-3">
+                  <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gradient-to-br from-primary/40 to-primary/10 text-[11px] font-bold text-foreground">
+                    {f.name[0]}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs text-foreground">
+                      <span className="font-semibold">{f.name}</span> <span className="text-muted-foreground">{f.action}</span>
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">{f.when} ago</p>
+                  </div>
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground" />
+                </li>
+              ))}
+            </ul>
+          </Tile>
+
+          {/* Quick links */}
+          <Tile className="bg-gradient-to-br from-card/40 to-primary/5">
+            <p className="font-display text-sm font-semibold text-foreground">Jump back in</p>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {[
+                { to: "/trades",     label: "Trades",     icon: Repeat2 },
+                { to: "/gifts",      label: "Gifts",      icon: Gift },
+                { to: "/collection-missions", label: "Missions", icon: Target },
+                { to: "/wonder-pick", label: "Wonder Pick", icon: Sparkles },
+              ].map((q) => (
+                <Link
+                  key={q.to}
+                  to={q.to}
+                  className="flex items-center gap-2 rounded-lg border border-border/60 bg-background/40 px-3 py-2 text-xs font-medium text-foreground hover:border-primary/40 hover:bg-card/60"
+                >
+                  <q.icon className="h-3.5 w-3.5 text-primary" />
+                  {q.label}
+                </Link>
+              ))}
+            </div>
+          </Tile>
         </aside>
       </div>
     </div>
