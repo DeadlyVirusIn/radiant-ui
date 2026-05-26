@@ -278,8 +278,10 @@ function PullRevealDialog({ pack, onClose }: { pack: Pack | null; onClose: () =>
 
   if (!pack) return null;
   const cards = pack.pullResultIds.map(getCardById).filter(Boolean);
-  const impact = pullImpact(pack.pullResultIds);
+  const revealedIds = pack.pullResultIds.filter((_, i) => revealed.has(i));
+  const impact = pullImpact(revealedIds);
   const allRevealed = revealed.size === cards.length;
+  const hasRevealed = revealed.size > 0;
 
   return (
     <Dialog open onOpenChange={(o) => { if (!o) onClose(); }}>
