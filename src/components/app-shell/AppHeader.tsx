@@ -21,6 +21,7 @@ const labels: Record<string, string> = {
   events: "Events",
   settings: "Settings",
   admin: "Admin",
+  "card-request": "Card Requests",
 };
 
 export function AppHeader() {
