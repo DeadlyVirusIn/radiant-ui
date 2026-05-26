@@ -13,6 +13,7 @@ const labels: Record<string, string> = {
   gifts: "Gifts",
   trades: "Trades",
   wishlist: "Wishlist",
+  "collection-missions": "Collection Goals",
   inventory: "Inventory",
   accounts: "Accounts",
   analytics: "Analytics",
