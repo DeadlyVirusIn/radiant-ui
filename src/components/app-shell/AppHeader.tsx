@@ -14,6 +14,7 @@ const labels: Record<string, string> = {
   trades: "Trades",
   wishlist: "Wishlist",
   "collection-missions": "Collection Goals",
+  godpacks: "God Pack Gallery",
   inventory: "Inventory",
   accounts: "Accounts",
   analytics: "Analytics",
