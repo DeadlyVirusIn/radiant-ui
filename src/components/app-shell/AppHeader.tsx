@@ -46,6 +46,7 @@ export function AppHeader() {
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success" />
           <span>All systems nominal</span>
         </div>
+        <ThemeToggle />
         <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
           <Bell className="h-4 w-4" />
         </Button>
