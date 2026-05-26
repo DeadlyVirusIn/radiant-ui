@@ -316,6 +316,43 @@ export function AppSidebar() {
     [role],
   );
 
+  // ── Per-group collapsed state, persisted across sessions ──────────────
+  // Defaults reflect product brief: keep top-of-funnel groups open, push
+  // secondary surfaces behind a click.
+  const DEFAULT_COLLAPSED: Record<string, boolean> = {
+    // user
+    play: false, collect: false,
+    hunts: true, trade: true, gift: true, flair: true,
+    social: true, more: true,
+    // admin
+    "admin-overview": false, "admin-ops": false,
+    "admin-integrity": true, "admin-platform": true,
+  };
+  const STORAGE_KEY = "radiant.sidebar.collapsedGroups";
+  const [collapsedGroups, setCollapsedGroups] =
+    useState<Record<string, boolean>>(DEFAULT_COLLAPSED);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, boolean>;
+        setCollapsedGroups({ ...DEFAULT_COLLAPSED, ...parsed });
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const toggleGroup = (id: string, next: boolean, groupActive: boolean) => {
+    // If the route is inside this group it's force-open; ignore close attempts.
+    if (groupActive && !next) return;
+    setCollapsedGroups((prev) => {
+      const updated = { ...prev, [id]: !next };
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  };
+
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
       <SidebarHeader className="px-3 pt-4 pb-2">
