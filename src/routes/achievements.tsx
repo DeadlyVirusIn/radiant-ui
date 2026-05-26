@@ -1,13 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
-  Trophy, Star, Lock, Sparkles, ArrowRight, Check,
-  Gift, ListChecks,
+  Trophy, Star, Lock, Sparkles, ArrowRight, Check, Gift, ListChecks,
 } from "lucide-react";
 
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { CrossLink } from "@/components/app-shell/CrossLink";
+import { Hero } from "@/components/app-shell/Hero";
+import { ProgressBar } from "@/components/app-shell/ProgressBar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -27,7 +28,6 @@ const TABS: (AchievementCategory | "all")[] = ["all", "collect", "play", "trade"
 
 function Achievements() {
   const summary = useMemo(() => getAchievementSummary(ACHIEVEMENTS), []);
-
   const featured = useMemo(() => {
     const inProgress = ACHIEVEMENTS.filter((a) => a.state === "in_progress");
     if (inProgress.length === 0) return null;
@@ -46,8 +46,44 @@ function Achievements() {
         description="Lifetime collector milestones. Permanent unlocks — nothing resets."
       />
 
-      {/* CLOSEST UNLOCK HERO */}
-      {featured && <ClosestHero a={featured} />}
+      {featured && (
+        <Hero
+          eyebrow="Closest unlock"
+          eyebrowIcon={Sparkles}
+          title={featured.name}
+          subtitle={featured.desc}
+          right={
+            <div
+              className={cn(
+                "grid h-24 w-24 place-items-center rounded-2xl ring-2",
+                TIER_META[featured.tier].bgClass,
+                TIER_META[featured.tier].ringClass,
+              )}
+            >
+              <Trophy className={cn("h-10 w-10", TIER_META[featured.tier].textClass)} />
+            </div>
+          }
+        >
+          <div className="mt-3 rounded-lg border border-border bg-background/40 p-3">
+            <div className="flex items-center justify-between gap-3 text-xs">
+              <span className={cn("font-semibold uppercase tracking-wider", TIER_META[featured.tier].textClass)}>
+                {TIER_META[featured.tier].label}
+              </span>
+              <span className="text-mono text-muted-foreground">
+                {featured.progress.done} / {featured.progress.total}
+              </span>
+            </div>
+            <ProgressBar done={featured.progress.done} total={featured.progress.total} />
+            {featured.actionTo && (
+              <div className="mt-3">
+                <Link to={featured.actionTo}>
+                  <Button size="sm">Make progress <ArrowRight className="ml-1 h-3.5 w-3.5" /></Button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </Hero>
+      )}
 
       <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Unlocked" value={`${summary.unlocked} / ${summary.total}`} icon={Trophy} tone="success" />
@@ -77,49 +113,6 @@ function Achievements() {
         <CrossLink to="/presents" icon={Gift} title="Present Box" hint="Claim rewards waiting for you." />
       </div>
     </>
-  );
-}
-
-/* ────────────────────── components ────────────────────── */
-
-function ClosestHero({ a }: { a: Achievement }) {
-  const tier = TIER_META[a.tier];
-  return (
-    <div className="relative overflow-hidden rounded-xl border border-primary/40 bg-gradient-to-br from-primary/10 via-card to-card p-5 ring-1 ring-primary/20">
-      <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
-        <div>
-          <div className="inline-flex items-center gap-1.5 rounded-md bg-primary/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-            <Sparkles className="h-3 w-3" /> Closest unlock
-          </div>
-          <h2 className="mt-2 font-display text-xl font-bold tracking-tight md:text-2xl">{a.name}</h2>
-          <p className="mt-0.5 text-xs text-muted-foreground">{a.desc}</p>
-
-          <div className="mt-3 rounded-lg border border-border bg-background/40 p-3">
-            <div className="flex items-center justify-between gap-3 text-xs">
-              <span className={cn("font-semibold uppercase tracking-wider", tier.textClass)}>
-                {tier.label}
-              </span>
-              <span className="text-mono text-muted-foreground">
-                {a.progress.done} / {a.progress.total}
-              </span>
-            </div>
-            <ProgressBar done={a.progress.done} total={a.progress.total} />
-            {a.actionTo && (
-              <div className="mt-3">
-                <Link to={a.actionTo}>
-                  <Button size="sm">
-                    Make progress <ArrowRight className="ml-1 h-3.5 w-3.5" />
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-        <div className={cn("grid h-24 w-24 place-items-center rounded-2xl ring-2", tier.bgClass, tier.ringClass)}>
-          <Trophy className={cn("h-10 w-10", tier.textClass)} />
-        </div>
-      </div>
-    </div>
   );
 }
 
@@ -184,10 +177,7 @@ function AchievementCard({ a }: { a: Achievement }) {
               <ProgressBar done={a.progress.done} total={a.progress.total} />
               {a.actionTo && (
                 <div className="mt-2">
-                  <Link
-                    to={a.actionTo}
-                    className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline"
-                  >
+                  <Link to={a.actionTo} className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline">
                     Continue <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -202,15 +192,6 @@ function AchievementCard({ a }: { a: Achievement }) {
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-function ProgressBar({ done, total }: { done: number; total: number }) {
-  const pct = total === 0 ? 0 : Math.min(100, (done / total) * 100);
-  return (
-    <div className="mt-1.5 h-1 rounded-full bg-muted">
-      <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${pct}%` }} />
     </div>
   );
 }
