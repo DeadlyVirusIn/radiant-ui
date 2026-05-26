@@ -525,6 +525,37 @@ function UserHome() {
         </div>
       </Tile>
 
+      {/* COMMUNITY ACTIVITY / TRENDING */}
+      <Tile className="bg-gradient-to-br from-card/40 via-card/30 to-primary/5">
+        <TileHeader
+          icon={TrendingUp}
+          title="Trending in the community"
+          subtitle="What other players are hunting, trading, and minting right now"
+          action={<Link to="/events" className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"><Compass className="h-3.5 w-3.5" /> Explore</Link>}
+        />
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {trending.map((t) => {
+            const meta = trendKind[t.kind];
+            const Icon = meta.icon;
+            return (
+              <Link key={t.id} to={t.to} className="group flex items-start gap-3 rounded-xl border border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/40 hover:bg-card/60">
+                <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-lg border ${meta.cls}`}><Icon className="h-4 w-4" /></div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-sm font-semibold text-foreground">{t.title}</p>
+                    <span className="shrink-0 rounded-md bg-foreground/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-foreground">{t.metric}</span>
+                  </div>
+                  <p className="mt-0.5 text-[11px] leading-snug text-muted-foreground">{t.sub}</p>
+                  <span className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                    Jump in <ArrowUpRight className="h-3 w-3" />
+                  </span>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </Tile>
+
       {/* LATEST EXPANSION (now below collection progress) */}
       <section className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-warning/10 via-background to-primary/10 p-6">
         <div className="pointer-events-none absolute -right-10 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-warning/20 blur-3xl" />
