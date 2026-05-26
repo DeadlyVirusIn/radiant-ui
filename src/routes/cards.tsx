@@ -72,41 +72,42 @@ function CardArt({
       className={cn(
         "relative aspect-[3/4] w-full overflow-hidden rounded-xl border border-white/10",
         rarityRing[rarity], e.glow,
-        missing && "saturate-[.35] opacity-70",
+        missing && "saturate-[.4] opacity-80",
       )}
     >
       <div className={cn("absolute inset-0 bg-gradient-to-br", e.from, e.via, e.to)} />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.32),transparent_45%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(115deg,transparent_30%,rgba(255,255,255,0.16)_50%,transparent_70%)]" />
       <div className="absolute inset-0 opacity-25 mix-blend-overlay [background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.12)_0_1px,transparent_1px_4px)]" />
+      {/* Reserved art area — swap silhouette for <img src={card.imageUrl}> when API wires up */}
       <div className="absolute inset-x-0 top-1/2 mx-auto h-2/3 w-2/3 -translate-y-1/2 rounded-full border border-white/10 bg-white/5" />
       <div className="absolute left-1/2 top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/30 bg-background/40" />
 
       {/* top chips */}
       <div className="absolute inset-x-2 top-2 flex items-start justify-between">
-        <span className="inline-flex items-center gap-1 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur">
+        <span className="inline-flex items-center gap-1 rounded-md bg-black/55 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur">
           <Star className="h-2.5 w-2.5" /> {rarity}
         </span>
         {!missing && typeof owned === "number" && owned > 0 && (
-          <span className="rounded-md bg-success/80 px-1.5 py-0.5 text-[10px] font-bold text-success-foreground backdrop-blur">
+          <span className="inline-flex items-center gap-0.5 rounded-md bg-success px-1.5 py-0.5 text-[11px] font-extrabold leading-none text-success-foreground shadow-md ring-1 ring-success-foreground/20 backdrop-blur">
             ×{owned}
           </span>
         )}
         {missing && (
-          <span className="grid h-5 w-5 place-items-center rounded-md bg-black/55 backdrop-blur">
-            <Lock className="h-2.5 w-2.5 text-white/80" />
+          <span className="inline-flex items-center gap-0.5 rounded-md bg-warning/90 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-warning-foreground shadow-md backdrop-blur">
+            <Lock className="h-2.5 w-2.5" /> Missing
           </span>
         )}
       </div>
 
       {/* bottom name plate */}
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-2 pt-6">
         <p className={cn(
-          "truncate font-display font-bold leading-tight text-white drop-shadow",
-          size === "lg" ? "text-sm" : "text-[11px]",
+          "truncate font-display font-bold leading-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]",
+          size === "lg" ? "text-base" : "text-[13px]",
         )}>{name}</p>
         {number && (
-          <p className="truncate text-[9px] uppercase tracking-wider text-white/70">{number}</p>
+          <p className="truncate text-[10px] font-semibold uppercase tracking-wider text-white/85">{number}</p>
         )}
       </div>
     </div>
@@ -285,6 +286,12 @@ function MyCollection() {
           </div>
         </div>
       </div>
+
+      {/* helper tip */}
+      <p className="mb-3 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+        <Sparkles className="h-3 w-3 text-primary/70" />
+        Tip: click any card to see how to get it.
+      </p>
 
       {/* ── Binder grid / list ───────────────────────────────────────── */}
       {filtered.length === 0 ? (
