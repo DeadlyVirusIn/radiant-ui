@@ -8,6 +8,7 @@ const labels: Record<string, string> = {
   "": "Dashboard",
   cards: "My Collection",
   hunts: "Hunts",
+  tracker: "Set Progress",
   "gold-flair": "Gold Flair",
   gifts: "Gifts",
   trades: "Trades",
