@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import {
-  Calendar, Sparkles, ArrowRight, Gift, ListChecks, PackageOpen,
+  Sparkles, ArrowRight, Gift, ListChecks, PackageOpen,
   Clock, Check, Flag,
 } from "lucide-react";
 
