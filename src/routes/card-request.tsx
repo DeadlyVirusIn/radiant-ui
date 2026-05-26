@@ -6,8 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
+type CardRequestSearch = { card?: string };
+
 export const Route = createFileRoute("/card-request")({
   head: () => ({ meta: [{ title: "Card requests — Radiant" }] }),
+  validateSearch: (search: Record<string, unknown>): CardRequestSearch => ({
+    card: typeof search.card === "string" ? search.card : undefined,
+  }),
   component: CardRequest,
 });
 
@@ -25,13 +30,14 @@ const status: Record<string, string> = {
 };
 
 function CardRequest() {
+  const { card } = Route.useSearch();
   return (
     <>
       <PageHeader title="Card requests" description="Open asks from the community and your active responses." actions={<Button size="sm" className="gap-1.5"><Plus className="h-3.5 w-3.5" /> New request</Button>} />
 
       <Section title="Open a request">
         <div className="flex flex-col gap-2 md:flex-row">
-          <Input placeholder="Card name…" className="bg-background/40" />
+          <Input key={card ?? ""} defaultValue={card ?? ""} placeholder="Card name…" className="bg-background/40" autoFocus={!!card} />
           <Input placeholder="Set (optional)" className="bg-background/40 md:max-w-[200px]" />
           <Button>Post</Button>
         </div>
