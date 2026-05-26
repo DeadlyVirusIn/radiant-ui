@@ -14,6 +14,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription,
 } from "@/components/ui/dialog";
 import { CardArt } from "@/components/home/CardArt";
+import { CrossLink } from "@/components/app-shell/CrossLink";
 import { cn } from "@/lib/utils";
 import { SETS } from "@/lib/mock-cards";
 import {
