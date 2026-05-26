@@ -9,15 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WonderPickRouteImport } from './routes/wonder-pick'
 import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as TradesRouteImport } from './routes/trades'
 import { Route as TradeAnalyticsRouteImport } from './routes/trade-analytics'
 import { Route as TrackerRouteImport } from './routes/tracker'
+import { Route as StaminaRouteImport } from './routes/stamina'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SharingCardsRouteImport } from './routes/sharing-cards'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PvpRouteImport } from './routes/pvp'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PresentsRouteImport } from './routes/presents'
+import { Route as OpenPackRouteImport } from './routes/open-pack'
+import { Route as MissionsRouteImport } from './routes/missions'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as HuntsRouteImport } from './routes/hunts'
@@ -26,6 +32,7 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as GoldFlairRouteImport } from './routes/gold-flair'
 import { Route as GodpacksRouteImport } from './routes/godpacks'
 import { Route as GiftsRouteImport } from './routes/gifts'
+import { Route as FriendsRouteImport } from './routes/friends'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as CollectionMissionsRouteImport } from './routes/collection-missions'
 import { Route as CardsRouteImport } from './routes/cards'
@@ -37,11 +44,17 @@ import { Route as BattleHistoryRouteImport } from './routes/battle-history'
 import { Route as ApexTerminalRouteImport } from './routes/apex-terminal'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CollectionGoldFlairTradeRouteImport } from './routes/collection.gold-flair-trade'
 
+const WonderPickRoute = WonderPickRouteImport.update({
+  id: '/wonder-pick',
+  path: '/wonder-pick',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WishlistRoute = WishlistRouteImport.update({
   id: '/wishlist',
   path: '/wishlist',
@@ -62,6 +75,16 @@ const TrackerRoute = TrackerRouteImport.update({
   path: '/tracker',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaminaRoute = StaminaRouteImport.update({
+  id: '/stamina',
+  path: '/stamina',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SharingCardsRoute = SharingCardsRouteImport.update({
   id: '/sharing-cards',
   path: '/sharing-cards',
@@ -77,6 +100,11 @@ const ResourcesRoute = ResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PvpRoute = PvpRouteImport.update({
+  id: '/pvp',
+  path: '/pvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -85,6 +113,16 @@ const ProfileRoute = ProfileRouteImport.update({
 const PresentsRoute = PresentsRouteImport.update({
   id: '/presents',
   path: '/presents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenPackRoute = OpenPackRouteImport.update({
+  id: '/open-pack',
+  path: '/open-pack',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionsRoute = MissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -125,6 +163,11 @@ const GodpacksRoute = GodpacksRouteImport.update({
 const GiftsRoute = GiftsRouteImport.update({
   id: '/gifts',
   path: '/gifts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FriendsRoute = FriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EventsRoute = EventsRouteImport.update({
@@ -182,6 +225,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountsRoute = AccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
@@ -207,6 +255,7 @@ const CollectionGoldFlairTradeRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/achievements': typeof AchievementsRoute
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
@@ -218,6 +267,7 @@ export interface FileRoutesByFullPath {
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
   '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
@@ -226,21 +276,28 @@ export interface FileRoutesByFullPath {
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
   '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
   '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
   '/tracker': typeof TrackerRoute
   '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
   '/battle-history': typeof BattleHistoryRoute
@@ -251,6 +308,7 @@ export interface FileRoutesByTo {
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
   '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
@@ -259,15 +317,21 @@ export interface FileRoutesByTo {
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
   '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
   '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
   '/tracker': typeof TrackerRoute
   '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -275,6 +339,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
+  '/achievements': typeof AchievementsRoute
   '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
   '/apex-terminal': typeof ApexTerminalRoute
@@ -286,6 +351,7 @@ export interface FileRoutesById {
   '/cards': typeof CardsRoute
   '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
   '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
@@ -294,15 +360,21 @@ export interface FileRoutesById {
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
   '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
   '/presents': typeof PresentsRoute
   '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
   '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
   '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
   '/tracker': typeof TrackerRoute
   '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
   '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -311,6 +383,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/accounts'
+    | '/achievements'
     | '/admin'
     | '/analytics'
     | '/apex-terminal'
@@ -322,6 +395,7 @@ export interface FileRouteTypes {
     | '/cards'
     | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
     | '/godpacks'
     | '/gold-flair'
@@ -330,21 +404,28 @@ export interface FileRouteTypes {
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/missions'
+    | '/open-pack'
     | '/presents'
     | '/profile'
+    | '/pvp'
     | '/resources'
     | '/settings'
     | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
     | '/tracker'
     | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/wonder-pick'
     | '/collection/gold-flair-trade'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts'
+    | '/achievements'
     | '/analytics'
     | '/apex-terminal'
     | '/battle-history'
@@ -355,6 +436,7 @@ export interface FileRouteTypes {
     | '/cards'
     | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
     | '/godpacks'
     | '/gold-flair'
@@ -363,21 +445,28 @@ export interface FileRouteTypes {
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/missions'
+    | '/open-pack'
     | '/presents'
     | '/profile'
+    | '/pvp'
     | '/resources'
     | '/settings'
     | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
     | '/tracker'
     | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/wonder-pick'
     | '/collection/gold-flair-trade'
     | '/admin'
   id:
     | '__root__'
     | '/'
     | '/accounts'
+    | '/achievements'
     | '/admin'
     | '/analytics'
     | '/apex-terminal'
@@ -389,6 +478,7 @@ export interface FileRouteTypes {
     | '/cards'
     | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
     | '/godpacks'
     | '/gold-flair'
@@ -397,15 +487,21 @@ export interface FileRouteTypes {
     | '/hunts'
     | '/inventory'
     | '/login'
+    | '/missions'
+    | '/open-pack'
     | '/presents'
     | '/profile'
+    | '/pvp'
     | '/resources'
     | '/settings'
     | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
     | '/tracker'
     | '/trade-analytics'
     | '/trades'
     | '/wishlist'
+    | '/wonder-pick'
     | '/collection/gold-flair-trade'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -413,6 +509,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsRoute: typeof AccountsRoute
+  AchievementsRoute: typeof AchievementsRoute
   AdminRoute: typeof AdminRouteWithChildren
   AnalyticsRoute: typeof AnalyticsRoute
   ApexTerminalRoute: typeof ApexTerminalRoute
@@ -424,6 +521,7 @@ export interface RootRouteChildren {
   CardsRoute: typeof CardsRoute
   CollectionMissionsRoute: typeof CollectionMissionsRoute
   EventsRoute: typeof EventsRoute
+  FriendsRoute: typeof FriendsRoute
   GiftsRoute: typeof GiftsRoute
   GodpacksRoute: typeof GodpacksRoute
   GoldFlairRoute: typeof GoldFlairRoute
@@ -432,20 +530,33 @@ export interface RootRouteChildren {
   HuntsRoute: typeof HuntsRoute
   InventoryRoute: typeof InventoryRoute
   LoginRoute: typeof LoginRoute
+  MissionsRoute: typeof MissionsRoute
+  OpenPackRoute: typeof OpenPackRoute
   PresentsRoute: typeof PresentsRoute
   ProfileRoute: typeof ProfileRoute
+  PvpRoute: typeof PvpRoute
   ResourcesRoute: typeof ResourcesRoute
   SettingsRoute: typeof SettingsRoute
   SharingCardsRoute: typeof SharingCardsRoute
+  ShopRoute: typeof ShopRoute
+  StaminaRoute: typeof StaminaRoute
   TrackerRoute: typeof TrackerRoute
   TradeAnalyticsRoute: typeof TradeAnalyticsRoute
   TradesRoute: typeof TradesRoute
   WishlistRoute: typeof WishlistRoute
+  WonderPickRoute: typeof WonderPickRoute
   CollectionGoldFlairTradeRoute: typeof CollectionGoldFlairTradeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wonder-pick': {
+      id: '/wonder-pick'
+      path: '/wonder-pick'
+      fullPath: '/wonder-pick'
+      preLoaderRoute: typeof WonderPickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wishlist': {
       id: '/wishlist'
       path: '/wishlist'
@@ -474,6 +585,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrackerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stamina': {
+      id: '/stamina'
+      path: '/stamina'
+      fullPath: '/stamina'
+      preLoaderRoute: typeof StaminaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sharing-cards': {
       id: '/sharing-cards'
       path: '/sharing-cards'
@@ -495,6 +620,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResourcesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pvp': {
+      id: '/pvp'
+      path: '/pvp'
+      fullPath: '/pvp'
+      preLoaderRoute: typeof PvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -507,6 +639,20 @@ declare module '@tanstack/react-router' {
       path: '/presents'
       fullPath: '/presents'
       preLoaderRoute: typeof PresentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/open-pack': {
+      id: '/open-pack'
+      path: '/open-pack'
+      fullPath: '/open-pack'
+      preLoaderRoute: typeof OpenPackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missions': {
+      id: '/missions'
+      path: '/missions'
+      fullPath: '/missions'
+      preLoaderRoute: typeof MissionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -563,6 +709,13 @@ declare module '@tanstack/react-router' {
       path: '/gifts'
       fullPath: '/gifts'
       preLoaderRoute: typeof GiftsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/friends': {
+      id: '/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof FriendsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/events': {
@@ -642,6 +795,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accounts': {
       id: '/accounts'
       path: '/accounts'
@@ -686,6 +846,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
+  AchievementsRoute: AchievementsRoute,
   AdminRoute: AdminRouteWithChildren,
   AnalyticsRoute: AnalyticsRoute,
   ApexTerminalRoute: ApexTerminalRoute,
@@ -697,6 +858,7 @@ const rootRouteChildren: RootRouteChildren = {
   CardsRoute: CardsRoute,
   CollectionMissionsRoute: CollectionMissionsRoute,
   EventsRoute: EventsRoute,
+  FriendsRoute: FriendsRoute,
   GiftsRoute: GiftsRoute,
   GodpacksRoute: GodpacksRoute,
   GoldFlairRoute: GoldFlairRoute,
@@ -705,15 +867,21 @@ const rootRouteChildren: RootRouteChildren = {
   HuntsRoute: HuntsRoute,
   InventoryRoute: InventoryRoute,
   LoginRoute: LoginRoute,
+  MissionsRoute: MissionsRoute,
+  OpenPackRoute: OpenPackRoute,
   PresentsRoute: PresentsRoute,
   ProfileRoute: ProfileRoute,
+  PvpRoute: PvpRoute,
   ResourcesRoute: ResourcesRoute,
   SettingsRoute: SettingsRoute,
   SharingCardsRoute: SharingCardsRoute,
+  ShopRoute: ShopRoute,
+  StaminaRoute: StaminaRoute,
   TrackerRoute: TrackerRoute,
   TradeAnalyticsRoute: TradeAnalyticsRoute,
   TradesRoute: TradesRoute,
   WishlistRoute: WishlistRoute,
+  WonderPickRoute: WonderPickRoute,
   CollectionGoldFlairTradeRoute: CollectionGoldFlairTradeRoute,
 }
 export const routeTree = rootRouteImport
