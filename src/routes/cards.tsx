@@ -643,7 +643,7 @@ function CardDetail({
             tone="success"
           />
           <AcquireLink
-            href={`/hunt?card=${cardParam}`}
+            href="/hunt"
             icon={<Crosshair className="h-3.5 w-3.5" />}
             label="Join a hunt"
             value="Community sessions"
