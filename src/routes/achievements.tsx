@@ -214,6 +214,3 @@ function ProgressBar({ done, total }: { done: number; total: number }) {
     </div>
   );
 }
-
-// satisfy Heart import (lint-friendly noop reference if unused elsewhere)
-void Heart;
