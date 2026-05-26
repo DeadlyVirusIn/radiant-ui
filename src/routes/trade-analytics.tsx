@@ -328,15 +328,15 @@ function TradeAnalytics() {
                 <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                   <defs>
                     <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--warning)" stopOpacity={0.5} />
-                      <stop offset="100%" stopColor="var(--warning)" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--chart-3)" stopOpacity={0.75} />
+                      <stop offset="100%" stopColor="var(--chart-3)" stopOpacity={0.05} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
                   <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={40} />
-                  <RTooltip content={<ChartTip />} />
-                  <Area type="monotone" dataKey="net" stroke="var(--warning)" fill="url(#sandGrad)" strokeWidth={2} />
+                  <RTooltip content={<ChartTip />} cursor={{ stroke: "var(--accent)", strokeWidth: 1 }} />
+                  <Area type="monotone" dataKey="net" name="Net Sand" stroke="var(--chart-3)" fill="url(#sandGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: "var(--chart-3)", stroke: "var(--background)", strokeWidth: 2 }} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
