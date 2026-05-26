@@ -6,8 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
+type CardRequestSearch = { card?: string };
+
 export const Route = createFileRoute("/card-request")({
   head: () => ({ meta: [{ title: "Card requests — Radiant" }] }),
+  validateSearch: (search: Record<string, unknown>): CardRequestSearch => ({
+    card: typeof search.card === "string" ? search.card : undefined,
+  }),
   component: CardRequest,
 });
 
