@@ -9,26 +9,140 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WonderPickRouteImport } from './routes/wonder-pick'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as TradesRouteImport } from './routes/trades'
+import { Route as TradeAnalyticsRouteImport } from './routes/trade-analytics'
+import { Route as TrackerRouteImport } from './routes/tracker'
+import { Route as StaminaRouteImport } from './routes/stamina'
+import { Route as ShopRouteImport } from './routes/shop'
+import { Route as SharingCardsRouteImport } from './routes/sharing-cards'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ResourcesRouteImport } from './routes/resources'
+import { Route as PvpRouteImport } from './routes/pvp'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PresentsRouteImport } from './routes/presents'
+import { Route as OpenPackRouteImport } from './routes/open-pack'
+import { Route as MissionsRouteImport } from './routes/missions'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as HuntsRouteImport } from './routes/hunts'
+import { Route as HuntRouteImport } from './routes/hunt'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as GoldFlairRouteImport } from './routes/gold-flair'
+import { Route as GodpacksRouteImport } from './routes/godpacks'
 import { Route as GiftsRouteImport } from './routes/gifts'
+import { Route as FriendsRouteImport } from './routes/friends'
 import { Route as EventsRouteImport } from './routes/events'
+import { Route as CollectionMissionsRouteImport } from './routes/collection-missions'
+import { Route as CardsRouteImport } from './routes/cards'
+import { Route as CardRequestRouteImport } from './routes/card-request'
+import { Route as BotHubRouteImport } from './routes/bot-hub'
+import { Route as BattlesRouteImport } from './routes/battles'
+import { Route as BattleStatsRouteImport } from './routes/battle-stats'
+import { Route as BattleHistoryRouteImport } from './routes/battle-history'
+import { Route as ApexTerminalRouteImport } from './routes/apex-terminal'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AchievementsRouteImport } from './routes/achievements'
 import { Route as AccountsRouteImport } from './routes/accounts'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as CollectionGoldFlairTradeRouteImport } from './routes/collection.gold-flair-trade'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
+import { Route as AdminTrustRouteImport } from './routes/admin.trust'
+import { Route as AdminSystemHealthRouteImport } from './routes/admin.system-health'
+import { Route as AdminSchedulerRouteImport } from './routes/admin.scheduler'
+import { Route as AdminObservabilityRouteImport } from './routes/admin.observability'
+import { Route as AdminMissionDebugRouteImport } from './routes/admin.mission-debug'
+import { Route as AdminIntegrityRouteImport } from './routes/admin.integrity'
+import { Route as AdminHybridControlRouteImport } from './routes/admin.hybrid-control'
+import { Route as AdminHuntOpsRouteImport } from './routes/admin.hunt-ops'
+import { Route as AdminHuntConfigRouteImport } from './routes/admin.hunt-config'
+import { Route as AdminHuntBotsRouteImport } from './routes/admin.hunt-bots'
+import { Route as AdminFleetRouteImport } from './routes/admin.fleet'
+import { Route as AdminCapacityRouteImport } from './routes/admin.capacity'
+import { Route as AdminAuditLogRouteImport } from './routes/admin.audit-log'
+import { Route as AdminActivityLogsRouteImport } from './routes/admin.activity-logs'
 
+const WonderPickRoute = WonderPickRouteImport.update({
+  id: '/wonder-pick',
+  path: '/wonder-pick',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TradesRoute = TradesRouteImport.update({
   id: '/trades',
   path: '/trades',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TradeAnalyticsRoute = TradeAnalyticsRouteImport.update({
+  id: '/trade-analytics',
+  path: '/trade-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrackerRoute = TrackerRouteImport.update({
+  id: '/tracker',
+  path: '/tracker',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaminaRoute = StaminaRouteImport.update({
+  id: '/stamina',
+  path: '/stamina',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SharingCardsRoute = SharingCardsRouteImport.update({
+  id: '/sharing-cards',
+  path: '/sharing-cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResourcesRoute = ResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PvpRoute = PvpRouteImport.update({
+  id: '/pvp',
+  path: '/pvp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PresentsRoute = PresentsRouteImport.update({
+  id: '/presents',
+  path: '/presents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OpenPackRoute = OpenPackRouteImport.update({
+  id: '/open-pack',
+  path: '/open-pack',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionsRoute = MissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InventoryRoute = InventoryRouteImport.update({
@@ -41,9 +155,24 @@ const HuntsRoute = HuntsRouteImport.update({
   path: '/hunts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HuntRoute = HuntRouteImport.update({
+  id: '/hunt',
+  path: '/hunt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GoldFlairRoute = GoldFlairRouteImport.update({
   id: '/gold-flair',
   path: '/gold-flair',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GodpacksRoute = GodpacksRouteImport.update({
+  id: '/godpacks',
+  path: '/godpacks',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GiftsRoute = GiftsRouteImport.update({
@@ -51,9 +180,54 @@ const GiftsRoute = GiftsRouteImport.update({
   path: '/gifts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FriendsRoute = FriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
   path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CollectionMissionsRoute = CollectionMissionsRouteImport.update({
+  id: '/collection-missions',
+  path: '/collection-missions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardsRoute = CardsRouteImport.update({
+  id: '/cards',
+  path: '/cards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CardRequestRoute = CardRequestRouteImport.update({
+  id: '/card-request',
+  path: '/card-request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BotHubRoute = BotHubRouteImport.update({
+  id: '/bot-hub',
+  path: '/bot-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattlesRoute = BattlesRouteImport.update({
+  id: '/battles',
+  path: '/battles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattleStatsRoute = BattleStatsRouteImport.update({
+  id: '/battle-stats',
+  path: '/battle-stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BattleHistoryRoute = BattleHistoryRouteImport.update({
+  id: '/battle-history',
+  path: '/battle-history',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApexTerminalRoute = ApexTerminalRouteImport.update({
+  id: '/apex-terminal',
+  path: '/apex-terminal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -66,6 +240,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AchievementsRoute = AchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountsRoute = AccountsRouteImport.update({
   id: '/accounts',
   path: '/accounts',
@@ -76,105 +255,495 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const CollectionGoldFlairTradeRoute =
+  CollectionGoldFlairTradeRouteImport.update({
+    id: '/collection/gold-flair-trade',
+    path: '/collection/gold-flair-trade',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTrustRoute = AdminTrustRouteImport.update({
+  id: '/trust',
+  path: '/trust',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSystemHealthRoute = AdminSystemHealthRouteImport.update({
+  id: '/system-health',
+  path: '/system-health',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSchedulerRoute = AdminSchedulerRouteImport.update({
+  id: '/scheduler',
+  path: '/scheduler',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminObservabilityRoute = AdminObservabilityRouteImport.update({
+  id: '/observability',
+  path: '/observability',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMissionDebugRoute = AdminMissionDebugRouteImport.update({
+  id: '/mission-debug',
+  path: '/mission-debug',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminIntegrityRoute = AdminIntegrityRouteImport.update({
+  id: '/integrity',
+  path: '/integrity',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHybridControlRoute = AdminHybridControlRouteImport.update({
+  id: '/hybrid-control',
+  path: '/hybrid-control',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHuntOpsRoute = AdminHuntOpsRouteImport.update({
+  id: '/hunt-ops',
+  path: '/hunt-ops',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHuntConfigRoute = AdminHuntConfigRouteImport.update({
+  id: '/hunt-config',
+  path: '/hunt-config',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHuntBotsRoute = AdminHuntBotsRouteImport.update({
+  id: '/hunt-bots',
+  path: '/hunt-bots',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminFleetRoute = AdminFleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCapacityRoute = AdminCapacityRouteImport.update({
+  id: '/capacity',
+  path: '/capacity',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditLogRoute = AdminAuditLogRouteImport.update({
+  id: '/audit-log',
+  path: '/audit-log',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminActivityLogsRoute = AdminActivityLogsRouteImport.update({
+  id: '/activity-logs',
+  path: '/activity-logs',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/admin': typeof AdminRoute
+  '/achievements': typeof AchievementsRoute
+  '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
+  '/presents': typeof PresentsRoute
+  '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
+  '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
+  '/admin/activity-logs': typeof AdminActivityLogsRoute
+  '/admin/audit-log': typeof AdminAuditLogRoute
+  '/admin/capacity': typeof AdminCapacityRoute
+  '/admin/fleet': typeof AdminFleetRoute
+  '/admin/hunt-bots': typeof AdminHuntBotsRoute
+  '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
+  '/admin/hybrid-control': typeof AdminHybridControlRoute
+  '/admin/integrity': typeof AdminIntegrityRoute
+  '/admin/mission-debug': typeof AdminMissionDebugRoute
+  '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/scheduler': typeof AdminSchedulerRoute
+  '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trust': typeof AdminTrustRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/admin': typeof AdminRoute
+  '/achievements': typeof AchievementsRoute
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
+  '/presents': typeof PresentsRoute
+  '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
+  '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
+  '/admin/activity-logs': typeof AdminActivityLogsRoute
+  '/admin/audit-log': typeof AdminAuditLogRoute
+  '/admin/capacity': typeof AdminCapacityRoute
+  '/admin/fleet': typeof AdminFleetRoute
+  '/admin/hunt-bots': typeof AdminHuntBotsRoute
+  '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
+  '/admin/hybrid-control': typeof AdminHybridControlRoute
+  '/admin/integrity': typeof AdminIntegrityRoute
+  '/admin/mission-debug': typeof AdminMissionDebugRoute
+  '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/scheduler': typeof AdminSchedulerRoute
+  '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trust': typeof AdminTrustRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accounts': typeof AccountsRoute
-  '/admin': typeof AdminRoute
+  '/achievements': typeof AchievementsRoute
+  '/admin': typeof AdminRouteWithChildren
   '/analytics': typeof AnalyticsRoute
+  '/apex-terminal': typeof ApexTerminalRoute
+  '/battle-history': typeof BattleHistoryRoute
+  '/battle-stats': typeof BattleStatsRoute
+  '/battles': typeof BattlesRoute
+  '/bot-hub': typeof BotHubRoute
+  '/card-request': typeof CardRequestRoute
+  '/cards': typeof CardsRoute
+  '/collection-missions': typeof CollectionMissionsRoute
   '/events': typeof EventsRoute
+  '/friends': typeof FriendsRoute
   '/gifts': typeof GiftsRoute
+  '/godpacks': typeof GodpacksRoute
   '/gold-flair': typeof GoldFlairRoute
+  '/help': typeof HelpRoute
+  '/hunt': typeof HuntRoute
   '/hunts': typeof HuntsRoute
   '/inventory': typeof InventoryRoute
+  '/login': typeof LoginRoute
+  '/missions': typeof MissionsRoute
+  '/open-pack': typeof OpenPackRoute
+  '/presents': typeof PresentsRoute
+  '/profile': typeof ProfileRoute
+  '/pvp': typeof PvpRoute
+  '/resources': typeof ResourcesRoute
   '/settings': typeof SettingsRoute
+  '/sharing-cards': typeof SharingCardsRoute
+  '/shop': typeof ShopRoute
+  '/stamina': typeof StaminaRoute
+  '/tracker': typeof TrackerRoute
+  '/trade-analytics': typeof TradeAnalyticsRoute
   '/trades': typeof TradesRoute
+  '/wishlist': typeof WishlistRoute
+  '/wonder-pick': typeof WonderPickRoute
+  '/admin/activity-logs': typeof AdminActivityLogsRoute
+  '/admin/audit-log': typeof AdminAuditLogRoute
+  '/admin/capacity': typeof AdminCapacityRoute
+  '/admin/fleet': typeof AdminFleetRoute
+  '/admin/hunt-bots': typeof AdminHuntBotsRoute
+  '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
+  '/admin/hybrid-control': typeof AdminHybridControlRoute
+  '/admin/integrity': typeof AdminIntegrityRoute
+  '/admin/mission-debug': typeof AdminMissionDebugRoute
+  '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/scheduler': typeof AdminSchedulerRoute
+  '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trust': typeof AdminTrustRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/accounts'
+    | '/achievements'
     | '/admin'
     | '/analytics'
+    | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
+    | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/missions'
+    | '/open-pack'
+    | '/presents'
+    | '/profile'
+    | '/pvp'
+    | '/resources'
     | '/settings'
+    | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
+    | '/tracker'
+    | '/trade-analytics'
     | '/trades'
+    | '/wishlist'
+    | '/wonder-pick'
+    | '/admin/activity-logs'
+    | '/admin/audit-log'
+    | '/admin/capacity'
+    | '/admin/fleet'
+    | '/admin/hunt-bots'
+    | '/admin/hunt-config'
+    | '/admin/hunt-ops'
+    | '/admin/hybrid-control'
+    | '/admin/integrity'
+    | '/admin/mission-debug'
+    | '/admin/observability'
+    | '/admin/scheduler'
+    | '/admin/system-health'
+    | '/admin/trust'
+    | '/admin/users'
+    | '/collection/gold-flair-trade'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accounts'
-    | '/admin'
+    | '/achievements'
     | '/analytics'
+    | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
+    | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/missions'
+    | '/open-pack'
+    | '/presents'
+    | '/profile'
+    | '/pvp'
+    | '/resources'
     | '/settings'
+    | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
+    | '/tracker'
+    | '/trade-analytics'
     | '/trades'
+    | '/wishlist'
+    | '/wonder-pick'
+    | '/admin/activity-logs'
+    | '/admin/audit-log'
+    | '/admin/capacity'
+    | '/admin/fleet'
+    | '/admin/hunt-bots'
+    | '/admin/hunt-config'
+    | '/admin/hunt-ops'
+    | '/admin/hybrid-control'
+    | '/admin/integrity'
+    | '/admin/mission-debug'
+    | '/admin/observability'
+    | '/admin/scheduler'
+    | '/admin/system-health'
+    | '/admin/trust'
+    | '/admin/users'
+    | '/collection/gold-flair-trade'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/accounts'
+    | '/achievements'
     | '/admin'
     | '/analytics'
+    | '/apex-terminal'
+    | '/battle-history'
+    | '/battle-stats'
+    | '/battles'
+    | '/bot-hub'
+    | '/card-request'
+    | '/cards'
+    | '/collection-missions'
     | '/events'
+    | '/friends'
     | '/gifts'
+    | '/godpacks'
     | '/gold-flair'
+    | '/help'
+    | '/hunt'
     | '/hunts'
     | '/inventory'
+    | '/login'
+    | '/missions'
+    | '/open-pack'
+    | '/presents'
+    | '/profile'
+    | '/pvp'
+    | '/resources'
     | '/settings'
+    | '/sharing-cards'
+    | '/shop'
+    | '/stamina'
+    | '/tracker'
+    | '/trade-analytics'
     | '/trades'
+    | '/wishlist'
+    | '/wonder-pick'
+    | '/admin/activity-logs'
+    | '/admin/audit-log'
+    | '/admin/capacity'
+    | '/admin/fleet'
+    | '/admin/hunt-bots'
+    | '/admin/hunt-config'
+    | '/admin/hunt-ops'
+    | '/admin/hybrid-control'
+    | '/admin/integrity'
+    | '/admin/mission-debug'
+    | '/admin/observability'
+    | '/admin/scheduler'
+    | '/admin/system-health'
+    | '/admin/trust'
+    | '/admin/users'
+    | '/collection/gold-flair-trade'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountsRoute: typeof AccountsRoute
-  AdminRoute: typeof AdminRoute
+  AchievementsRoute: typeof AchievementsRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AnalyticsRoute: typeof AnalyticsRoute
+  ApexTerminalRoute: typeof ApexTerminalRoute
+  BattleHistoryRoute: typeof BattleHistoryRoute
+  BattleStatsRoute: typeof BattleStatsRoute
+  BattlesRoute: typeof BattlesRoute
+  BotHubRoute: typeof BotHubRoute
+  CardRequestRoute: typeof CardRequestRoute
+  CardsRoute: typeof CardsRoute
+  CollectionMissionsRoute: typeof CollectionMissionsRoute
   EventsRoute: typeof EventsRoute
+  FriendsRoute: typeof FriendsRoute
   GiftsRoute: typeof GiftsRoute
+  GodpacksRoute: typeof GodpacksRoute
   GoldFlairRoute: typeof GoldFlairRoute
+  HelpRoute: typeof HelpRoute
+  HuntRoute: typeof HuntRoute
   HuntsRoute: typeof HuntsRoute
   InventoryRoute: typeof InventoryRoute
+  LoginRoute: typeof LoginRoute
+  MissionsRoute: typeof MissionsRoute
+  OpenPackRoute: typeof OpenPackRoute
+  PresentsRoute: typeof PresentsRoute
+  ProfileRoute: typeof ProfileRoute
+  PvpRoute: typeof PvpRoute
+  ResourcesRoute: typeof ResourcesRoute
   SettingsRoute: typeof SettingsRoute
+  SharingCardsRoute: typeof SharingCardsRoute
+  ShopRoute: typeof ShopRoute
+  StaminaRoute: typeof StaminaRoute
+  TrackerRoute: typeof TrackerRoute
+  TradeAnalyticsRoute: typeof TradeAnalyticsRoute
   TradesRoute: typeof TradesRoute
+  WishlistRoute: typeof WishlistRoute
+  WonderPickRoute: typeof WonderPickRoute
+  CollectionGoldFlairTradeRoute: typeof CollectionGoldFlairTradeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wonder-pick': {
+      id: '/wonder-pick'
+      path: '/wonder-pick'
+      fullPath: '/wonder-pick'
+      preLoaderRoute: typeof WonderPickRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trades': {
       id: '/trades'
       path: '/trades'
@@ -182,11 +751,95 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TradesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/trade-analytics': {
+      id: '/trade-analytics'
+      path: '/trade-analytics'
+      fullPath: '/trade-analytics'
+      preLoaderRoute: typeof TradeAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tracker': {
+      id: '/tracker'
+      path: '/tracker'
+      fullPath: '/tracker'
+      preLoaderRoute: typeof TrackerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/stamina': {
+      id: '/stamina'
+      path: '/stamina'
+      fullPath: '/stamina'
+      preLoaderRoute: typeof StaminaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sharing-cards': {
+      id: '/sharing-cards'
+      path: '/sharing-cards'
+      fullPath: '/sharing-cards'
+      preLoaderRoute: typeof SharingCardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resources': {
+      id: '/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof ResourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pvp': {
+      id: '/pvp'
+      path: '/pvp'
+      fullPath: '/pvp'
+      preLoaderRoute: typeof PvpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/presents': {
+      id: '/presents'
+      path: '/presents'
+      fullPath: '/presents'
+      preLoaderRoute: typeof PresentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/open-pack': {
+      id: '/open-pack'
+      path: '/open-pack'
+      fullPath: '/open-pack'
+      preLoaderRoute: typeof OpenPackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/missions': {
+      id: '/missions'
+      path: '/missions'
+      fullPath: '/missions'
+      preLoaderRoute: typeof MissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inventory': {
@@ -203,11 +856,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HuntsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hunt': {
+      id: '/hunt'
+      path: '/hunt'
+      fullPath: '/hunt'
+      preLoaderRoute: typeof HuntRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/gold-flair': {
       id: '/gold-flair'
       path: '/gold-flair'
       fullPath: '/gold-flair'
       preLoaderRoute: typeof GoldFlairRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/godpacks': {
+      id: '/godpacks'
+      path: '/godpacks'
+      fullPath: '/godpacks'
+      preLoaderRoute: typeof GodpacksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gifts': {
@@ -217,11 +891,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GiftsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/friends': {
+      id: '/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof FriendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/events': {
       id: '/events'
       path: '/events'
       fullPath: '/events'
       preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/collection-missions': {
+      id: '/collection-missions'
+      path: '/collection-missions'
+      fullPath: '/collection-missions'
+      preLoaderRoute: typeof CollectionMissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cards': {
+      id: '/cards'
+      path: '/cards'
+      fullPath: '/cards'
+      preLoaderRoute: typeof CardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/card-request': {
+      id: '/card-request'
+      path: '/card-request'
+      fullPath: '/card-request'
+      preLoaderRoute: typeof CardRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bot-hub': {
+      id: '/bot-hub'
+      path: '/bot-hub'
+      fullPath: '/bot-hub'
+      preLoaderRoute: typeof BotHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battles': {
+      id: '/battles'
+      path: '/battles'
+      fullPath: '/battles'
+      preLoaderRoute: typeof BattlesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battle-stats': {
+      id: '/battle-stats'
+      path: '/battle-stats'
+      fullPath: '/battle-stats'
+      preLoaderRoute: typeof BattleStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/battle-history': {
+      id: '/battle-history'
+      path: '/battle-history'
+      fullPath: '/battle-history'
+      preLoaderRoute: typeof BattleHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apex-terminal': {
+      id: '/apex-terminal'
+      path: '/apex-terminal'
+      fullPath: '/apex-terminal'
+      preLoaderRoute: typeof ApexTerminalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytics': {
@@ -238,6 +975,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/achievements': {
+      id: '/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accounts': {
       id: '/accounts'
       path: '/accounts'
@@ -252,32 +996,209 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/collection/gold-flair-trade': {
+      id: '/collection/gold-flair-trade'
+      path: '/collection/gold-flair-trade'
+      fullPath: '/collection/gold-flair-trade'
+      preLoaderRoute: typeof CollectionGoldFlairTradeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/trust': {
+      id: '/admin/trust'
+      path: '/trust'
+      fullPath: '/admin/trust'
+      preLoaderRoute: typeof AdminTrustRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/system-health': {
+      id: '/admin/system-health'
+      path: '/system-health'
+      fullPath: '/admin/system-health'
+      preLoaderRoute: typeof AdminSystemHealthRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/scheduler': {
+      id: '/admin/scheduler'
+      path: '/scheduler'
+      fullPath: '/admin/scheduler'
+      preLoaderRoute: typeof AdminSchedulerRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/observability': {
+      id: '/admin/observability'
+      path: '/observability'
+      fullPath: '/admin/observability'
+      preLoaderRoute: typeof AdminObservabilityRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/mission-debug': {
+      id: '/admin/mission-debug'
+      path: '/mission-debug'
+      fullPath: '/admin/mission-debug'
+      preLoaderRoute: typeof AdminMissionDebugRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/integrity': {
+      id: '/admin/integrity'
+      path: '/integrity'
+      fullPath: '/admin/integrity'
+      preLoaderRoute: typeof AdminIntegrityRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hybrid-control': {
+      id: '/admin/hybrid-control'
+      path: '/hybrid-control'
+      fullPath: '/admin/hybrid-control'
+      preLoaderRoute: typeof AdminHybridControlRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hunt-ops': {
+      id: '/admin/hunt-ops'
+      path: '/hunt-ops'
+      fullPath: '/admin/hunt-ops'
+      preLoaderRoute: typeof AdminHuntOpsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hunt-config': {
+      id: '/admin/hunt-config'
+      path: '/hunt-config'
+      fullPath: '/admin/hunt-config'
+      preLoaderRoute: typeof AdminHuntConfigRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hunt-bots': {
+      id: '/admin/hunt-bots'
+      path: '/hunt-bots'
+      fullPath: '/admin/hunt-bots'
+      preLoaderRoute: typeof AdminHuntBotsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/fleet': {
+      id: '/admin/fleet'
+      path: '/fleet'
+      fullPath: '/admin/fleet'
+      preLoaderRoute: typeof AdminFleetRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/capacity': {
+      id: '/admin/capacity'
+      path: '/capacity'
+      fullPath: '/admin/capacity'
+      preLoaderRoute: typeof AdminCapacityRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/audit-log': {
+      id: '/admin/audit-log'
+      path: '/audit-log'
+      fullPath: '/admin/audit-log'
+      preLoaderRoute: typeof AdminAuditLogRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/activity-logs': {
+      id: '/admin/activity-logs'
+      path: '/activity-logs'
+      fullPath: '/admin/activity-logs'
+      preLoaderRoute: typeof AdminActivityLogsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminActivityLogsRoute: typeof AdminActivityLogsRoute
+  AdminAuditLogRoute: typeof AdminAuditLogRoute
+  AdminCapacityRoute: typeof AdminCapacityRoute
+  AdminFleetRoute: typeof AdminFleetRoute
+  AdminHuntBotsRoute: typeof AdminHuntBotsRoute
+  AdminHuntConfigRoute: typeof AdminHuntConfigRoute
+  AdminHuntOpsRoute: typeof AdminHuntOpsRoute
+  AdminHybridControlRoute: typeof AdminHybridControlRoute
+  AdminIntegrityRoute: typeof AdminIntegrityRoute
+  AdminMissionDebugRoute: typeof AdminMissionDebugRoute
+  AdminObservabilityRoute: typeof AdminObservabilityRoute
+  AdminSchedulerRoute: typeof AdminSchedulerRoute
+  AdminSystemHealthRoute: typeof AdminSystemHealthRoute
+  AdminTrustRoute: typeof AdminTrustRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminActivityLogsRoute: AdminActivityLogsRoute,
+  AdminAuditLogRoute: AdminAuditLogRoute,
+  AdminCapacityRoute: AdminCapacityRoute,
+  AdminFleetRoute: AdminFleetRoute,
+  AdminHuntBotsRoute: AdminHuntBotsRoute,
+  AdminHuntConfigRoute: AdminHuntConfigRoute,
+  AdminHuntOpsRoute: AdminHuntOpsRoute,
+  AdminHybridControlRoute: AdminHybridControlRoute,
+  AdminIntegrityRoute: AdminIntegrityRoute,
+  AdminMissionDebugRoute: AdminMissionDebugRoute,
+  AdminObservabilityRoute: AdminObservabilityRoute,
+  AdminSchedulerRoute: AdminSchedulerRoute,
+  AdminSystemHealthRoute: AdminSystemHealthRoute,
+  AdminTrustRoute: AdminTrustRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountsRoute: AccountsRoute,
-  AdminRoute: AdminRoute,
+  AchievementsRoute: AchievementsRoute,
+  AdminRoute: AdminRouteWithChildren,
   AnalyticsRoute: AnalyticsRoute,
+  ApexTerminalRoute: ApexTerminalRoute,
+  BattleHistoryRoute: BattleHistoryRoute,
+  BattleStatsRoute: BattleStatsRoute,
+  BattlesRoute: BattlesRoute,
+  BotHubRoute: BotHubRoute,
+  CardRequestRoute: CardRequestRoute,
+  CardsRoute: CardsRoute,
+  CollectionMissionsRoute: CollectionMissionsRoute,
   EventsRoute: EventsRoute,
+  FriendsRoute: FriendsRoute,
   GiftsRoute: GiftsRoute,
+  GodpacksRoute: GodpacksRoute,
   GoldFlairRoute: GoldFlairRoute,
+  HelpRoute: HelpRoute,
+  HuntRoute: HuntRoute,
   HuntsRoute: HuntsRoute,
   InventoryRoute: InventoryRoute,
+  LoginRoute: LoginRoute,
+  MissionsRoute: MissionsRoute,
+  OpenPackRoute: OpenPackRoute,
+  PresentsRoute: PresentsRoute,
+  ProfileRoute: ProfileRoute,
+  PvpRoute: PvpRoute,
+  ResourcesRoute: ResourcesRoute,
   SettingsRoute: SettingsRoute,
+  SharingCardsRoute: SharingCardsRoute,
+  ShopRoute: ShopRoute,
+  StaminaRoute: StaminaRoute,
+  TrackerRoute: TrackerRoute,
+  TradeAnalyticsRoute: TradeAnalyticsRoute,
   TradesRoute: TradesRoute,
+  WishlistRoute: WishlistRoute,
+  WonderPickRoute: WonderPickRoute,
+  CollectionGoldFlairTradeRoute: CollectionGoldFlairTradeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
