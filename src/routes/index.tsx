@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, ArrowUpRight, Bell, Calendar, Flame, Gem, Gift, Heart,
-  Package, PlayCircle, Sparkles, Star, Store, Target, Trophy, Users,
+  Package, PlayCircle, Repeat2, Sparkles, Star, Store, Target, Trophy, Users,
 } from "lucide-react";
 
 import { CardArt, energy, type EnergyType } from "@/components/home/CardArt";
@@ -304,10 +304,10 @@ function UserHome() {
             <p className="font-display text-sm font-semibold text-foreground">Jump back in</p>
             <div className="mt-3 grid grid-cols-2 gap-2">
               {[
-                { to: "/trades" as const,             label: "Trades",      icon: Repeat2Icon },
-                { to: "/presents" as const,           label: "Presents",    icon: Gift },
-                { to: "/missions" as const,           label: "Missions",    icon: Target },
-                { to: "/wonder-pick" as const,        label: "Wonder Pick", icon: Sparkles },
+                { to: "/trades" as const,      label: "Trades",      icon: Repeat2 },
+                { to: "/presents" as const,    label: "Presents",    icon: Gift },
+                { to: "/missions" as const,    label: "Missions",    icon: Target },
+                { to: "/wonder-pick" as const, label: "Wonder Pick", icon: Sparkles },
               ].map((q) => (
                 <Link key={q.to} to={q.to} className="flex items-center gap-2 rounded-lg border border-border/60 bg-background/40 px-3 py-2 text-xs font-medium text-foreground hover:border-primary/40 hover:bg-card/60">
                   <q.icon className="h-3.5 w-3.5 text-primary" />
@@ -321,6 +321,3 @@ function UserHome() {
     </div>
   );
 }
-
-// local alias to avoid double-import noise
-import { Repeat2 as Repeat2Icon } from "lucide-react";
