@@ -22,6 +22,7 @@ const labels: Record<string, string> = {
   settings: "Settings",
   admin: "Admin",
   "card-request": "Card Requests",
+  "trade-analytics": "Trade Analytics",
 };
 
 export function AppHeader() {
