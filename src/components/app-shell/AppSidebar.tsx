@@ -146,7 +146,7 @@ const ADMIN_GROUPS: Group[] = [
 const isActivePath = (current: string, to: string) =>
   to === "/" ? current === "/" : current === to || current.startsWith(to + "/");
 
-function pathInTree(current: string, items: (Leaf | Branch)[]): boolean {
+function pathInTree(current: string, items: (Leaf | SubBranch)[]): boolean {
   return items.some((n) =>
     "to" in n ? isActivePath(current, n.to) : pathInTree(current, n.items)
   );
