@@ -270,7 +270,8 @@ function Wishlist() {
       </section>
 
       {/* ── Filters bar ───────────────────────────────────────────── */}
-      <div className="sticky top-12 z-20 -mx-4 mb-4 border-y border-border bg-background/85 px-4 py-3 backdrop-blur md:-mx-6 md:px-6">
+      <div className="sticky top-12 z-20 -mx-4 mb-6 mt-2 border-y border-border bg-background/85 px-4 py-4 backdrop-blur md:-mx-6 md:px-6">
+
         <div className="flex flex-wrap items-center gap-2">
           {/* Set chips */}
           <div className="flex gap-1.5 overflow-x-auto">
@@ -323,54 +324,65 @@ function Wishlist() {
         </div>
       </div>
 
+      {/* ── Grid header: legend + count ───────────────────────────── */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <span>Priority:</span>
+          <LegendDot color="bg-rose-400"  label="High" />
+          <LegendDot color="bg-amber-400" label="Medium" />
+          <LegendDot color="bg-slate-400" label="Low" />
+        </div>
+        <span className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          {filtered.length} cards
+        </span>
+      </div>
+
       {/* ── Wishlist grid ─────────────────────────────────────────── */}
       {filtered.length === 0 ? (
         <EmptyWishlist />
       ) : (
-        <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <section className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7">
           {filtered.map((c) => {
             const meta = ACQ_META[c.acquisition];
             const prio = PRIO_META[c.priority];
             const Icon = meta.icon;
             return (
-              <button key={c.id} onClick={() => setPicked(c)} className="group relative text-left transition-all hover:-translate-y-1">
+              <button key={c.id} onClick={() => setPicked(c)} className="group relative text-left transition-all hover:-translate-y-0.5">
                 <CardArt name={c.name} type={c.type} rarity={c.rarity} number={c.number} missing />
                 {/* priority indicator */}
                 <span
                   className={cn(
-                    "absolute -left-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-background ring-2 shadow-lg",
+                    "absolute -left-1 -top-1 grid h-5 w-5 place-items-center rounded-full bg-background ring-2 shadow-md",
                     prio.ring,
                   )}
                   title={`${prio.label} priority`}
                 >
-                  <span className={cn("h-2.5 w-2.5 rounded-full", prio.dot)} />
+                  <span className={cn("h-2 w-2 rounded-full", prio.dot)} />
                 </span>
 
-                <div className="mt-2 space-y-1">
-                  <div className="flex items-center justify-between gap-1">
-                    <Badge variant="outline" className={cn("h-4 border-transparent px-1.5 text-[9px] font-semibold uppercase tracking-wider", rarityChip[c.rarity])}>
-                      {c.rarity}
-                    </Badge>
-                    <span className={cn("inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-semibold", meta.cls)}>
-                      <Icon className="h-2.5 w-2.5" /> {meta.label}
-                    </span>
-                  </div>
-                  {(c.completes || c.setCompletion || c.remaining) && (
-                    <div className="rounded-md border border-primary/20 bg-primary/5 px-2 py-1 text-[10px] leading-tight text-primary">
-                      {c.completes || (c.setCompletion ? "Needed for Set Completion" : c.remaining)}
-                      {c.completes && c.remaining && <span className="block text-[9px] text-primary/70">{c.remaining}</span>}
-                    </div>
-                  )}
+                <div className="mt-1.5 flex items-center justify-between gap-1">
+                  <span className={cn("inline-flex items-center gap-1 rounded-md border px-1.5 py-0.5 text-[10px] font-semibold leading-none", meta.cls)}>
+                    <Icon className="h-2.5 w-2.5" /> {meta.label}
+                  </span>
                 </div>
+                {(c.completes || c.setCompletion || c.remaining) && (
+                  <div className="mt-1 rounded-md border border-primary/20 bg-primary/5 px-1.5 py-1 text-[10px] leading-tight text-primary">
+                    {c.completes || (c.setCompletion ? "Needed for Set Completion" : c.remaining)}
+                  </div>
+                )}
               </button>
             );
           })}
         </section>
       )}
 
+
       <p className="mt-5 text-center text-xs text-muted-foreground">
         Showing <span className="text-mono text-foreground">{filtered.length}</span> of {WISH.length} wishlisted cards
       </p>
+
+
+
 
       {/* ── Card detail drawer ───────────────────────────────────── */}
       <Sheet open={!!picked} onOpenChange={(o) => !o && setPicked(null)}>
@@ -586,5 +598,14 @@ function SourceRow({
       </div>
       <span className="text-mono text-[11px] text-muted-foreground">{value}</span>
     </div>
+  );
+}
+
+function LegendDot({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1 normal-case tracking-normal">
+      <span className={cn("h-2 w-2 rounded-full", color)} />
+      <span className="text-[10px] font-medium text-foreground/80">{label}</span>
+    </span>
   );
 }
