@@ -279,17 +279,17 @@ function MyCards() {
 
         {/* search + sort + filters + view */}
         <div className="flex items-center gap-2 pb-3">
-          <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <div className="relative flex-1 min-w-0">
+            <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search cards or number…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-9 bg-background/40 pl-8"
+              className="h-9 w-full border-border bg-card pl-8 text-sm placeholder:text-muted-foreground/80"
             />
           </div>
           <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-            <SelectTrigger className="hidden h-9 w-[160px] bg-background/40 sm:flex">
+            <SelectTrigger className="hidden h-9 w-[170px] border-border bg-card text-sm sm:flex">
               <SelectValue placeholder="Sort" />
             </SelectTrigger>
             <SelectContent>
