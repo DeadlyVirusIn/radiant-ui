@@ -97,7 +97,7 @@ const USER_GROUPS: Group[] = [
     id: "collect",
     label: "Collection",
     entries: [
-      { kind: "link", title: "Cards",            to: "/cards",                icon: CreditCard },
+      { kind: "link", title: "My Cards",         to: "/cards",                icon: CreditCard },
       { kind: "link", title: "Tracker",          to: "/tracker",              icon: Target },
       { kind: "link", title: "Wishlist",         to: "/wishlist",             icon: Heart },
       { kind: "link", title: "Collection Goals", to: "/collection-missions",  icon: Trophy },
