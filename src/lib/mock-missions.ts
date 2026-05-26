@@ -1,10 +1,12 @@
 // Mock data + helpers for the /missions page.
 // Daily play-loop only. No backend, no economy calculations.
 
+import { REWARD_WEIGHT, type Reward, type RewardKind } from "./mock-rewards";
+
 export type MissionScope = "daily" | "weekly" | "event";
 export type MissionCategory = "play" | "collect" | "trade" | "social";
 export type MissionState = "in_progress" | "complete_unclaimed" | "claimed";
-export type RewardKind = "pack" | "hourglass" | "ticket" | "dust" | "card";
+export type { RewardKind };
 
 export type MissionActionTo =
   | "/open-pack"
