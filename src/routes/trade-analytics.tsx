@@ -42,9 +42,9 @@ const TF_LABEL: Record<AnalyticsTimeframe, string> = { "7d": "7d", "30d": "30d",
 function TradeAnalytics() {
   const { tf = "30d", account = "all", compare = false } = Route.useSearch();
   const navigate = useNavigate({ from: "/trade-analytics" });
-  const setTf = (next: AnalyticsTimeframe) => navigate({ search: (s) => ({ ...s, tf: next }), replace: true });
-  const setAccount = (next: string) => navigate({ search: (s) => ({ ...s, account: next }), replace: true });
-  const setCompare = (next: boolean) => navigate({ search: (s) => ({ ...s, compare: next }), replace: true });
+  const setTf = (next: AnalyticsTimeframe) => navigate({ search: (s: SearchT) => ({ ...s, tf: next }), replace: true });
+  const setAccount = (next: string) => navigate({ search: (s: SearchT) => ({ ...s, account: next }), replace: true });
+  const setCompare = (next: boolean) => navigate({ search: (s: SearchT) => ({ ...s, compare: next }), replace: true });
 
   const data = MOCK_TRADE_ANALYTICS;
   const current = useMemo(() => sliceBuckets(data.buckets, tf), [data.buckets, tf]);
