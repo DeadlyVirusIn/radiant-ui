@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import {
   ArrowRight, CheckCircle2, Coins, Filter, HelpCircle, Info, Loader2,
   Plus, Repeat2, RotateCcw, Search, Sparkles, X, XCircle,
@@ -10,6 +11,7 @@ import { Section } from "@/components/app-shell/Section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CardArt } from "@/components/home/CardArt";
 import {
   MOCK_CARD_REQUESTS, MOCK_USER_REQUESTS, MARKETPLACE_PACKS, MARKETPLACE_RARITIES,
@@ -35,6 +37,7 @@ const availabilityMeta: Record<CardRequestAvailability, { label: string; cls: st
 
 function CardRequestPage() {
   const { card: deepLinkCard } = Route.useSearch();
+  const navigate = useNavigate({ from: "/card-request" });
 
   // Filters
   const [pack, setPack] = useState<string | "all">("all");
@@ -42,11 +45,15 @@ function CardRequestPage() {
   const [type, setType] = useState<"all" | "regular" | "premium">("all");
   const [query, setQuery] = useState("");
 
+  // User requests — local state so cancel/again/confirm are not no-ops.
+  const [userRequests, setUserRequests] = useState<UserCardRequest[]>(MOCK_USER_REQUESTS);
+
   // Confirmation dialog
   const [tradeTarget, setTradeTarget] = useState<CardRequest | null>(null);
 
-  // Deep-link highlight (scroll + pulse, NO auto-open per blueprint)
+  // Deep-link highlight (scroll + pulse ~5s + "Showing:" pill, NO auto-open)
   const [highlightId, setHighlightId] = useState<string | null>(null);
+  const [highlightName, setHighlightName] = useState<string | null>(null);
   const cardRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
 
   useEffect(() => {
@@ -56,13 +63,19 @@ function CardRequestPage() {
     );
     if (!match) return;
     setHighlightId(match.id);
-    // Defer to next frame so refs are populated.
+    setHighlightName(match.card.name);
     requestAnimationFrame(() => {
       cardRefs.current.get(match.id)?.scrollIntoView({ behavior: "smooth", block: "center" });
     });
-    const t = setTimeout(() => setHighlightId(null), 2400);
+    const t = setTimeout(() => setHighlightId(null), 5000);
     return () => clearTimeout(t);
   }, [deepLinkCard]);
+
+  const clearDeepLink = () => {
+    setHighlightId(null);
+    setHighlightName(null);
+    navigate({ search: {}, replace: true });
+  };
 
   const filtered = useMemo(() => {
     return MOCK_CARD_REQUESTS.filter((c) => {
@@ -75,41 +88,124 @@ function CardRequestPage() {
     });
   }, [pack, rarity, type, query]);
 
-  // Metrics
+  // Metrics — derived from local state
   const stats = useMemo(() => {
-    const m: Record<string, number> = { total: MOCK_USER_REQUESTS.length, pending: 0, completed: 0, failed: 0 };
-    for (const r of MOCK_USER_REQUESTS) {
+    const m: Record<string, number> = { total: userRequests.length, pending: 0, completed: 0, failed: 0 };
+    for (const r of userRequests) {
       const meta = USER_REQUEST_STATUS_META[r.status];
       if (!meta.terminal) m.pending += 1;
       else if (r.status === "completed") m.completed += 1;
       else if (r.status === "failed") m.failed += 1;
     }
     return m;
-  }, []);
+  }, [userRequests]);
+
+  const atCap = stats.pending >= PENDING_REQUEST_CAP;
+  const capCopy = `${stats.pending}/${PENDING_REQUEST_CAP} request cap reached — cancel or complete a request first.`;
+
+  const handleCancel = (id: string) => {
+    setUserRequests((rs) => rs.map((r) => (r.id === id ? { ...r, status: "cancelled" as const } : r)));
+    toast.success("Request cancelled", { description: "Demo mock — no real trade was affected." });
+  };
+
+  const handleAgain = (id: string) => {
+    if (atCap) {
+      toast.error("Can't requeue", { description: capCopy });
+      return;
+    }
+    setUserRequests((rs) =>
+      rs.map((r) =>
+        r.id === id
+          ? { ...r, status: "matching" as const, createdAt: Date.now(), ageLabel: "just now" }
+          : r,
+      ),
+    );
+    toast.success("Request requeued", { description: "Looking for a matching partner." });
+  };
+
+  const handleConfirm = (req: CardRequest) => {
+    if (atCap) {
+      toast.error("Request cap reached", { description: capCopy });
+      return;
+    }
+    const newReq: UserCardRequest = {
+      id: `UR-${Math.random().toString(36).slice(2, 7)}`,
+      card: req.card,
+      cost: req.cost,
+      status: "matching",
+      createdAt: Date.now(),
+      ageLabel: "just now",
+    };
+    setUserRequests((rs) => [newReq, ...rs]);
+    setTradeTarget(null);
+    toast.success(`Requested ${req.card.name}`, {
+      description: `Bright Sand ${req.cost.toLocaleString()} will be spent on completion.`,
+    });
+  };
+
+  const handleNewRequest = () => {
+    if (atCap) {
+      toast.error("Request cap reached", { description: capCopy });
+      return;
+    }
+    toast("Pick a card below", { description: "Use the marketplace grid to start a new request." });
+  };
 
   return (
-    <>
+    <TooltipProvider delayDuration={150}>
       <PageHeader
         title="Card requests"
         description="Spend Bright Sand to request cards from the community. Trade matches handled automatically."
         actions={
-          <Button size="sm" className="gap-1.5" disabled={stats.pending >= PENDING_REQUEST_CAP}>
-            <Plus className="h-3.5 w-3.5" />
-            New request
-          </Button>
+          atCap ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                {/* Span wrapper so tooltip works on disabled button */}
+                <span tabIndex={0} className="inline-flex">
+                  <Button size="sm" className="gap-1.5 pointer-events-none opacity-60" disabled>
+                    <Plus className="h-3.5 w-3.5" />
+                    New request · {stats.pending}/{PENDING_REQUEST_CAP}
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">{capCopy}</TooltipContent>
+            </Tooltip>
+          ) : (
+            <Button size="sm" className="gap-1.5" onClick={handleNewRequest}>
+              <Plus className="h-3.5 w-3.5" />
+              New request
+            </Button>
+          )
         }
       />
+
+      {/* Deep-link pill */}
+      {highlightName && (
+        <div className="mb-3 flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs text-primary w-fit">
+          <Sparkles className="h-3 w-3" />
+          <span className="font-semibold">Showing:</span>
+          <span>{highlightName}</span>
+          <button
+            type="button"
+            onClick={clearDeepLink}
+            className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full hover:bg-primary/20"
+            aria-label="Clear deep link"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
+      )}
 
       {/* Metrics strip */}
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <MetricTile label="Total" value={stats.total} icon={<Sparkles className="h-3.5 w-3.5" />} />
-        <MetricTile label="Pending" value={`${stats.pending}/${PENDING_REQUEST_CAP}`} icon={<Loader2 className="h-3.5 w-3.5" />} tone={stats.pending >= PENDING_REQUEST_CAP ? "warning" : "info"} />
+        <MetricTile label="Pending" value={`${stats.pending}/${PENDING_REQUEST_CAP}`} icon={<Loader2 className="h-3.5 w-3.5" />} tone={atCap ? "warning" : "info"} />
         <MetricTile label="Completed" value={stats.completed} icon={<CheckCircle2 className="h-3.5 w-3.5" />} tone="success" />
         <MetricTile label="Failed" value={stats.failed} icon={<XCircle className="h-3.5 w-3.5" />} tone="danger" />
       </div>
 
       {/* Your Requests — ABOVE marketplace (blueprint mod #1) */}
-      <YourRequestsPanel requests={MOCK_USER_REQUESTS} />
+      <YourRequestsPanel requests={userRequests} onCancel={handleCancel} onAgain={handleAgain} />
 
       {/* How it works */}
       <HowItWorks />
@@ -151,7 +247,6 @@ function CardRequestPage() {
           </FilterRow>
         </div>
 
-        {/* Density: mobile 2, tablet 3, lg 4, xl 5 — per blueprint mod #3 */}
         {filtered.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-background/40 py-10 text-center">
             <Filter className="mx-auto mb-2 h-5 w-5 text-muted-foreground" />
@@ -176,9 +271,10 @@ function CardRequestPage() {
       <TradeConfirmDialog
         request={tradeTarget}
         onOpenChange={(open) => { if (!open) setTradeTarget(null); }}
-        atCap={stats.pending >= PENDING_REQUEST_CAP}
+        atCap={atCap}
+        onConfirm={handleConfirm}
       />
-    </>
+    </TooltipProvider>
   );
 }
 
@@ -258,7 +354,7 @@ function MarketplaceCard({
 
 // ── Your requests panel (ABOVE marketplace) ─────────────────────────────────
 
-function YourRequestsPanel({ requests }: { requests: UserCardRequest[] }) {
+function YourRequestsPanel({ requests, onCancel, onAgain }: { requests: UserCardRequest[]; onCancel: (id: string) => void; onAgain: (id: string) => void }) {
   const [tab, setTab] = useState<"active" | "completed" | "failed">("active");
 
   const filtered = requests.filter((r) => {
@@ -323,6 +419,7 @@ function YourRequestsPanel({ requests }: { requests: UserCardRequest[] }) {
                   {meta.terminal ? (
                     <button
                       type="button"
+                      onClick={() => onAgain(r.id)}
                       className="inline-flex items-center gap-1 rounded-md border border-border bg-card/40 px-2 py-1 text-[10px] font-semibold text-foreground hover:bg-accent"
                     >
                       <RotateCcw className="h-3 w-3" /> Again
@@ -330,6 +427,7 @@ function YourRequestsPanel({ requests }: { requests: UserCardRequest[] }) {
                   ) : (
                     <button
                       type="button"
+                      onClick={() => onCancel(r.id)}
                       className="inline-flex items-center gap-1 rounded-md border border-border bg-card/40 px-2 py-1 text-[10px] font-semibold text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     >
                       <X className="h-3 w-3" /> Cancel
@@ -378,11 +476,12 @@ function HowItWorks() {
 // ── Trade confirmation dialog ───────────────────────────────────────────────
 
 function TradeConfirmDialog({
-  request, onOpenChange, atCap,
+  request, onOpenChange, atCap, onConfirm,
 }: {
   request: CardRequest | null;
   onOpenChange: (open: boolean) => void;
   atCap: boolean;
+  onConfirm: (req: CardRequest) => void;
 }) {
   const open = !!request;
   return (
@@ -422,7 +521,7 @@ function TradeConfirmDialog({
             )}
             <DialogFooter>
               <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-              <Button disabled={atCap} onClick={() => onOpenChange(false)}>
+              <Button disabled={atCap} onClick={() => onConfirm(request)}>
                 <Repeat2 className="mr-1.5 h-3.5 w-3.5" /> Confirm request
               </Button>
             </DialogFooter>

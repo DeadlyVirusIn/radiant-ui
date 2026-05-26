@@ -160,15 +160,6 @@ export const MOCK_USER_REQUESTS: UserCardRequest[] = [
     ageLabel: "22m",
   },
   {
-    id: "UR-7c4eb",
-    card: MOCK_CARD_REQUESTS[9].card, // Pikachu ex
-    cost: 540,
-    status: "friend_sent",
-    createdAt: NOW - 42 * MIN,
-    ageLabel: "42m",
-    partner: "user_morrow",
-  },
-  {
     id: "UR-7c4ec",
     card: MOCK_CARD_REQUESTS[6].card, // Greninja ex
     cost: 390,
