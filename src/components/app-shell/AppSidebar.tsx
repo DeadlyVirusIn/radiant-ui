@@ -239,7 +239,7 @@ export function AppSidebar() {
   }, [currentPath]);
 
   const groups = useMemo(
-    () => (role === "admin" ? [...USER_GROUPS, ...ADMIN_GROUPS] : USER_GROUPS),
+    () => (role === "admin" ? ADMIN_GROUPS : USER_GROUPS),
     [role],
   );
 
