@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Trophy, Star, Lock, Sparkles, ArrowRight, Check,
-  Gift, ListChecks, Heart,
+  Gift, ListChecks,
 } from "lucide-react";
 
 import { PageHeader } from "@/components/app-shell/PageHeader";
