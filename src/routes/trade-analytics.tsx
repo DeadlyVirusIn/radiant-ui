@@ -163,18 +163,18 @@ function TradeAnalytics() {
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                 <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
                 <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={28} />
-                <RTooltip content={<ChartTip />} />
-                <Bar dataKey="completed" stackId="a" fill="var(--success)" radius={[2,2,0,0]} />
-                <Bar dataKey="failed" stackId="a" fill="var(--destructive)" />
-                <Bar dataKey="cancelled" stackId="a" fill="var(--muted-foreground)" />
+                <RTooltip content={<ChartTip />} cursor={{ fill: "var(--accent)", opacity: 0.25 }} />
+                <Bar dataKey="completed" name="Completed" stackId="a" fill="var(--chart-2)" radius={[2,2,0,0]} />
+                <Bar dataKey="failed" name="Failed" stackId="a" fill="var(--chart-4)" />
+                <Bar dataKey="cancelled" name="Cancelled" stackId="a" fill="var(--chart-5)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
         )}
         <div className="mt-3 flex flex-wrap gap-3 text-[11px]">
-          <Legend swatch="bg-success" label="Completed" value={sum.completed} />
-          <Legend swatch="bg-destructive" label="Failed" value={sum.failed} />
-          <Legend swatch="bg-muted-foreground" label="Cancelled" value={sum.cancelled} />
+          <Legend swatch="var(--chart-2)" label="Completed" value={sum.completed} />
+          <Legend swatch="var(--chart-4)" label="Failed" value={sum.failed} />
+          <Legend swatch="var(--chart-5)" label="Cancelled" value={sum.cancelled} />
         </div>
       </Section>
 
@@ -193,11 +193,10 @@ function TradeAnalytics() {
               <div className="bg-destructive" style={{ width: `${(sum.failed / trades) * 100}%` }} />
               <div className="bg-muted-foreground" style={{ width: `${(sum.cancelled / trades) * 100}%` }} />
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mt-4 grid grid-cols-3 gap-3">
               <Readout tone="success" label="Completed" value={sum.completed} pct={Math.round((sum.completed/trades)*100)} />
               <Readout tone="danger" label="Failed" value={sum.failed} pct={Math.round((sum.failed/trades)*100)} />
               <Readout tone="neutral" label="Cancelled" value={sum.cancelled} pct={Math.round((sum.cancelled/trades)*100)} />
-              <Readout tone="warning" label="Stuck > 24h" value={2} pct={Math.round((2/trades)*100)} />
             </div>
           </>
         )}
@@ -329,15 +328,15 @@ function TradeAnalytics() {
                 <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                   <defs>
                     <linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--warning)" stopOpacity={0.5} />
-                      <stop offset="100%" stopColor="var(--warning)" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--chart-3)" stopOpacity={0.75} />
+                      <stop offset="100%" stopColor="var(--chart-3)" stopOpacity={0.05} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
                   <XAxis dataKey="date" tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} interval="preserveStartEnd" />
                   <YAxis tick={{ fontSize: 10, fill: "var(--muted-foreground)" }} width={40} />
-                  <RTooltip content={<ChartTip />} />
-                  <Area type="monotone" dataKey="net" stroke="var(--warning)" fill="url(#sandGrad)" strokeWidth={2} />
+                  <RTooltip content={<ChartTip />} cursor={{ stroke: "var(--accent)", strokeWidth: 1 }} />
+                  <Area type="monotone" dataKey="net" name="Net Sand" stroke="var(--chart-3)" fill="url(#sandGrad)" strokeWidth={2.5} dot={false} activeDot={{ r: 4, fill: "var(--chart-3)", stroke: "var(--background)", strokeWidth: 2 }} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -388,7 +387,7 @@ function ChartTip({ active, payload, label }: { active?: boolean; payload?: Arra
 function Legend({ swatch, label, value }: { swatch: string; label: string; value: number }) {
   return (
     <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-      <span className={`h-2.5 w-2.5 rounded-sm ${swatch}`} />
+      <span className="h-2.5 w-2.5 rounded-sm" style={{ background: swatch }} />
       <span className="font-medium text-foreground">{label}</span>
       <span className="font-mono">{value.toLocaleString()}</span>
     </span>
