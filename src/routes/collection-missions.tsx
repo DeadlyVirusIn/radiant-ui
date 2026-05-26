@@ -187,14 +187,15 @@ function GoalCard({ g, compact = false }: { g: Goal; compact?: boolean }) {
             <StatusChip status={status} />
           </div>
 
-          <div className="mt-3 flex items-center gap-3">
+          <div className="mt-2 flex items-center gap-3">
             <ProgressBar value={pct(g)} tone={tone} />
             <span className="w-20 shrink-0 text-right font-mono text-xs text-muted-foreground">
               {g.progress}/{g.total} · {pct(g)}%
             </span>
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+
             <div className="flex flex-wrap items-center gap-1.5">
               <CategoryChip category={g.category} />
               <Badge variant="outline" className="border-transparent bg-muted/60 text-[10px] font-normal text-muted-foreground">
