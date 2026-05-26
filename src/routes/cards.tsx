@@ -136,7 +136,7 @@ function MyCards() {
   // Sync own filter into URL (preserve other params)
   useEffect(() => {
     navigate({
-      search: (prev) => ({
+      search: (prev: Search) => ({
         ...prev,
         own: own === "all" ? undefined : own,
         set: activeSet === "ALL" ? undefined : activeSet,
