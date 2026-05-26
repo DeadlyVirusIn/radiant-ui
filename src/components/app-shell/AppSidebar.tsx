@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Home, Gauge, Sparkle, Bot, Users, Wand2, Crosshair, Repeat2, Compass,
-  CreditCard, Target, Heart, ArrowLeftRight, Gift, Gem, Flame,
+  Home, Gauge, Sparkle, Bot, Users, Wand2, Repeat2,
+  CreditCard, Target, Heart, ArrowLeftRight, Gift, Gem,
   Swords, ListChecks, PackageOpen, Wallet, Battery, Store, Trophy, Coins,
   HeartPulse, ShieldCheck, BarChart3, Database, Activity, ScrollText, FileSearch,
   Settings as SettingsIcon, Calendar, RotateCcw, GitBranch, FlaskConical, LayoutDashboard,
