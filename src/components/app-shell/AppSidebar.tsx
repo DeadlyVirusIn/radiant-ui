@@ -5,7 +5,7 @@ import {
   CreditCard, Target, Heart, ArrowLeftRight, Gift, Gem,
   Swords, ListChecks, PackageOpen, Wallet, Battery, Store, Trophy, Coins,
   HeartPulse, ShieldCheck, BarChart3, Database, Activity, ScrollText, FileSearch,
-  Settings as SettingsIcon, Calendar, RotateCcw, GitBranch,
+  Settings as SettingsIcon, Calendar, RotateCcw, GitBranch, FlaskConical, LayoutDashboard,
   Search, Command, ChevronDown, UserCog, Shield,
 } from "lucide-react";
 
