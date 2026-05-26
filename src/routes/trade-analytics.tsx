@@ -388,7 +388,7 @@ function ChartTip({ active, payload, label }: { active?: boolean; payload?: Arra
 function Legend({ swatch, label, value }: { swatch: string; label: string; value: number }) {
   return (
     <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-      <span className={`h-2.5 w-2.5 rounded-sm ${swatch}`} />
+      <span className="h-2.5 w-2.5 rounded-sm" style={{ background: swatch }} />
       <span className="font-medium text-foreground">{label}</span>
       <span className="font-mono">{value.toLocaleString()}</span>
     </span>
