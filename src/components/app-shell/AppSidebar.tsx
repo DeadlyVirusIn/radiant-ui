@@ -5,7 +5,7 @@ import {
   CreditCard, Target, Heart, ArrowLeftRight, Gift, Gem,
   Swords, ListChecks, PackageOpen, Wallet, Battery, Store, Trophy, Coins,
   HeartPulse, ShieldCheck, BarChart3, Database, Activity, ScrollText, FileSearch,
-  Settings as SettingsIcon, Calendar, RotateCcw, GitBranch,
+  Settings as SettingsIcon, Calendar, RotateCcw, GitBranch, FlaskConical, LayoutDashboard,
   Search, Command, ChevronDown, UserCog, Shield,
 } from "lucide-react";
 
@@ -88,55 +88,55 @@ const USER_GROUPS: Group[] = [
   },
 ];
 
-// ADMIN ADDITIONAL  (System section)
+// ADMIN FLOW (replaces user flow when role=admin) — covers every /admin/* route
 const ADMIN_GROUPS: Group[] = [
   {
-    id: "system",
-    label: "System",
+    id: "admin-overview",
+    label: "Overview",
     entries: [
+      { kind: "link", title: "Admin Home",     to: "/admin",          icon: LayoutDashboard },
+      { kind: "link", title: "Observability",  to: "/admin/observability", icon: Activity },
+      { kind: "link", title: "System Health",  to: "/admin/system-health", icon: HeartPulse },
+      { kind: "link", title: "Capacity",       to: "/admin/capacity",      icon: Gauge },
+    ],
+  },
+  {
+    id: "admin-ops",
+    label: "Operations",
+    entries: [
+      { kind: "link", title: "Fleet Health",   to: "/admin/fleet",         icon: HeartPulse },
       {
         kind: "tree",
-        title: "Operations",
-        icon: HeartPulse,
+        title: "Hunts",
+        icon: Gauge,
         items: [
-          { title: "Fleet Status", to: "/admin/fleet", icon: HeartPulse },
-          {
-            title: "Hunts",
-            icon: Gauge,
-            items: [
-              { title: "Hunters",        to: "/admin/users",         icon: Users },
-              { title: "Hunt Config",    to: "/admin/hunt-config",   icon: SettingsIcon },
-              { title: "Scheduler",      to: "/admin/scheduler",     icon: Calendar },
-              { title: "Hunt Bots",      to: "/admin/hunt-bots",     icon: Bot },
-              { title: "Hybrid Control", to: "/admin/hybrid-control",icon: GitBranch },
-            ],
-          },
-          { title: "Operations Recovery", to: "/admin/hunt-ops", icon: RotateCcw },
-          { title: "Capacity Verdict",    to: "/admin/capacity", icon: Gauge },
+          { title: "Hunt Config",    to: "/admin/hunt-config",    icon: SettingsIcon },
+          { title: "Hunt Bots",      to: "/admin/hunt-bots",      icon: Bot },
+          { title: "Hunt Ops",       to: "/admin/hunt-ops",       icon: RotateCcw },
+          { title: "Hybrid Control", to: "/admin/hybrid-control", icon: GitBranch },
+          { title: "Scheduler",      to: "/admin/scheduler",      icon: Calendar },
         ],
       },
-      {
-        kind: "tree",
-        title: "Integrity",
-        icon: ShieldCheck,
-        items: [
-          { title: "Integrity Dashboard", to: "/admin/integrity",     icon: ShieldCheck },
-          { title: "Data Health",         to: "/admin/system-health", icon: Database },
-          { title: "Drift Detection",     to: "/admin/trust",         icon: BarChart3 },
-          { title: "Account Health",      to: "/admin/audit-log",     icon: HeartPulse },
-        ],
-      },
-      {
-        kind: "tree",
-        title: "Platform",
-        icon: Users,
-        items: [
-          { title: "Users",         to: "/admin/users",         icon: Users },
-          { title: "Observability", to: "/admin/observability", icon: Activity },
-          { title: "Audit Log",     to: "/admin/audit-log",     icon: FileSearch },
-          { title: "Activity Logs", to: "/admin/activity-logs", icon: ScrollText },
-        ],
-      },
+      { kind: "link", title: "Mission Debug",  to: "/admin/mission-debug", icon: FlaskConical },
+    ],
+  },
+  {
+    id: "admin-integrity",
+    label: "Integrity",
+    entries: [
+      { kind: "link", title: "Integrity",  to: "/admin/integrity", icon: ShieldCheck },
+      { kind: "link", title: "Trust",      to: "/admin/trust",     icon: Shield },
+      { kind: "link", title: "Drift",      to: "/admin/system-health", icon: BarChart3 },
+    ],
+  },
+  {
+    id: "admin-platform",
+    label: "Platform",
+    entries: [
+      { kind: "link", title: "Users",         to: "/admin/users",         icon: Users },
+      { kind: "link", title: "Activity Logs", to: "/admin/activity-logs", icon: ScrollText },
+      { kind: "link", title: "Audit Log",     to: "/admin/audit-log",     icon: FileSearch },
+      { kind: "link", title: "Data Stores",   to: "/admin/system-health", icon: Database },
     ],
   },
 ];
@@ -239,7 +239,7 @@ export function AppSidebar() {
   }, [currentPath]);
 
   const groups = useMemo(
-    () => (role === "admin" ? [...USER_GROUPS, ...ADMIN_GROUPS] : USER_GROUPS),
+    () => (role === "admin" ? ADMIN_GROUPS : USER_GROUPS),
     [role],
   );
 
