@@ -354,7 +354,7 @@ function MarketplaceCard({
 
 // ── Your requests panel (ABOVE marketplace) ─────────────────────────────────
 
-function YourRequestsPanel({ requests }: { requests: UserCardRequest[] }) {
+function YourRequestsPanel({ requests, onCancel, onAgain }: { requests: UserCardRequest[]; onCancel: (id: string) => void; onAgain: (id: string) => void }) {
   const [tab, setTab] = useState<"active" | "completed" | "failed">("active");
 
   const filtered = requests.filter((r) => {
