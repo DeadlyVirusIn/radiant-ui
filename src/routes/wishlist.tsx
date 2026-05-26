@@ -380,14 +380,8 @@ function Wishlist() {
       <p className="mt-5 text-center text-xs text-muted-foreground">
         Showing <span className="text-mono text-foreground">{filtered.length}</span> of {WISH.length} wishlisted cards
       </p>
-function LegendDot({ color, label }: { color: string; label: string }) {
-  return (
-    <span className="inline-flex items-center gap-1 normal-case tracking-normal">
-      <span className={cn("h-2 w-2 rounded-full", color)} />
-      <span className="text-[10px] font-medium text-foreground/80">{label}</span>
-    </span>
-  );
-}
+
+
 
 
       {/* ── Card detail drawer ───────────────────────────────────── */}
