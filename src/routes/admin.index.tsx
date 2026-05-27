@@ -265,6 +265,22 @@ function Dashboard() {
             </div>
           </section>
 
+          {/* HEALTH SUMMARY — deep-links to operator pages */}
+          <HealthSummaryRow />
+
+          {/* QUEUE DEPTH STRIP — per-queue depth + oldest age + p95 wait */}
+          <QueueDepthStrip />
+
+          {/* ACTIVE ALERTS — deep-link to entity drawers */}
+          <AlertsList />
+
+          {/* RECENT FAILURES — top 5 actionable */}
+          <RecentFailures />
+
+          {/* SLA BREACHES */}
+          <SLABreaches />
+
+
           {/* 2. NEEDS ATTENTION QUEUE */}
           <section>
             <SectionLabel
