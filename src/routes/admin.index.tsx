@@ -272,19 +272,19 @@ function Dashboard() {
                 {needsAttention.map((item) => {
                   const tone = STATUS_META[item.status].tone;
                   return (
-                    <li key={item.id} className={`flex items-center justify-between gap-3 border-l-2 p-3 transition-colors hover:bg-card/60 ${toneBorder[tone]}`}>
-                      <div className="flex min-w-0 items-center gap-3">
-                        <span className="text-mono w-20 shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <li key={item.id} className={`flex flex-col gap-2 border-l-2 p-3 transition-colors hover:bg-card/60 sm:flex-row sm:items-center sm:justify-between sm:gap-3 ${toneBorder[tone]}`}>
+                      <div className="flex min-w-0 flex-1 items-start gap-3">
+                        <span className="text-mono w-16 shrink-0 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:w-20">
                           {item.entity}
                         </span>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-foreground">{item.title}</p>
-                          <p className="text-mono mt-0.5 truncate text-[10px] uppercase tracking-wider text-muted-foreground">{item.detail}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold text-foreground break-words">{item.title}</p>
+                          <p className="text-mono mt-0.5 text-[10px] uppercase tracking-wider text-muted-foreground break-words">{item.detail}</p>
                         </div>
                       </div>
-                      <div className="flex shrink-0 items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2 pl-[4.5rem] sm:pl-0 sm:shrink-0">
                         <StatusPill status={item.status} />
-                        <span className="text-mono hidden w-10 text-right text-[10px] text-muted-foreground sm:inline">{item.age}</span>
+                        <span className="text-mono w-10 text-[10px] text-muted-foreground sm:text-right">{item.age}</span>
                         <button className={`rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
                           tone === "danger"
                             ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
