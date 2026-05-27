@@ -4,11 +4,13 @@ import { Gem, ShieldCheck, AlertTriangle, XCircle } from "lucide-react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section, DataRow } from "@/components/app-shell/Section";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { GoldFlairRequestDrawer } from "@/components/admin/GoldFlairRequestDrawer";
 import { MintBatchDrawer } from "@/components/admin/MintBatchDrawer";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { OpsTabStrip } from "@/components/admin/ops/OpsTabStrip";
 import {
   MINT_QUEUE, GF_REQUESTS, SUPPLY, CATALOG, BACKLOG, SIGNER_POOL,
   GF_STATUS, GF_BLOCK_LABEL, GF_REQUEST_BY_ID, MINT_BATCH_BY_ID,
@@ -85,29 +87,24 @@ function AdminGoldFlair() {
       />
 
       {/* KPI ROW — canonical terms */}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+      <OpsKpiGrid>
         <StatCard label="Queue depth"  value={String(kpis.queueDepth)}    icon={Gem}      tone={kpis.queueDepth >= 10 ? "warning" : "primary"} />
         <StatCard label="In flight"    value={String(kpis.inFlight)}      tone="primary" />
         <StatCard label="Blocked"      value={String(kpis.blocked)}       tone={kpis.blocked > 0 ? "warning" : "default"} />
         <StatCard label="Failed"       value={String(kpis.failed)}        tone={kpis.failed > 0 ? "danger" : "default"} />
         <StatCard label="Delivered 24h" value={String(kpis.delivered24h)} tone="success" />
-      </div>
+      </OpsKpiGrid>
 
       <Tabs
         value={tab}
         onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
         className="mt-6 min-w-0"
       >
-        <div className="relative mb-4 -mx-4 max-w-[100vw] overflow-hidden md:-mx-6">
-          <div className="overflow-x-auto px-4 pr-10 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList className="w-max">
-              {TABS.map((t) => (
-                <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent md:hidden" />
-        </div>
+        <OpsTabStrip>
+          {TABS.map((t) => (
+            <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+          ))}
+        </OpsTabStrip>
 
         {/* ─── MINT QUEUE ─────────────────────────────────────────── */}
         <TabsContent value="mint">

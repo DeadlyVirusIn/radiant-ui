@@ -4,7 +4,8 @@ import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/capacity")({
   head: () => ({ meta: [{ title: "Admin · Capacity — Radiant" }] }),
@@ -46,20 +47,16 @@ function Capacity() {
       <PageHeader
         title="Capacity verdict"
         description="Headroom across the worker pools and data stores. Operational preview — mock data, not wired to live telemetry."
-        actions={
-          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
-            Mock data · read-only
-          </Badge>
-        }
+        actions={<ReadOnlyBadge />}
       />
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+      <OpsKpiGrid>
         <StatCard label="Headroom"      value={`${100 - avgPct}%`} icon={Gauge}    tone={avgPct >= 70 ? "warning" : "success"} />
         <StatCard label="Avg utilization" value={`${avgPct}%`}      icon={Database} tone="primary" />
         <StatCard label="Hot pool"      value={hotPool.name}        icon={Cpu}      tone={toneFor(hotPct)} />
         <StatCard label="Hot pool load" value={`${hotPct}%`}        icon={Gauge}    tone={toneFor(hotPct)} />
         <StatCard label="Forecast"      value="~3 weeks"            icon={Network} />
-      </div>
+      </OpsKpiGrid>
 
       <Section title="Pool utilization" className="mt-6">
         <div className="space-y-3">

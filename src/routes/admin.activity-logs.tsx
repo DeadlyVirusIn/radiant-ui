@@ -4,10 +4,14 @@ import { ScrollText, AlertTriangle, AlertOctagon, Users, Clock } from "lucide-re
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ActivityEventDrawer } from "@/components/admin/ActivityEventDrawer";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { OpsTabStrip } from "@/components/admin/ops/OpsTabStrip";
+import { OpsEmptyState } from "@/components/admin/ops/OpsEmptyState";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 import {
   ACTIVITY_EVENTS, ACTIVITY_BY_ID, LEVEL_META, KIND_META,
   activityKpis, fmtRelFrom, type ActivityEvent,
@@ -48,11 +52,7 @@ function ActivityTable({
   empty: string;
 }) {
   if (events.length === 0) {
-    return (
-      <Section padded={false}>
-        <div className="px-5 py-10 text-center text-xs text-muted-foreground">{empty}</div>
-      </Section>
-    );
+    return <OpsEmptyState message={empty} />;
   }
   return (
     <Section padded={false}>
@@ -120,36 +120,27 @@ function ActivityLogs() {
       <PageHeader
         title="Activity logs"
         description="Operator and system actions across the workspace. Operational preview — mock data, not wired to the live activity stream."
-        actions={
-          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
-            Mock data · read-only
-          </Badge>
-        }
+        actions={<ReadOnlyBadge />}
       />
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+      <OpsKpiGrid>
         <StatCard label="Events 24h" value={String(kpis.events24h)}  icon={ScrollText} />
         <StatCard label="Warnings"   value={String(kpis.warnings)}   icon={AlertTriangle} tone={kpis.warnings > 0 ? "warning" : "default"} />
         <StatCard label="Errors"     value={String(kpis.errors)}     icon={AlertOctagon}  tone={kpis.errors > 0 ? "danger" : "default"} />
         <StatCard label="Operators"  value={String(kpis.operators)}  icon={Users} />
         <StatCard label="Last event" value={fmtRelFrom(kpis.lastEventAt)} icon={Clock} tone="primary" />
-      </div>
+      </OpsKpiGrid>
 
       <Tabs
         value={tab}
         onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
         className="mt-6 min-w-0"
       >
-        <div className="relative mb-4 -mx-4 max-w-[100vw] overflow-hidden md:-mx-6">
-          <div className="overflow-x-auto px-4 pr-10 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList className="w-max">
-              {TABS.map((t) => (
-                <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent md:hidden" />
-        </div>
+        <OpsTabStrip>
+          {TABS.map((t) => (
+            <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+          ))}
+        </OpsTabStrip>
 
         <TabsContent value="all">
           <ActivityTable events={sorted} onOpen={openEvent} empty="No activity recorded." />
