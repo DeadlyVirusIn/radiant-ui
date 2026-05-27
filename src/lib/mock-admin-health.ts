@@ -50,7 +50,7 @@ export const DOMAIN_HEALTH: DomainHealth[] = [
   { domain: "hunts",      label: "Hunts",      status: "warn", lastExecAt: mins(2),  queueDepth: 14, errors1h: 1, href: "/admin/queues" },
   { domain: "trades",     label: "Trades",     status: "ok",   lastExecAt: mins(1),  queueDepth:  7, errors1h: 4, href: "/admin/trades" },
   { domain: "gifts",      label: "Gifts",      status: "ok",   lastExecAt: mins(3),  queueDepth:  4, errors1h: 0, href: "/admin/gifts" },
-  { domain: "gold-flair", label: "Gold Flair", status: "warn", lastExecAt: mins(14), queueDepth: 14, errors1h: 1, href: "/gold-flair" },
+  { domain: "gold-flair", label: "Gold Flair", status: "warn", lastExecAt: mins(14), queueDepth: 14, errors1h: 1, href: "/admin/gold-flair" },
   { domain: "scheduler",  label: "Scheduler",  status: "ok",   lastExecAt: mins(0),  queueDepth:  0, errors1h: 0, href: "/admin/scheduler" },
 ];
 
