@@ -30,7 +30,7 @@ function QueuePanel({ k }: { k: QueueKey }) {
   const runbook = QUEUE_RUNBOOK[k];
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         <StatCard label="Queue depth"    value={String(q.depth)}                icon={Activity} tone={q.depth >= 10 ? "warning" : "primary"} />
         <StatCard label="Throughput"     value={`${q.throughputPerH}/h`}        tone="success" />
         <StatCard label="Errors 1h"      value={String(q.errors1h)}             tone={q.errors1h > 0 ? "danger" : "default"} />
