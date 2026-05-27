@@ -59,6 +59,7 @@ import { Route as AdminObservabilityRouteImport } from './routes/admin.observabi
 import { Route as AdminMissionDebugRouteImport } from './routes/admin.mission-debug'
 import { Route as AdminIntegrityRouteImport } from './routes/admin.integrity'
 import { Route as AdminHybridControlRouteImport } from './routes/admin.hybrid-control'
+import { Route as AdminHuntOpsRouteImport } from './routes/admin.hunt-ops'
 import { Route as AdminHuntConfigRouteImport } from './routes/admin.hunt-config'
 import { Route as AdminHuntBotsRouteImport } from './routes/admin.hunt-bots'
 import { Route as AdminGiftsRouteImport } from './routes/admin.gifts'
@@ -318,6 +319,11 @@ const AdminHybridControlRoute = AdminHybridControlRouteImport.update({
   path: '/hybrid-control',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHuntOpsRoute = AdminHuntOpsRouteImport.update({
+  id: '/hunt-ops',
+  path: '/hunt-ops',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminHuntConfigRoute = AdminHuntConfigRouteImport.update({
   id: '/hunt-config',
   path: '/hunt-config',
@@ -400,6 +406,7 @@ export interface FileRoutesByFullPath {
   '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
@@ -458,6 +465,7 @@ export interface FileRoutesByTo {
   '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
@@ -518,6 +526,7 @@ export interface FileRoutesById {
   '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
+  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
@@ -579,6 +588,7 @@ export interface FileRouteTypes {
     | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
+    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
@@ -637,6 +647,7 @@ export interface FileRouteTypes {
     | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
+    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
@@ -696,6 +707,7 @@ export interface FileRouteTypes {
     | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
+    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
@@ -1104,6 +1116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHybridControlRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/hunt-ops': {
+      id: '/admin/hunt-ops'
+      path: '/hunt-ops'
+      fullPath: '/admin/hunt-ops'
+      preLoaderRoute: typeof AdminHuntOpsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/hunt-config': {
       id: '/admin/hunt-config'
       path: '/hunt-config'
@@ -1164,6 +1183,7 @@ interface AdminRouteChildren {
   AdminGiftsRoute: typeof AdminGiftsRoute
   AdminHuntBotsRoute: typeof AdminHuntBotsRoute
   AdminHuntConfigRoute: typeof AdminHuntConfigRoute
+  AdminHuntOpsRoute: typeof AdminHuntOpsRoute
   AdminHybridControlRoute: typeof AdminHybridControlRoute
   AdminIntegrityRoute: typeof AdminIntegrityRoute
   AdminMissionDebugRoute: typeof AdminMissionDebugRoute
@@ -1185,6 +1205,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminGiftsRoute: AdminGiftsRoute,
   AdminHuntBotsRoute: AdminHuntBotsRoute,
   AdminHuntConfigRoute: AdminHuntConfigRoute,
+  AdminHuntOpsRoute: AdminHuntOpsRoute,
   AdminHybridControlRoute: AdminHybridControlRoute,
   AdminIntegrityRoute: AdminIntegrityRoute,
   AdminMissionDebugRoute: AdminMissionDebugRoute,
