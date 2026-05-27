@@ -103,7 +103,7 @@ function GoldFlairPage() {
         right={<RingGauge pct={summary.pct} label={`${summary.pct}%`} sublabel="Owned" />}
       >
         <div className="mt-3 rounded-lg border border-border bg-background/40 p-3">
-          <ProgressBar done={summary.owned} total={summary.total} tone="warning" />
+          <ProgressBar done={summary.owned} total={summary.total} tone="warn" />
           <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px]">
             <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase", TIER_STYLE[featured.tier])}>
               {featured.tier}
