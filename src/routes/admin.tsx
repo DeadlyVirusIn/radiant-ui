@@ -50,8 +50,8 @@ function AdminLayout() {
   }, [path]);
 
   return (
-    <div className="-mt-4">
-      <div className="sticky top-12 z-10 -mx-4 mb-5 border-b border-border bg-background/80 backdrop-blur md:-mx-6">
+    <div className="-mt-4 min-w-0">
+      <div className="sticky top-12 z-10 -mx-4 mb-5 max-w-[100vw] overflow-hidden border-b border-border bg-background/80 backdrop-blur md:-mx-6">
         <div className="relative">
           <nav
             ref={navRef}

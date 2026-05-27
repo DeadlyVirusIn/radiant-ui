@@ -77,7 +77,7 @@ export function MintBatchDrawer({
 
           <Separator />
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             <Button size="sm" variant="outline" disabled={batch.status !== "queued"}>Approve</Button>
             <Button size="sm" variant="outline" disabled={batch.status !== "failed"}>Retry batch</Button>
             <Button size="sm" variant="ghost">View audit log</Button>
