@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
-import { Gem, Sparkles, ShieldCheck, AlertTriangle, XCircle } from "lucide-react";
+import { Gem, ShieldCheck, AlertTriangle, XCircle } from "lucide-react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section, DataRow } from "@/components/app-shell/Section";
