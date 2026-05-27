@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
 import { Badge } from "@/components/ui/badge";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/trust")({
   head: () => ({ meta: [{ title: "Admin · Trust — Radiant" }] }),
@@ -22,7 +23,11 @@ const level: Record<string, string> = { high: "bg-destructive/15 text-destructiv
 function AdminTrust() {
   return (
     <>
-      <PageHeader title="Trust" description="Risk signals across users and counterparties — sort by score, act on outliers." />
+      <PageHeader
+        title="Trust"
+        description="Risk signals across users and counterparties. Mock data; controls are read-only in this preview."
+        actions={<ReadOnlyBadge />}
+      />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Avg score" value="74" icon={Shield} tone="success" />
         <StatCard label="High risk" value="3"  tone="danger" icon={AlertTriangle} />
@@ -31,21 +36,23 @@ function AdminTrust() {
       </div>
 
       <Section title="Signals" className="mt-6" padded={false}>
-        <table className="w-full text-sm">
-          <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            <th className="px-5 py-3">User</th><th className="px-5 py-3">Signal</th><th className="px-5 py-3 text-right">Score</th><th className="px-5 py-3">Level</th>
-          </tr></thead>
-          <tbody className="divide-y divide-border">
-            {flags.map((f) => (
-              <tr key={f.user} className="hover:bg-accent/40">
-                <td className="px-5 py-3 text-mono">{f.user}</td>
-                <td className="px-5 py-3 text-muted-foreground text-xs">{f.signal}</td>
-                <td className="px-5 py-3 text-right text-mono">{f.score}</td>
-                <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] uppercase " + level[f.level]}>{f.level}</Badge></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
+            <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              <th className="px-5 py-3">User</th><th className="px-5 py-3">Signal</th><th className="px-5 py-3 text-right">Score</th><th className="px-5 py-3">Level</th>
+            </tr></thead>
+            <tbody className="divide-y divide-border">
+              {flags.map((f) => (
+                <tr key={f.user} className="hover:bg-accent/40">
+                  <td className="px-5 py-3 text-mono">{f.user}</td>
+                  <td className="px-5 py-3 text-muted-foreground text-xs">{f.signal}</td>
+                  <td className="px-5 py-3 text-right text-mono">{f.score}</td>
+                  <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] uppercase " + level[f.level]}>{f.level}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Section>
     </>
   );

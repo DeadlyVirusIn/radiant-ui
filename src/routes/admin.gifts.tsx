@@ -7,6 +7,7 @@ import { Section } from "@/components/app-shell/Section";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { GiftDetailDrawer } from "@/components/admin/GiftDetailDrawer";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 import { ADMIN_GIFTS, GIFT_STATUS } from "@/lib/mock-gifts-admin";
 
 type Search = { id?: string };
@@ -57,7 +58,8 @@ function AdminGifts() {
     <>
       <PageHeader
         title="Gifts"
-        description="Operator-facing gift queue. (Collectors continue to use /gifts.)"
+        description="Operator-facing gift queue. Mock data; controls are read-only in this preview. (Collectors continue to use /gifts.)"
+        actions={<ReadOnlyBadge />}
       />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">

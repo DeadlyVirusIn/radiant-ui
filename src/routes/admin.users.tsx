@@ -6,6 +6,7 @@ import { Section } from "@/components/app-shell/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/users")({
   head: () => ({ meta: [{ title: "Admin · Users — Radiant" }] }),
@@ -25,7 +26,16 @@ const role: Record<string, string> = { owner: "bg-warning/15 text-warning", admi
 function AdminUsers() {
   return (
     <>
-      <PageHeader title="Users" description="Workspace members and their plans." actions={<Button size="sm">Invite</Button>} />
+      <PageHeader
+        title="Users"
+        description="Workspace members and their plans. Mock data; controls are read-only in this preview."
+        actions={
+          <>
+            <ReadOnlyBadge />
+            <Button size="sm" disabled>Invite</Button>
+          </>
+        }
+      />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Total" value="42" icon={UserCog} />
         <StatCard label="Premium" value="14" tone="primary" />
@@ -33,24 +43,26 @@ function AdminUsers() {
         <StatCard label="Suspended" value="1" tone="danger" />
       </div>
 
-      <Section title="Members" className="mt-6" padded={false} actions={<Input placeholder="Search…" className="h-8 w-48 bg-background/40" />}>
-        <table className="w-full text-sm">
-          <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            <th className="px-5 py-3">Name</th><th className="px-5 py-3">Email</th><th className="px-5 py-3">Role</th><th className="px-5 py-3">Plan</th><th className="px-5 py-3">Last</th><th className="px-5 py-3 text-right"></th>
-          </tr></thead>
-          <tbody className="divide-y divide-border">
-            {users.map((u) => (
-              <tr key={u.email} className="hover:bg-accent/40">
-                <td className="px-5 py-3 font-medium">{u.name}</td>
-                <td className="px-5 py-3 text-mono text-xs text-muted-foreground">{u.email}</td>
-                <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] uppercase " + role[u.role]}>{u.role}</Badge></td>
-                <td className="px-5 py-3 text-xs uppercase text-muted-foreground">{u.plan}</td>
-                <td className="px-5 py-3 text-xs text-muted-foreground">{u.last}</td>
-                <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs">Manage</Button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Section title="Members" className="mt-6" padded={false} actions={<Input placeholder="Search…" className="h-8 w-48 bg-background/40" disabled />}>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              <th className="px-5 py-3">Name</th><th className="px-5 py-3">Email</th><th className="px-5 py-3">Role</th><th className="px-5 py-3">Plan</th><th className="px-5 py-3">Last</th><th className="px-5 py-3 text-right"></th>
+            </tr></thead>
+            <tbody className="divide-y divide-border">
+              {users.map((u) => (
+                <tr key={u.email} className="hover:bg-accent/40">
+                  <td className="px-5 py-3 font-medium">{u.name}</td>
+                  <td className="px-5 py-3 text-mono text-xs text-muted-foreground">{u.email}</td>
+                  <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] uppercase " + role[u.role]}>{u.role}</Badge></td>
+                  <td className="px-5 py-3 text-xs uppercase text-muted-foreground">{u.plan}</td>
+                  <td className="px-5 py-3 text-xs text-muted-foreground">{u.last}</td>
+                  <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs" disabled>Manage</Button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Section>
     </>
   );
