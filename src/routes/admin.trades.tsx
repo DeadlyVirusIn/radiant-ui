@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { AdminTradeDetailDrawer } from "@/components/admin/AdminTradeDetailDrawer";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 import {
   ADMIN_TRADES, DISPUTES, STATUS_LABEL,
   type AdminTrade,
@@ -118,7 +119,11 @@ function AdminTrades() {
 
   return (
     <>
-      <PageHeader title="Trades" description="Operator ledger, settlement queue and disputes." />
+      <PageHeader
+        title="Trades"
+        description="Operator ledger, settlement queue and disputes. Mock data; controls are read-only in this preview."
+        actions={<ReadOnlyBadge />}
+      />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="In flight" value={String(counts.inFlight)} icon={Repeat2} tone="primary" />
