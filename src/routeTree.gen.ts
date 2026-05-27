@@ -62,6 +62,7 @@ import { Route as AdminHybridControlRouteImport } from './routes/admin.hybrid-co
 import { Route as AdminHuntOpsRouteImport } from './routes/admin.hunt-ops'
 import { Route as AdminHuntConfigRouteImport } from './routes/admin.hunt-config'
 import { Route as AdminHuntBotsRouteImport } from './routes/admin.hunt-bots'
+import { Route as AdminGoldFlairRouteImport } from './routes/admin.gold-flair'
 import { Route as AdminGiftsRouteImport } from './routes/admin.gifts'
 import { Route as AdminFleetRouteImport } from './routes/admin.fleet'
 import { Route as AdminCapacityRouteImport } from './routes/admin.capacity'
@@ -334,6 +335,11 @@ const AdminHuntBotsRoute = AdminHuntBotsRouteImport.update({
   path: '/hunt-bots',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminGoldFlairRoute = AdminGoldFlairRouteImport.update({
+  id: '/gold-flair',
+  path: '/gold-flair',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminGiftsRoute = AdminGiftsRouteImport.update({
   id: '/gifts',
   path: '/gifts',
@@ -404,6 +410,7 @@ export interface FileRoutesByFullPath {
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
   '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/gold-flair': typeof AdminGoldFlairRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
   '/admin/hunt-ops': typeof AdminHuntOpsRoute
@@ -463,6 +470,7 @@ export interface FileRoutesByTo {
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
   '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/gold-flair': typeof AdminGoldFlairRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
   '/admin/hunt-ops': typeof AdminHuntOpsRoute
@@ -524,6 +532,7 @@ export interface FileRoutesById {
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
   '/admin/gifts': typeof AdminGiftsRoute
+  '/admin/gold-flair': typeof AdminGoldFlairRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
   '/admin/hunt-ops': typeof AdminHuntOpsRoute
@@ -586,6 +595,7 @@ export interface FileRouteTypes {
     | '/admin/capacity'
     | '/admin/fleet'
     | '/admin/gifts'
+    | '/admin/gold-flair'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
     | '/admin/hunt-ops'
@@ -645,6 +655,7 @@ export interface FileRouteTypes {
     | '/admin/capacity'
     | '/admin/fleet'
     | '/admin/gifts'
+    | '/admin/gold-flair'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
     | '/admin/hunt-ops'
@@ -705,6 +716,7 @@ export interface FileRouteTypes {
     | '/admin/capacity'
     | '/admin/fleet'
     | '/admin/gifts'
+    | '/admin/gold-flair'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
     | '/admin/hunt-ops'
@@ -1137,6 +1149,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHuntBotsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/gold-flair': {
+      id: '/admin/gold-flair'
+      path: '/gold-flair'
+      fullPath: '/admin/gold-flair'
+      preLoaderRoute: typeof AdminGoldFlairRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/gifts': {
       id: '/admin/gifts'
       path: '/gifts'
@@ -1181,6 +1200,7 @@ interface AdminRouteChildren {
   AdminCapacityRoute: typeof AdminCapacityRoute
   AdminFleetRoute: typeof AdminFleetRoute
   AdminGiftsRoute: typeof AdminGiftsRoute
+  AdminGoldFlairRoute: typeof AdminGoldFlairRoute
   AdminHuntBotsRoute: typeof AdminHuntBotsRoute
   AdminHuntConfigRoute: typeof AdminHuntConfigRoute
   AdminHuntOpsRoute: typeof AdminHuntOpsRoute
@@ -1203,6 +1223,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCapacityRoute: AdminCapacityRoute,
   AdminFleetRoute: AdminFleetRoute,
   AdminGiftsRoute: AdminGiftsRoute,
+  AdminGoldFlairRoute: AdminGoldFlairRoute,
   AdminHuntBotsRoute: AdminHuntBotsRoute,
   AdminHuntConfigRoute: AdminHuntConfigRoute,
   AdminHuntOpsRoute: AdminHuntOpsRoute,

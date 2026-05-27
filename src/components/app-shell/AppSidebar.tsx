@@ -181,6 +181,7 @@ const ADMIN_GROUPS: Group[] = [
       { kind: "link", title: "Queues",         to: "/admin/queues",        icon: RotateCcw },
       { kind: "link", title: "Trades",         to: "/admin/trades",        icon: Repeat2 },
       { kind: "link", title: "Gifts",          to: "/admin/gifts",         icon: Gift },
+      { kind: "link", title: "Gold Flair",     to: "/admin/gold-flair",    icon: Gem },
       {
         kind: "tree",
         title: "Hunts",
