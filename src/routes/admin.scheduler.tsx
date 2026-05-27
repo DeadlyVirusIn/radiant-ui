@@ -30,22 +30,24 @@ function Scheduler() {
       </div>
 
       <Section title="Jobs" className="mt-6" padded={false}>
-        <table className="w-full text-sm">
-          <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            <th className="px-5 py-3">Name</th><th className="px-5 py-3">Cron</th><th className="px-5 py-3">Next</th><th className="px-5 py-3">State</th><th className="px-5 py-3 text-right"></th>
-          </tr></thead>
-          <tbody className="divide-y divide-border">
-            {jobs.map((j) => (
-              <tr key={j.name} className="hover:bg-accent/40">
-                <td className="px-5 py-3 font-medium">{j.name}</td>
-                <td className="px-5 py-3 text-mono text-xs text-muted-foreground">{j.cron}</td>
-                <td className="px-5 py-3 text-xs">{j.next}</td>
-                <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] " + (j.state === "Enabled" ? "bg-success/15 text-success" : "bg-muted text-muted-foreground")}>{j.state}</Badge></td>
-                <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs">Run now</Button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] text-sm">
+            <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              <th className="px-5 py-3">Name</th><th className="px-5 py-3">Cron</th><th className="px-5 py-3">Next</th><th className="px-5 py-3">State</th><th className="px-5 py-3 text-right">Action</th>
+            </tr></thead>
+            <tbody className="divide-y divide-border">
+              {jobs.map((j) => (
+                <tr key={j.name} className="hover:bg-accent/40">
+                  <td className="px-5 py-3 font-medium whitespace-nowrap">{j.name}</td>
+                  <td className="px-5 py-3 text-mono text-xs text-muted-foreground whitespace-nowrap">{j.cron}</td>
+                  <td className="px-5 py-3 text-xs whitespace-nowrap">{j.next}</td>
+                  <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] " + (j.state === "Enabled" ? "bg-success/15 text-success" : "bg-muted text-muted-foreground")}>{j.state}</Badge></td>
+                  <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs">Run now</Button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Section>
     </>
   );
