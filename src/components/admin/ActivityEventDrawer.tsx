@@ -35,17 +35,17 @@ export function ActivityEventDrawer({
         side="right"
         className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg"
       >
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <SheetTitle className="font-display text-base leading-snug break-words">{event.action}</SheetTitle>
-              <p className="text-mono mt-1 text-[11px] text-muted-foreground">{event.id} · {kind.label} · {event.surface}</p>
-            </div>
-            <Badge variant="outline" className={cn("h-5 shrink-0 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[lvl.tone])}>
+        <OpsDrawerHeader
+          align="start"
+          badges={
+            <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[lvl.tone])}>
               {lvl.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-display text-base leading-snug break-words">{event.action}</SheetTitle>
+          <p className="text-mono mt-1 text-[11px] text-muted-foreground">{event.id} · {kind.label} · {event.surface}</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           <div className="grid grid-cols-2 gap-3 text-xs">
