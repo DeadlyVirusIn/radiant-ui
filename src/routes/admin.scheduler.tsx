@@ -13,7 +13,7 @@ import {
   schedulerKpis, fmtDurMs, fmtRelFrom,
 } from "@/lib/mock-admin-scheduler";
 
-type Tab = "running" | "schedule" | "history" | "failures";
+type Tab = "running" | "schedule" | "recent" | "failures";
 type Search = { tab?: Tab; id?: string };
 
 export const Route = createFileRoute("/admin/scheduler")({
@@ -36,7 +36,7 @@ const TONE: Record<string, string> = {
 const TABS: { key: Tab; label: string }[] = [
   { key: "running",  label: "Running" },
   { key: "schedule", label: "Schedule" },
-  { key: "history",  label: "Recent runs" },
+  { key: "recent",   label: "Recent runs" },
   { key: "failures", label: "Failures" },
 ];
 
@@ -61,7 +61,12 @@ function Scheduler() {
     <>
       <PageHeader
         title="Scheduler"
-        description="Cron-style jobs running across the fleet. Read-only operational view."
+        description="Cron-style jobs across the fleet. Operational preview — values shown are mock data, not wired to the live scheduler."
+        actions={
+          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
+            Mock data · read-only
+          </Badge>
+        }
       />
 
       {/* KPI ROW — canonical */}
@@ -181,7 +186,7 @@ function Scheduler() {
         </TabsContent>
 
         {/* ─── RECENT RUNS ───────────────────────────────────────── */}
-        <TabsContent value="history">
+        <TabsContent value="recent">
           <Section padded={false}>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[720px] text-sm">
