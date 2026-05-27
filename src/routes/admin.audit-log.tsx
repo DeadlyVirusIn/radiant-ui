@@ -1,53 +1,187 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { FileSearch, Filter } from "lucide-react";
+import { useMemo } from "react";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { FileSearch, AlertOctagon, ShieldAlert, UserCog, Clock } from "lucide-react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
-import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { AuditEventDrawer } from "@/components/admin/AuditEventDrawer";
+import {
+  AUDIT_EVENTS, EVENT_BY_ID, SEVERITY_META, STATUS_META, KIND_META,
+  auditKpis, fmtRelFrom, fmtDuration, type AuditEvent,
+} from "@/lib/mock-admin-audit";
+
+type Tab = "all" | "admin" | "system" | "failed" | "high-risk";
+type Search = { tab?: Tab; id?: string };
 
 export const Route = createFileRoute("/admin/audit-log")({
   head: () => ({ meta: [{ title: "Admin · Audit log — Radiant" }] }),
+  validateSearch: (s: Record<string, unknown>): Search => ({
+    tab: (s.tab as Tab) ?? undefined,
+    id: typeof s.id === "string" ? s.id : undefined,
+  }),
   component: AuditLog,
 });
 
-const events = Array.from({ length: 14 }).map((_, i) => ({
-  t: new Date(Date.now() - i * 86_400_000 / 14).toISOString().slice(0, 16).replace("T", " "),
-  actor: ["alex", "jules", "system", "nelle"][i % 4],
-  scope: ["users", "fleet", "trades", "config"][i % 4],
-  action: ["created", "updated", "deleted", "approved"][i % 4],
-  target: `obj-${1000 + i}`,
-}));
+const TONE: Record<string, string> = {
+  primary: "bg-primary/15 text-primary",
+  success: "bg-success/15 text-success",
+  danger:  "bg-destructive/15 text-destructive",
+  warning: "bg-warning/15 text-warning",
+  muted:   "bg-muted text-muted-foreground",
+};
 
-function AuditLog() {
+const TABS: { key: Tab; label: string }[] = [
+  { key: "all",       label: "All events" },
+  { key: "admin",     label: "Admin actions" },
+  { key: "system",    label: "System events" },
+  { key: "failed",    label: "Failed" },
+  { key: "high-risk", label: "High risk" },
+];
+
+function EventTable({
+  events, onOpen, empty,
+}: {
+  events: AuditEvent[];
+  onOpen: (id: string) => void;
+  empty: string;
+}) {
+  if (events.length === 0) {
+    return (
+      <Section padded={false}>
+        <div className="px-5 py-10 text-center text-xs text-muted-foreground">{empty}</div>
+      </Section>
+    );
+  }
   return (
-    <>
-      <PageHeader title="Audit log" description="Immutable record of every change made through Radiant." actions={<Button variant="outline" size="sm" className="gap-1.5"><Filter className="h-3.5 w-3.5" /> Filter</Button>} />
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        <StatCard label="Events"      value="48,210" icon={FileSearch} />
-        <StatCard label="Today"       value="312"   tone="primary" />
-        <StatCard label="By system"   value="60%"   tone="success" />
-        <StatCard label="Retained"    value="365 d" />
-      </div>
-
-      <Section title="Events" className="mt-6" padded={false}>
-        <table className="w-full text-sm">
-          <thead><tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            <th className="px-5 py-3">When</th><th className="px-5 py-3">Actor</th><th className="px-5 py-3">Scope</th><th className="px-5 py-3">Action</th><th className="px-5 py-3">Target</th>
-          </tr></thead>
+    <Section padded={false}>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[880px] text-sm">
+          <thead>
+            <tr className="text-left text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              <th className="px-5 py-3">When</th>
+              <th className="px-5 py-3">Actor</th>
+              <th className="px-5 py-3">Action</th>
+              <th className="px-5 py-3">Surface</th>
+              <th className="px-5 py-3">Entity</th>
+              <th className="px-5 py-3">Status</th>
+              <th className="px-5 py-3">Severity</th>
+              <th className="px-5 py-3">Duration</th>
+            </tr>
+          </thead>
           <tbody className="divide-y divide-border">
-            {events.map((e, i) => (
-              <tr key={i} className="hover:bg-accent/40">
-                <td className="px-5 py-3 text-mono text-xs text-muted-foreground">{e.t}</td>
-                <td className="px-5 py-3 text-mono text-xs">{e.actor}</td>
-                <td className="px-5 py-3"><Badge variant="outline" className="h-5 border-transparent bg-muted text-[10px] text-muted-foreground">{e.scope}</Badge></td>
-                <td className="px-5 py-3 capitalize">{e.action}</td>
-                <td className="px-5 py-3 text-mono text-xs text-muted-foreground">{e.target}</td>
-              </tr>
-            ))}
+            {events.map((e) => {
+              const sev = SEVERITY_META[e.severity];
+              const stat = STATUS_META[e.status];
+              const kind = KIND_META[e.kind];
+              return (
+                <tr key={e.id} className="cursor-pointer hover:bg-accent/40" onClick={() => onOpen(e.id)}>
+                  <td className="px-5 py-3 text-mono text-xs">
+                    <div>{fmtRelFrom(e.at)}</div>
+                    <div className="text-[10px] text-muted-foreground">{e.id}</div>
+                  </td>
+                  <td className="px-5 py-3">
+                    <div className="text-mono text-xs">{e.actor}</div>
+                    <Badge variant="outline" className={cn("mt-0.5 h-4 border-transparent px-1 text-[9px]", TONE[kind.tone])}>{kind.label}</Badge>
+                  </td>
+                  <td className="px-5 py-3 text-mono text-xs">{e.action}</td>
+                  <td className="px-5 py-3 text-xs">{e.surface}</td>
+                  <td className="px-5 py-3 text-mono text-[11px] text-muted-foreground max-w-[220px] truncate">{e.entity}</td>
+                  <td className="px-5 py-3">
+                    <Badge variant="outline" className={cn("h-5 border-transparent text-[10px]", TONE[stat.tone])}>{stat.label}</Badge>
+                  </td>
+                  <td className="px-5 py-3">
+                    <Badge variant="outline" className={cn("h-5 border-transparent text-[10px]", TONE[sev.tone])}>{sev.label}</Badge>
+                  </td>
+                  <td className="px-5 py-3 text-mono text-xs">{fmtDuration(e.durationMs)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-      </Section>
+      </div>
+    </Section>
+  );
+}
+
+function AuditLog() {
+  const navigate = useNavigate({ from: "/admin/audit-log" });
+  const search = useSearch({ from: "/admin/audit-log" }) as Search;
+  const tab: Tab = search.tab ?? "all";
+
+  const kpis = useMemo(() => auditKpis(), []);
+
+  const openEvent = (id: string | undefined) =>
+    navigate({ search: { ...search, id } });
+  const selected = search.id ? EVENT_BY_ID[search.id] ?? null : null;
+
+  const sorted = [...AUDIT_EVENTS].sort((a, b) => b.at - a.at);
+  const adminOnly  = sorted.filter((e) => e.kind === "admin");
+  const systemOnly = sorted.filter((e) => e.kind === "system");
+  const failed     = sorted.filter((e) => e.status === "failed" || e.status === "denied");
+  const highRisk   = sorted.filter((e) => e.severity === "high" || e.severity === "critical");
+
+  return (
+    <>
+      <PageHeader
+        title="Audit log"
+        description="Immutable historical trail of admin and system activity. Operational preview — values shown are mock data, not wired to live audit storage."
+        actions={
+          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
+            Mock data · read-only
+          </Badge>
+        }
+      />
+
+      {/* KPI ROW */}
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+        <StatCard label="Events 24h"     value={String(kpis.events24h)}   icon={FileSearch} />
+        <StatCard label="Failed actions" value={String(kpis.failed)}      icon={AlertOctagon} tone={kpis.failed > 0 ? "danger" : "default"} />
+        <StatCard label="High risk"      value={String(kpis.highRisk)}    icon={ShieldAlert}  tone={kpis.highRisk > 0 ? "warning" : "default"} />
+        <StatCard label="Admin actions"  value={String(kpis.adminActions)} icon={UserCog} />
+        <StatCard label="Last event"     value={fmtRelFrom(kpis.lastEventAt)} icon={Clock} tone="primary" />
+      </div>
+
+      <Tabs
+        value={tab}
+        onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
+        className="mt-6 min-w-0"
+      >
+        <div className="relative mb-4 -mx-4 max-w-[100vw] overflow-hidden md:-mx-6">
+          <div className="overflow-x-auto px-4 pr-10 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <TabsList className="w-max">
+              {TABS.map((t) => (
+                <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent md:hidden" />
+        </div>
+
+        <TabsContent value="all">
+          <EventTable events={sorted} onOpen={openEvent} empty="No audit events recorded." />
+        </TabsContent>
+        <TabsContent value="admin">
+          <EventTable events={adminOnly} onOpen={openEvent} empty="No admin actions recorded." />
+        </TabsContent>
+        <TabsContent value="system">
+          <EventTable events={systemOnly} onOpen={openEvent} empty="No system events recorded." />
+        </TabsContent>
+        <TabsContent value="failed">
+          <EventTable events={failed} onOpen={openEvent} empty="No failed or denied actions in window." />
+        </TabsContent>
+        <TabsContent value="high-risk">
+          <EventTable events={highRisk} onOpen={openEvent} empty="No high-risk events in window." />
+        </TabsContent>
+      </Tabs>
+
+      <AuditEventDrawer
+        event={selected}
+        open={!!selected}
+        onOpenChange={(o) => { if (!o) openEvent(undefined); }}
+      />
     </>
   );
 }
