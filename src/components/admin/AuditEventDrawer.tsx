@@ -147,7 +147,7 @@ export function AuditEventDrawer({
             </>
           )}
 
-          <OpsDrawerFooter note="Read-only view. Audit entries are immutable; export and deep-link controls ship in P8.5.">
+          <OpsDrawerFooter note="Read-only view. Audit entries are immutable; export and deep-link controls ship with a later batch.">
             <Button size="sm" variant="outline" disabled>Export entry</Button>
             <Button size="sm" variant="outline" disabled>Copy payload</Button>
             <Button size="sm" variant="ghost" disabled>Open owner surface</Button>
