@@ -5,6 +5,7 @@ import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/hunt-bots")({
   head: () => ({ meta: [{ title: "Admin · Hunt bots — Radiant" }] }),
@@ -21,7 +22,11 @@ const bots = Array.from({ length: 14 }).map((_, i) => ({
 function HuntBots() {
   return (
     <>
-      <PageHeader title="Hunt bots" description="Dedicated bots reserved for hunt sessions — assign roles and pool counts." />
+      <PageHeader
+        title="Hunt bots"
+        description="Dedicated bots reserved for hunt sessions — assign roles and pool counts. Operational preview — values shown are mock data, not wired to live bot fleet."
+        actions={<ReadOnlyBadge />}
+      />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Hunt bots" value="14" icon={Bot} />
         <StatCard label="Scouts"    value="5"  tone="primary" />
@@ -42,7 +47,7 @@ function HuntBots() {
                   <td className="px-5 py-3 capitalize">{b.role}</td>
                   <td className="px-5 py-3"><Badge variant="outline" className={"h-5 border-transparent text-[10px] " + (b.state === "Running" ? "bg-success/15 text-success" : "bg-muted text-muted-foreground")}>{b.state}</Badge></td>
                   <td className="px-5 py-3 text-right text-mono">{b.hunts}</td>
-                  <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs">Inspect</Button></td>
+                  <td className="px-5 py-3 text-right"><Button variant="ghost" size="sm" className="h-7 text-xs" disabled>Inspect</Button></td>
                 </tr>
               ))}
             </tbody>

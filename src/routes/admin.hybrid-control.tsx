@@ -5,6 +5,7 @@ import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/hybrid-control")({
   head: () => ({ meta: [{ title: "Admin · Hybrid control — Radiant" }] }),
@@ -14,7 +15,11 @@ export const Route = createFileRoute("/admin/hybrid-control")({
 function HybridControl() {
   return (
     <>
-      <PageHeader title="Hybrid control" description="Operator-in-the-loop switches for sensitive actions across the fleet." />
+      <PageHeader
+        title="Hybrid control"
+        description="Operator-in-the-loop switches for sensitive actions across the fleet. Operational preview — values shown are mock data, not wired to live gate storage."
+        actions={<ReadOnlyBadge />}
+      />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Manual gates" value="6" icon={GitBranch} tone="primary" />
@@ -34,10 +39,11 @@ function HybridControl() {
           ].map((g) => (
             <div key={g.label} className="flex items-center justify-between rounded-lg border border-border bg-background/30 p-4">
               <Label className="text-sm">{g.label}</Label>
-              <Switch defaultChecked={g.on} />
+              <Switch defaultChecked={g.on} disabled />
             </div>
           ))}
         </div>
+        <p className="mt-3 text-[10px] text-muted-foreground">Read-only preview — gate toggles are disabled until hybrid control storage is wired.</p>
       </Section>
     </>
   );
