@@ -96,7 +96,7 @@ export function GoldFlairRequestDrawer({
 
           <Separator />
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
             <Button size="sm" variant="outline" disabled={request.status !== "failed"}>Retry mint</Button>
             <Button size="sm" variant="outline" disabled={request.status !== "blocked"}>Unblock</Button>
             <Button size="sm" variant="ghost">View recipient</Button>
