@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
 import { Progress } from "@/components/ui/progress";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/system-health")({
   head: () => ({ meta: [{ title: "Admin · System — Radiant" }] }),
@@ -21,7 +22,11 @@ const checks = [
 function SystemHealth() {
   return (
     <>
-      <PageHeader title="System health" description="Service-level readiness and resource saturation." />
+      <PageHeader
+        title="System health"
+        description="Service-level readiness and resource saturation. Operational preview — values shown are mock data, not wired to live service probes."
+        actions={<ReadOnlyBadge />}
+      />
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Uptime"   value="99.97%" icon={HeartPulse} tone="success" />
         <StatCard label="CPU avg"  value="38%"    icon={Cpu} />
