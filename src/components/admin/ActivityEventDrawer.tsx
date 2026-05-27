@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
 import {
   LEVEL_META, KIND_META, fmtTs, fmtRelFrom,
   type ActivityEvent,
@@ -95,16 +96,11 @@ export function ActivityEventDrawer({
             </div>
           )}
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+          <OpsDrawerFooter note="Read-only view. Activity stream is operator-visible only; mutation controls are not wired in this preview.">
             <Button size="sm" variant="outline" disabled>Pin entry</Button>
             <Button size="sm" variant="outline" disabled>Copy reference</Button>
             <Button size="sm" variant="ghost" disabled>Open owner surface</Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Read-only view. Activity stream is operator-visible only; mutation controls are not wired in this preview.
-          </p>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

@@ -4,10 +4,13 @@ import { Calendar, Activity, AlertTriangle, Timer, Clock } from "lucide-react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ScheduledJobDrawer } from "@/components/admin/ScheduledJobDrawer";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { OpsTabStrip } from "@/components/admin/ops/OpsTabStrip";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 import {
   SCHEDULED_JOBS, JOB_RUNS, JOB_BY_ID, JOB_STATE, RUN_STATUS,
   schedulerKpis, fmtDurMs, fmtRelFrom,
@@ -62,37 +65,28 @@ function Scheduler() {
       <PageHeader
         title="Scheduler"
         description="Cron-style jobs across the fleet. Operational preview — values shown are mock data, not wired to the live scheduler."
-        actions={
-          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
-            Mock data · read-only
-          </Badge>
-        }
+        actions={<ReadOnlyBadge />}
       />
 
       {/* KPI ROW — canonical */}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+      <OpsKpiGrid>
         <StatCard label="Running now"   value={String(kpis.running)}      icon={Activity}       tone={kpis.running > 0 ? "primary" : "default"} />
         <StatCard label="Enabled"       value={String(kpis.enabled)}      icon={Calendar}       tone="success" />
         <StatCard label="Paused"        value={String(kpis.paused)}       tone={kpis.paused > 0 ? "warning" : "default"} />
         <StatCard label="Failures 24h"  value={String(kpis.failures24h)}  icon={AlertTriangle}  tone={kpis.failures24h > 0 ? "danger" : "default"} />
         <StatCard label="Next run"      value={fmtRelFrom(kpis.nextRun)}  icon={Clock}          tone="primary" />
-      </div>
+      </OpsKpiGrid>
 
       <Tabs
         value={tab}
         onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
         className="mt-6 min-w-0"
       >
-        <div className="relative mb-4 -mx-4 max-w-[100vw] overflow-hidden md:-mx-6">
-          <div className="overflow-x-auto px-4 pr-10 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList className="w-max">
-              {TABS.map((t) => (
-                <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent md:hidden" />
-        </div>
+        <OpsTabStrip>
+          {TABS.map((t) => (
+            <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+          ))}
+        </OpsTabStrip>
 
         {/* ─── RUNNING ───────────────────────────────────────────── */}
         <TabsContent value="running">

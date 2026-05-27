@@ -4,10 +4,14 @@ import { ShieldCheck, AlertTriangle, AlertOctagon, Clock, Activity } from "lucid
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section } from "@/components/app-shell/Section";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { IntegrityIssueDrawer } from "@/components/admin/IntegrityIssueDrawer";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { OpsTabStrip } from "@/components/admin/ops/OpsTabStrip";
+import { OpsEmptyState } from "@/components/admin/ops/OpsEmptyState";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 import {
   INTEGRITY_ISSUES, ISSUE_BY_ID, SEVERITY_META, STATUS_META, CATEGORY_META,
   integrityKpis, fmtRelFrom, type IntegrityIssue,
@@ -49,11 +53,7 @@ function IssueTable({
   empty: string;
 }) {
   if (issues.length === 0) {
-    return (
-      <Section padded={false}>
-        <div className="px-5 py-10 text-center text-xs text-muted-foreground">{empty}</div>
-      </Section>
-    );
+    return <OpsEmptyState message={empty} />;
   }
   return (
     <Section padded={false}>
@@ -130,37 +130,28 @@ function Integrity() {
       <PageHeader
         title="Integrity"
         description="Cross-surface consistency, drift and freshness signals. Operational preview — values shown are mock data, not wired to live integrity checks."
-        actions={
-          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
-            Mock data · read-only
-          </Badge>
-        }
+        actions={<ReadOnlyBadge />}
       />
 
       {/* KPI ROW */}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-5">
+      <OpsKpiGrid>
         <StatCard label="Failed checks" value={String(kpis.failed)}   icon={AlertOctagon}  tone={kpis.failed > 0 ? "danger" : "default"} />
         <StatCard label="Blockers"      value={String(kpis.blockers)} icon={AlertTriangle} tone={kpis.blockers > 0 ? "danger" : "default"} />
         <StatCard label="Drift items"   value={String(kpis.drift)}    icon={Activity}      tone={kpis.drift > 0 ? "warning" : "default"} />
         <StatCard label="Stale records" value={String(kpis.stale)}    tone={kpis.stale > 0 ? "warning" : "default"} />
         <StatCard label="Last checked"  value={fmtRelFrom(kpis.lastCheckedAt)} icon={Clock} tone="primary" />
-      </div>
+      </OpsKpiGrid>
 
       <Tabs
         value={tab}
         onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
         className="mt-6 min-w-0"
       >
-        <div className="relative mb-4 -mx-4 max-w-[100vw] overflow-hidden md:-mx-6">
-          <div className="overflow-x-auto px-4 pr-10 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <TabsList className="w-max">
-              {TABS.map((t) => (
-                <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
-              ))}
-            </TabsList>
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent md:hidden" />
-        </div>
+        <OpsTabStrip>
+          {TABS.map((t) => (
+            <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+          ))}
+        </OpsTabStrip>
 
         {/* OVERVIEW */}
         <TabsContent value="overview">

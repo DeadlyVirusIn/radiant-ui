@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
 import {
   SEVERITY_META, STATUS_META, KIND_META, fmtTs, fmtRelFrom, fmtDuration,
   type AuditEvent,
@@ -151,16 +152,11 @@ export function AuditEventDrawer({
             </>
           )}
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+          <OpsDrawerFooter note="Read-only view. Audit entries are immutable; export and deep-link controls ship in P8.5.">
             <Button size="sm" variant="outline" disabled>Export entry</Button>
             <Button size="sm" variant="outline" disabled>Copy payload</Button>
             <Button size="sm" variant="ghost" disabled>Open owner surface</Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Read-only view. Audit entries are immutable; export and deep-link controls ship in P8.5.
-          </p>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

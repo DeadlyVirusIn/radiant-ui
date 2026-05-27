@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { OpsKpiGrid } from "@/components/admin/ops/OpsKpiGrid";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/mission-debug")({
   head: () => ({ meta: [{ title: "Admin · Mission debug — Radiant" }] }),
@@ -33,19 +35,15 @@ function MissionDebug() {
       <PageHeader
         title="Mission debug"
         description="Synthetic mission runs and outcome inspector. Operational preview — mock data, runner controls are not wired."
-        actions={
-          <Badge variant="outline" className="h-6 border-warning/40 bg-warning/10 text-[10px] font-semibold uppercase tracking-wider text-warning">
-            Mock data · read-only
-          </Badge>
-        }
+        actions={<ReadOnlyBadge />}
       />
 
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 xl:grid-cols-4">
+      <OpsKpiGrid cols={4}>
         <StatCard label="Test runs" value="142" icon={FlaskConical} />
         <StatCard label="Pass"      value="138" icon={CheckCircle2} tone="success" />
         <StatCard label="Fail"      value="4"   icon={XCircle}      tone="danger" />
         <StatCard label="Flaky"     value="2"   icon={AlertTriangle} tone="warning" />
-      </div>
+      </OpsKpiGrid>
 
       <Section title="New synthetic run" className="mt-6">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
