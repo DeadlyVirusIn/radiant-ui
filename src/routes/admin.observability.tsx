@@ -3,6 +3,7 @@ import { Activity } from "lucide-react";
 import { PageHeader } from "@/components/app-shell/PageHeader";
 import { StatCard } from "@/components/app-shell/StatCard";
 import { Section, DataRow } from "@/components/app-shell/Section";
+import { ReadOnlyBadge } from "@/components/admin/ops/ReadOnlyBadge";
 
 export const Route = createFileRoute("/admin/observability")({
   head: () => ({ meta: [{ title: "Admin · Observability — Radiant" }] }),
@@ -12,7 +13,11 @@ export const Route = createFileRoute("/admin/observability")({
 function Observability() {
   return (
     <>
-      <PageHeader title="Observability" description="Metrics, traces and logs from the live services." />
+      <PageHeader
+        title="Observability"
+        description="Metrics, traces and logs from the live services. Mock data; controls are read-only in this preview."
+        actions={<ReadOnlyBadge />}
+      />
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Req/s"      value="2,840" icon={Activity} tone="primary" />
@@ -23,7 +28,7 @@ function Observability() {
 
       <Section title="Service map" className="mt-6">
         <div className="h-48 rounded-lg border border-dashed border-border bg-background/30 p-3">
-          <div className="grid h-full grid-cols-4 gap-3">
+          <div className="grid h-full grid-cols-2 gap-3 sm:grid-cols-4">
             {["gateway", "scheduler", "trader", "vault"].map((s) => (
               <div key={s} className="grid place-items-center rounded-md bg-card/60 text-xs font-medium">{s}</div>
             ))}
