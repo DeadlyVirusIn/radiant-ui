@@ -119,7 +119,7 @@ function RootComponent() {
       <SidebarProvider>
         <div className="flex min-h-screen w-full bg-background text-foreground">
           <AppSidebar />
-          <SidebarInset className="flex min-h-screen flex-1 flex-col">
+          <SidebarInset className="flex min-h-screen min-w-0 flex-1 flex-col">
             <AppHeader />
             <main className="flex-1 bg-glow-primary">
               <div className="mx-auto w-full max-w-[1600px] px-4 py-6 md:px-8 md:py-8">
