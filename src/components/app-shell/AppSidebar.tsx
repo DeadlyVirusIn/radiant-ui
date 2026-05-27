@@ -293,23 +293,24 @@ type Role = "user" | "admin";
 
 export function AppSidebar() {
   const currentPath = useRouterState({ select: (s) => s.location.pathname });
-  const [role, setRole] = useState<Role>("user");
+  const isAdminRoute = currentPath === "/admin" || currentPath.startsWith("/admin/");
+  const [persistedRole, setPersistedRole] = useState<Role>("user");
 
   // Persist role choice (UI-only — no auth/backend changes)
   useEffect(() => {
     try {
       const saved = localStorage.getItem("radiant.viewAs") as Role | null;
-      if (saved === "user" || saved === "admin") setRole(saved);
+      if (saved === "user" || saved === "admin") setPersistedRole(saved);
     } catch {}
   }, []);
   useEffect(() => {
-    try { localStorage.setItem("radiant.viewAs", role); } catch {}
-  }, [role]);
+    try { localStorage.setItem("radiant.viewAs", persistedRole); } catch {}
+  }, [persistedRole]);
 
-  // Auto-switch to admin when on /admin/* so the admin tree is visible
-  useEffect(() => {
-    if (currentPath.startsWith("/admin")) setRole("admin");
-  }, [currentPath]);
+  // Any /admin/* route forces the admin sidebar regardless of persisted toggle,
+  // so deep-links and hard refreshes always render admin navigation.
+  const role: Role = isAdminRoute ? "admin" : persistedRole;
+  const setRole = setPersistedRole;
 
   const groups = useMemo(
     () => (role === "admin" ? ADMIN_GROUPS : USER_GROUPS),
