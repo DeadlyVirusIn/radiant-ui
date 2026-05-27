@@ -178,6 +178,9 @@ const ADMIN_GROUPS: Group[] = [
     label: "Operations",
     entries: [
       { kind: "link", title: "Fleet Health",   to: "/admin/fleet",         icon: HeartPulse },
+      { kind: "link", title: "Queues",         to: "/admin/queues",        icon: RotateCcw },
+      { kind: "link", title: "Trades",         to: "/admin/trades",        icon: Repeat2 },
+      { kind: "link", title: "Gifts",          to: "/admin/gifts",         icon: Gift },
       {
         kind: "tree",
         title: "Hunts",
@@ -185,7 +188,6 @@ const ADMIN_GROUPS: Group[] = [
         items: [
           { title: "Hunt Config",    to: "/admin/hunt-config",    icon: SettingsIcon },
           { title: "Hunt Bots",      to: "/admin/hunt-bots",      icon: Bot },
-          { title: "Hunt Ops",       to: "/admin/hunt-ops",       icon: RotateCcw },
           { title: "Hybrid Control", to: "/admin/hybrid-control", icon: GitBranch },
           { title: "Scheduler",      to: "/admin/scheduler",      icon: Calendar },
         ],

@@ -51,15 +51,17 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CollectionGoldFlairTradeRouteImport } from './routes/collection.gold-flair-trade'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTrustRouteImport } from './routes/admin.trust'
+import { Route as AdminTradesRouteImport } from './routes/admin.trades'
 import { Route as AdminSystemHealthRouteImport } from './routes/admin.system-health'
 import { Route as AdminSchedulerRouteImport } from './routes/admin.scheduler'
+import { Route as AdminQueuesRouteImport } from './routes/admin.queues'
 import { Route as AdminObservabilityRouteImport } from './routes/admin.observability'
 import { Route as AdminMissionDebugRouteImport } from './routes/admin.mission-debug'
 import { Route as AdminIntegrityRouteImport } from './routes/admin.integrity'
 import { Route as AdminHybridControlRouteImport } from './routes/admin.hybrid-control'
-import { Route as AdminHuntOpsRouteImport } from './routes/admin.hunt-ops'
 import { Route as AdminHuntConfigRouteImport } from './routes/admin.hunt-config'
 import { Route as AdminHuntBotsRouteImport } from './routes/admin.hunt-bots'
+import { Route as AdminGiftsRouteImport } from './routes/admin.gifts'
 import { Route as AdminFleetRouteImport } from './routes/admin.fleet'
 import { Route as AdminCapacityRouteImport } from './routes/admin.capacity'
 import { Route as AdminAuditLogRouteImport } from './routes/admin.audit-log'
@@ -276,6 +278,11 @@ const AdminTrustRoute = AdminTrustRouteImport.update({
   path: '/trust',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTradesRoute = AdminTradesRouteImport.update({
+  id: '/trades',
+  path: '/trades',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSystemHealthRoute = AdminSystemHealthRouteImport.update({
   id: '/system-health',
   path: '/system-health',
@@ -284,6 +291,11 @@ const AdminSystemHealthRoute = AdminSystemHealthRouteImport.update({
 const AdminSchedulerRoute = AdminSchedulerRouteImport.update({
   id: '/scheduler',
   path: '/scheduler',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQueuesRoute = AdminQueuesRouteImport.update({
+  id: '/queues',
+  path: '/queues',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminObservabilityRoute = AdminObservabilityRouteImport.update({
@@ -306,11 +318,6 @@ const AdminHybridControlRoute = AdminHybridControlRouteImport.update({
   path: '/hybrid-control',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminHuntOpsRoute = AdminHuntOpsRouteImport.update({
-  id: '/hunt-ops',
-  path: '/hunt-ops',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminHuntConfigRoute = AdminHuntConfigRouteImport.update({
   id: '/hunt-config',
   path: '/hunt-config',
@@ -319,6 +326,11 @@ const AdminHuntConfigRoute = AdminHuntConfigRouteImport.update({
 const AdminHuntBotsRoute = AdminHuntBotsRouteImport.update({
   id: '/hunt-bots',
   path: '/hunt-bots',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminGiftsRoute = AdminGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminFleetRoute = AdminFleetRouteImport.update({
@@ -385,15 +397,17 @@ export interface FileRoutesByFullPath {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
-  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
   '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/queues': typeof AdminQueuesRoute
   '/admin/scheduler': typeof AdminSchedulerRoute
   '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trades': typeof AdminTradesRoute
   '/admin/trust': typeof AdminTrustRoute
   '/admin/users': typeof AdminUsersRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
@@ -441,15 +455,17 @@ export interface FileRoutesByTo {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
-  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
   '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/queues': typeof AdminQueuesRoute
   '/admin/scheduler': typeof AdminSchedulerRoute
   '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trades': typeof AdminTradesRoute
   '/admin/trust': typeof AdminTrustRoute
   '/admin/users': typeof AdminUsersRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
@@ -499,15 +515,17 @@ export interface FileRoutesById {
   '/admin/audit-log': typeof AdminAuditLogRoute
   '/admin/capacity': typeof AdminCapacityRoute
   '/admin/fleet': typeof AdminFleetRoute
+  '/admin/gifts': typeof AdminGiftsRoute
   '/admin/hunt-bots': typeof AdminHuntBotsRoute
   '/admin/hunt-config': typeof AdminHuntConfigRoute
-  '/admin/hunt-ops': typeof AdminHuntOpsRoute
   '/admin/hybrid-control': typeof AdminHybridControlRoute
   '/admin/integrity': typeof AdminIntegrityRoute
   '/admin/mission-debug': typeof AdminMissionDebugRoute
   '/admin/observability': typeof AdminObservabilityRoute
+  '/admin/queues': typeof AdminQueuesRoute
   '/admin/scheduler': typeof AdminSchedulerRoute
   '/admin/system-health': typeof AdminSystemHealthRoute
+  '/admin/trades': typeof AdminTradesRoute
   '/admin/trust': typeof AdminTrustRoute
   '/admin/users': typeof AdminUsersRoute
   '/collection/gold-flair-trade': typeof CollectionGoldFlairTradeRoute
@@ -558,15 +576,17 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/capacity'
     | '/admin/fleet'
+    | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
-    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
     | '/admin/observability'
+    | '/admin/queues'
     | '/admin/scheduler'
     | '/admin/system-health'
+    | '/admin/trades'
     | '/admin/trust'
     | '/admin/users'
     | '/collection/gold-flair-trade'
@@ -614,15 +634,17 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/capacity'
     | '/admin/fleet'
+    | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
-    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
     | '/admin/observability'
+    | '/admin/queues'
     | '/admin/scheduler'
     | '/admin/system-health'
+    | '/admin/trades'
     | '/admin/trust'
     | '/admin/users'
     | '/collection/gold-flair-trade'
@@ -671,15 +693,17 @@ export interface FileRouteTypes {
     | '/admin/audit-log'
     | '/admin/capacity'
     | '/admin/fleet'
+    | '/admin/gifts'
     | '/admin/hunt-bots'
     | '/admin/hunt-config'
-    | '/admin/hunt-ops'
     | '/admin/hybrid-control'
     | '/admin/integrity'
     | '/admin/mission-debug'
     | '/admin/observability'
+    | '/admin/queues'
     | '/admin/scheduler'
     | '/admin/system-health'
+    | '/admin/trades'
     | '/admin/trust'
     | '/admin/users'
     | '/collection/gold-flair-trade'
@@ -1024,6 +1048,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTrustRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/trades': {
+      id: '/admin/trades'
+      path: '/trades'
+      fullPath: '/admin/trades'
+      preLoaderRoute: typeof AdminTradesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/system-health': {
       id: '/admin/system-health'
       path: '/system-health'
@@ -1036,6 +1067,13 @@ declare module '@tanstack/react-router' {
       path: '/scheduler'
       fullPath: '/admin/scheduler'
       preLoaderRoute: typeof AdminSchedulerRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/queues': {
+      id: '/admin/queues'
+      path: '/queues'
+      fullPath: '/admin/queues'
+      preLoaderRoute: typeof AdminQueuesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/observability': {
@@ -1066,13 +1104,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHybridControlRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/hunt-ops': {
-      id: '/admin/hunt-ops'
-      path: '/hunt-ops'
-      fullPath: '/admin/hunt-ops'
-      preLoaderRoute: typeof AdminHuntOpsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/hunt-config': {
       id: '/admin/hunt-config'
       path: '/hunt-config'
@@ -1085,6 +1116,13 @@ declare module '@tanstack/react-router' {
       path: '/hunt-bots'
       fullPath: '/admin/hunt-bots'
       preLoaderRoute: typeof AdminHuntBotsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/gifts': {
+      id: '/admin/gifts'
+      path: '/gifts'
+      fullPath: '/admin/gifts'
+      preLoaderRoute: typeof AdminGiftsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/fleet': {
@@ -1123,15 +1161,17 @@ interface AdminRouteChildren {
   AdminAuditLogRoute: typeof AdminAuditLogRoute
   AdminCapacityRoute: typeof AdminCapacityRoute
   AdminFleetRoute: typeof AdminFleetRoute
+  AdminGiftsRoute: typeof AdminGiftsRoute
   AdminHuntBotsRoute: typeof AdminHuntBotsRoute
   AdminHuntConfigRoute: typeof AdminHuntConfigRoute
-  AdminHuntOpsRoute: typeof AdminHuntOpsRoute
   AdminHybridControlRoute: typeof AdminHybridControlRoute
   AdminIntegrityRoute: typeof AdminIntegrityRoute
   AdminMissionDebugRoute: typeof AdminMissionDebugRoute
   AdminObservabilityRoute: typeof AdminObservabilityRoute
+  AdminQueuesRoute: typeof AdminQueuesRoute
   AdminSchedulerRoute: typeof AdminSchedulerRoute
   AdminSystemHealthRoute: typeof AdminSystemHealthRoute
+  AdminTradesRoute: typeof AdminTradesRoute
   AdminTrustRoute: typeof AdminTrustRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -1142,15 +1182,17 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditLogRoute: AdminAuditLogRoute,
   AdminCapacityRoute: AdminCapacityRoute,
   AdminFleetRoute: AdminFleetRoute,
+  AdminGiftsRoute: AdminGiftsRoute,
   AdminHuntBotsRoute: AdminHuntBotsRoute,
   AdminHuntConfigRoute: AdminHuntConfigRoute,
-  AdminHuntOpsRoute: AdminHuntOpsRoute,
   AdminHybridControlRoute: AdminHybridControlRoute,
   AdminIntegrityRoute: AdminIntegrityRoute,
   AdminMissionDebugRoute: AdminMissionDebugRoute,
   AdminObservabilityRoute: AdminObservabilityRoute,
+  AdminQueuesRoute: AdminQueuesRoute,
   AdminSchedulerRoute: AdminSchedulerRoute,
   AdminSystemHealthRoute: AdminSystemHealthRoute,
+  AdminTradesRoute: AdminTradesRoute,
   AdminTrustRoute: AdminTrustRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminIndexRoute: AdminIndexRoute,
