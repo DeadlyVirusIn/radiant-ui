@@ -1,17 +1,12 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import { GIFT_STATUS, type AdminGift } from "@/lib/mock-gifts-admin";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-  muted:   "bg-muted text-muted-foreground",
-};
 
 function fmt(ts: number) { return new Date(ts).toLocaleString(); }
 
@@ -36,17 +31,17 @@ export function GiftDetailDrawer({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-md">
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <SheetTitle className="font-mono text-base">{gift.id}</SheetTitle>
-              <p className="mt-1 text-xs text-muted-foreground">{gift.recipient}</p>
-            </div>
+        <OpsDrawerHeader
+          align="center"
+          badges={
             <Badge variant="outline" className={cn("h-6 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[meta.tone])}>
               {meta.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-mono text-base">{gift.id}</SheetTitle>
+          <p className="mt-1 text-xs text-muted-foreground">{gift.recipient}</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           <div className="rounded-lg border border-border bg-background/40 p-3">
@@ -67,13 +62,11 @@ export function GiftDetailDrawer({
             </div>
           )}
 
-          <Separator />
-
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" disabled={gift.status !== "failed"}>Retry delivery</Button>
-            <Button size="sm" variant="outline" disabled={gift.status === "refunded"}>Refund</Button>
-            <Button size="sm" variant="ghost">View recipient</Button>
-          </div>
+          <OpsDrawerFooter note="Read-only view. Gift actions ship with the gifts control surface.">
+            <Button size="sm" variant="outline" disabled>Retry delivery</Button>
+            <Button size="sm" variant="outline" disabled>Refund</Button>
+            <Button size="sm" variant="ghost" disabled>View recipient</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

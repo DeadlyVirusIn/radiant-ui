@@ -1,19 +1,14 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import {
   GF_STATUS, GF_BLOCK_LABEL, type GFRequest,
 } from "@/lib/mock-gold-flair-admin";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-  muted:   "bg-muted text-muted-foreground",
-};
 
 function fmt(ts: number | null) {
   return ts ? new Date(ts).toLocaleString() : "—";
@@ -41,17 +36,17 @@ export function GoldFlairRequestDrawer({
         side="right"
         className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg"
       >
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <SheetTitle className="font-mono text-base">{request.id}</SheetTitle>
-              <p className="mt-1 text-xs text-muted-foreground">{request.recipient}</p>
-            </div>
+        <OpsDrawerHeader
+          align="center"
+          badges={
             <Badge variant="outline" className={cn("h-6 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[meta.tone])}>
               {meta.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-mono text-base">{request.id}</SheetTitle>
+          <p className="mt-1 text-xs text-muted-foreground">{request.recipient}</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           <div className="rounded-lg border border-border bg-background/40 p-3">
@@ -94,13 +89,11 @@ export function GoldFlairRequestDrawer({
             </ol>
           </div>
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-            <Button size="sm" variant="outline" disabled={request.status !== "failed"}>Retry mint</Button>
-            <Button size="sm" variant="outline" disabled={request.status !== "blocked"}>Unblock</Button>
-            <Button size="sm" variant="ghost">View recipient</Button>
-          </div>
+          <OpsDrawerFooter note="Read-only view. Gold-flair request actions ship with the control surface.">
+            <Button size="sm" variant="outline" disabled>Retry mint</Button>
+            <Button size="sm" variant="outline" disabled>Unblock</Button>
+            <Button size="sm" variant="ghost" disabled>View recipient</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

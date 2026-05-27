@@ -1,20 +1,15 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import {
   JOB_STATE, RUN_STATUS, fmtDurMs, fmtRelFrom, runsForJob,
   type ScheduledJob,
 } from "@/lib/mock-admin-scheduler";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-  muted:   "bg-muted text-muted-foreground",
-};
 
 function fmtTs(ts: number | null) {
   return ts ? new Date(ts).toLocaleString() : "—";
@@ -45,17 +40,17 @@ export function ScheduledJobDrawer({
         side="right"
         className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg"
       >
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <SheetTitle className="font-display text-base">{job.name}</SheetTitle>
-              <p className="text-mono mt-1 text-[11px] text-muted-foreground">{job.id}</p>
-            </div>
+        <OpsDrawerHeader
+          align="start"
+          badges={
             <Badge variant="outline" className={cn("h-6 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[stateMeta.tone])}>
               {stateMeta.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-display text-base">{job.name}</SheetTitle>
+          <p className="text-mono mt-1 text-[11px] text-muted-foreground">{job.id}</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           <p className="text-sm text-muted-foreground">{job.description}</p>
@@ -133,16 +128,11 @@ export function ScheduledJobDrawer({
             </ul>
           </div>
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+          <OpsDrawerFooter note="Read-only view. Actions disabled until scheduler control surface ships.">
             <Button size="sm" variant="outline" disabled>Run now</Button>
             <Button size="sm" variant="outline" disabled>{job.state === "paused" ? "Resume" : "Pause"}</Button>
-            <Button size="sm" variant="ghost">View runbook</Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Read-only view. Actions disabled until scheduler control surface ships.
-          </p>
+            <Button size="sm" variant="ghost" disabled>View runbook</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

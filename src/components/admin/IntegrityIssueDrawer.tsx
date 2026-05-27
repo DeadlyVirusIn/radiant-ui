@@ -1,20 +1,15 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import {
   SEVERITY_META, STATUS_META, CATEGORY_META, fmtTs, fmtRelFrom,
   type IntegrityIssue,
 } from "@/lib/mock-admin-integrity";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-  muted:   "bg-muted text-muted-foreground",
-};
 
 const LIFECYCLE_TONE: Record<string, string> = {
   detected:     "bg-destructive",
@@ -49,22 +44,23 @@ export function IntegrityIssueDrawer({
         side="right"
         className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg"
       >
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <SheetTitle className="font-display text-base leading-snug">{issue.title}</SheetTitle>
-              <p className="text-mono mt-1 text-[11px] text-muted-foreground">{issue.id} · {cat.label}</p>
-            </div>
-            <div className="flex shrink-0 flex-col items-end gap-1">
+        <OpsDrawerHeader
+          align="start"
+          stacked
+          badges={
+            <>
               <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[stat.tone])}>
                 {stat.label}
               </Badge>
               <Badge variant="outline" className={cn("h-5 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[sev.tone])}>
                 Sev · {sev.label}
               </Badge>
-            </div>
-          </div>
-        </SheetHeader>
+            </>
+          }
+        >
+          <SheetTitle className="font-display text-base leading-snug">{issue.title}</SheetTitle>
+          <p className="text-mono mt-1 text-[11px] text-muted-foreground">{issue.id} · {cat.label}</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           {issue.blocksOperations && (
@@ -140,17 +136,12 @@ export function IntegrityIssueDrawer({
             </ol>
           </div>
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
+          <OpsDrawerFooter note="Read-only view. Actions disabled until integrity control surface ships.">
             <Button size="sm" variant="outline" disabled>Acknowledge</Button>
             <Button size="sm" variant="outline" disabled>Mute 1h</Button>
             <Button size="sm" variant="outline" disabled>Re-check now</Button>
-            <Button size="sm" variant="ghost">Open owner surface</Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Read-only view. Actions disabled until integrity control surface ships.
-          </p>
+            <Button size="sm" variant="ghost" disabled>Open owner surface</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>

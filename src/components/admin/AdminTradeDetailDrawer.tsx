@@ -1,16 +1,12 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import { STATUS_LABEL, type AdminTrade } from "@/lib/mock-trades-admin";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-};
 
 function fmt(ts: number | null) {
   return ts ? new Date(ts).toLocaleString() : "—";
@@ -46,19 +42,19 @@ export function AdminTradeDetailDrawer({
         side="right"
         className="flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-lg"
       >
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <SheetTitle className="font-mono text-base">{trade.id}</SheetTitle>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {trade.account} · {trade.partner}
-              </p>
-            </div>
+        <OpsDrawerHeader
+          align="center"
+          badges={
             <Badge variant="outline" className={cn("h-6 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[meta.tone])}>
               {meta.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-mono text-base">{trade.id}</SheetTitle>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {trade.account} · {trade.partner}
+          </p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           {/* Exchange */}
@@ -103,14 +99,11 @@ export function AdminTradeDetailDrawer({
             </ol>
           </div>
 
-          <Separator />
-
-          {/* Actions */}
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" disabled={trade.settlement !== "failed"}>Retry settlement</Button>
-            <Button size="sm" variant="outline">View audit log</Button>
-            <Button size="sm" variant="ghost">View partner trades</Button>
-          </div>
+          <OpsDrawerFooter note="Read-only view. Trade actions ship with the trades control surface.">
+            <Button size="sm" variant="outline" disabled>Retry settlement</Button>
+            <Button size="sm" variant="outline" disabled>View audit log</Button>
+            <Button size="sm" variant="ghost" disabled>View partner trades</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>
