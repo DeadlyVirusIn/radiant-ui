@@ -1,17 +1,12 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { OpsDrawerHeader } from "@/components/admin/ops/OpsDrawerHeader";
+import { OpsDrawerFooter } from "@/components/admin/ops/OpsDrawerFooter";
+import { TONE } from "@/components/admin/ops/toneTokens";
 import { GF_STATUS, type MintBatch } from "@/lib/mock-gold-flair-admin";
-
-const TONE: Record<string, string> = {
-  primary: "bg-primary/15 text-primary",
-  success: "bg-success/15 text-success",
-  danger:  "bg-destructive/15 text-destructive",
-  warning: "bg-warning/15 text-warning",
-  muted:   "bg-muted text-muted-foreground",
-};
 
 function fmt(ts: number) { return new Date(ts).toLocaleString(); }
 
@@ -34,17 +29,17 @@ export function MintBatchDrawer({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg">
-        <SheetHeader className="border-b border-border p-5">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <SheetTitle className="font-mono text-base">{batch.id}</SheetTitle>
-              <p className="mt-1 text-xs text-muted-foreground">Mint batch · {batch.size} items</p>
-            </div>
+        <OpsDrawerHeader
+          align="center"
+          badges={
             <Badge variant="outline" className={cn("h-6 border-transparent text-[10px] font-semibold uppercase tracking-wider", TONE[meta.tone])}>
               {meta.label}
             </Badge>
-          </div>
-        </SheetHeader>
+          }
+        >
+          <SheetTitle className="font-mono text-base">{batch.id}</SheetTitle>
+          <p className="mt-1 text-xs text-muted-foreground">Mint batch · {batch.size} items</p>
+        </OpsDrawerHeader>
 
         <div className="flex flex-col gap-5 p-5">
           <div className="grid grid-cols-2 gap-3">
@@ -75,13 +70,11 @@ export function MintBatchDrawer({
             </ol>
           </div>
 
-          <Separator />
-
-          <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
-            <Button size="sm" variant="outline" disabled={batch.status !== "queued"}>Approve</Button>
-            <Button size="sm" variant="outline" disabled={batch.status !== "failed"}>Retry batch</Button>
-            <Button size="sm" variant="ghost">View audit log</Button>
-          </div>
+          <OpsDrawerFooter note="Read-only view. Mint batch actions ship with the gold-flair control surface.">
+            <Button size="sm" variant="outline" disabled>Approve</Button>
+            <Button size="sm" variant="outline" disabled>Retry batch</Button>
+            <Button size="sm" variant="ghost" disabled>View audit log</Button>
+          </OpsDrawerFooter>
         </div>
       </SheetContent>
     </Sheet>
