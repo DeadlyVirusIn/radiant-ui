@@ -319,8 +319,6 @@ function AdminGoldFlair() {
         onOpenChange={(o) => { if (!o) openBatch(undefined); }}
       />
 
-      {/* unused-import guard for Sparkles (kept for future header icon) */}
-      <Sparkles className="hidden" />
     </>
   );
 }
