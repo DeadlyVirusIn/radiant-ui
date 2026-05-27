@@ -60,7 +60,7 @@ function AdminGifts() {
         description="Operator-facing gift queue. (Collectors continue to use /gifts.)"
       />
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         <StatCard label="Queued"    value={String(counts.queued)}    icon={Gift} />
         <StatCard label="Sent"      value={String(counts.sent)}      tone="primary" />
         <StatCard label="Delivered" value={String(counts.delivered)} tone="success" />

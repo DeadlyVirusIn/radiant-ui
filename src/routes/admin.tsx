@@ -32,15 +32,21 @@ function AdminLayout() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const navRef = useRef<HTMLElement | null>(null);
 
-  // Scroll the active tab into view on route change so the current page
-  // is always discoverable on narrow viewports.
+  // Scroll the active tab into view *within the nav strip only*. Using
+  // scrollIntoView with inline:"center" would also shift ancestor scroll
+  // containers (including the document), pushing page content off-screen
+  // on mount. Adjust the nav's own scrollLeft directly instead.
   useEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
     const active = nav.querySelector<HTMLAnchorElement>("[data-active='true']");
-    if (active && typeof active.scrollIntoView === "function") {
-      active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-    }
+    if (!active) return;
+    const navRect = nav.getBoundingClientRect();
+    const activeRect = active.getBoundingClientRect();
+    const offsetWithinNav = activeRect.left - navRect.left + nav.scrollLeft;
+    const target = offsetWithinNav - (nav.clientWidth - active.offsetWidth) / 2;
+    const max = nav.scrollWidth - nav.clientWidth;
+    nav.scrollTo({ left: Math.max(0, Math.min(max, target)), behavior: "smooth" });
   }, [path]);
 
   return (
