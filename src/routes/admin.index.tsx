@@ -190,7 +190,7 @@ function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <header className="flex items-start justify-between gap-4">
+      <header className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 font-display text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
             <span className="relative flex h-2 w-2">
@@ -206,7 +206,7 @@ function Dashboard() {
             Hunts, Gold Flair, Gifts, Trades and Inventory — operations-first.
           </p>
         </div>
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="flex flex-wrap items-center gap-2">
           <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card/60 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground">
             <Pause className="h-3.5 w-3.5" /> Pause fleet
           </button>
