@@ -55,7 +55,7 @@ function AdminLayout() {
         <div className="relative">
           <nav
             ref={navRef}
-            className="flex min-w-max gap-1 overflow-x-auto px-4 py-2 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex gap-1 overflow-x-auto px-4 py-2 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {tabs.map((t) => {
               const active = t.exact ? path === t.to : path.startsWith(t.to);
@@ -65,7 +65,7 @@ function AdminLayout() {
                   to={t.to}
                   data-active={active}
                   className={cn(
-                    "rounded-md px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors",
+                    "shrink-0 rounded-md px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors",
                     active
                       ? "bg-primary/15 text-foreground shadow-[inset_0_-2px_0_var(--primary)]"
                       : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",

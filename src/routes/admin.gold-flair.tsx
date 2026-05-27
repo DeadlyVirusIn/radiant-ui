@@ -85,7 +85,7 @@ function AdminGoldFlair() {
       />
 
       {/* KPI ROW — canonical terms */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3 xl:grid-cols-5">
         <StatCard label="Queue depth"  value={String(kpis.queueDepth)}    icon={Gem}      tone={kpis.queueDepth >= 10 ? "warning" : "primary"} />
         <StatCard label="In flight"    value={String(kpis.inFlight)}      tone="primary" />
         <StatCard label="Blocked"      value={String(kpis.blocked)}       tone={kpis.blocked > 0 ? "warning" : "default"} />
@@ -98,11 +98,13 @@ function AdminGoldFlair() {
         onValueChange={(v) => navigate({ search: { ...search, tab: v as Tab } })}
         className="mt-6"
       >
-        <TabsList className="mb-4">
-          {TABS.map((t) => (
-            <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
-          ))}
-        </TabsList>
+        <div className="mb-4 -mx-4 overflow-x-auto px-4 md:-mx-6 md:px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <TabsList className="w-max">
+            {TABS.map((t) => (
+              <TabsTrigger key={t.key} value={t.key}>{t.label}</TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
 
         {/* ─── MINT QUEUE ─────────────────────────────────────────── */}
         <TabsContent value="mint">

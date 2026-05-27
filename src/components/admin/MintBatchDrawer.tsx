@@ -33,7 +33,7 @@ export function MintBatchDrawer({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="flex w-full flex-col gap-0 overflow-y-auto p-0 sm:max-w-lg">
+      <SheetContent side="right" className="flex w-screen max-w-full flex-col gap-0 overflow-y-auto p-0 sm:w-auto sm:max-w-lg">
         <SheetHeader className="border-b border-border p-5">
           <div className="flex items-center justify-between gap-3">
             <div>
